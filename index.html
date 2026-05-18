@@ -4,351 +4,373 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BoxBlayde Inventory Command Center</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.12.7/Recharts.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,Helvetica,Arial,sans-serif;background:#F9FAFB;color:#111827;font-size:14px}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:#F9FAFB;color:#111827;font-size:14px;line-height:1.4}
+.app{max-width:960px;margin:0 auto;padding:16px 14px 40px}
+.header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px}
+.brand{font-size:10px;font-weight:700;letter-spacing:2.5px;color:#0D7C5F;text-transform:uppercase}
+.title{font-size:22px;font-weight:700}
+.date{font-size:12px;color:#9CA3AF}
+.countdown{background:#FEE2E2;border:1.5px solid rgba(220,38,38,.25);border-radius:10px;padding:8px 14px;text-align:center}
+.countdown-num{font-family:monospace;font-size:28px;font-weight:700;color:#DC2626;line-height:1}
+.countdown-label{font-size:9px;font-weight:700;color:#DC2626;letter-spacing:1px}
+.tabs{display:flex;gap:2px;margin-bottom:16px;overflow-x:auto}
+.tab{padding:8px 16px;font-size:12px;font-weight:600;white-space:nowrap;border:1px solid #E5E7EB;border-radius:6px;background:transparent;color:#9CA3AF;cursor:pointer;font-family:inherit}
+.tab.active{background:#0D7C5F;color:#fff;border-color:#0D7C5F}
+.tab-content{display:none}.tab-content.active{display:block}
+.flex{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.stat{background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:10px 14px;flex:1;min-width:100px}
+.stat-label{font-size:9px;color:#9CA3AF;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.stat-val{font-size:22px;font-weight:700;font-family:monospace;line-height:1.1}
+.stat-sub{font-size:10px;color:#4B5563;margin-top:2px}
+.card{background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:16px;margin-bottom:12px}
+.card-title{font-size:14px;font-weight:700;margin-bottom:10px}
+.alert{border-radius:10px;padding:12px 16px;margin-bottom:12px}
+.alert-red{background:#FEE2E2;border:1.5px solid rgba(220,38,38,.25)}
+.alert-amber{background:#FEF3C7;border:1.5px solid rgba(217,119,6,.25)}
+.alert-green{background:#D1FAE5;border:1.5px solid rgba(5,150,105,.25)}
+.alert-title{font-size:13px;font-weight:700;margin-bottom:4px}
+.alert-body{font-size:12px;line-height:1.5}
 table{border-collapse:collapse;width:100%}
-button{font-family:inherit;cursor:pointer}
-::-webkit-scrollbar{height:6px}::-webkit-scrollbar-track{background:#f1f1f1;border-radius:3px}::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px}
+th{padding:7px 10px;font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.5px;background:#111827;color:#fff}
+td{padding:6px 10px;font-size:13px;border-bottom:1px solid #E5E7EB}
+tr.alt{background:#F9FAFB}
+tr.out{background:#FEE2E2}
+tr.fd{background:#FEF3C7}
+tr.total-row{background:#DBEAFE;border-top:2px solid #2563EB}
+.mono{font-family:monospace}.bold{font-weight:700}
+.c-red{color:#DC2626}.c-green{color:#059669}.c-blue{color:#2563EB}.c-amber{color:#D97706}.c-gray{color:#9CA3AF}.c-accent{color:#0D7C5F}.c-purple{color:#7C3AED}
+.al{text-align:left}.ac{text-align:center}.ar{text-align:right}
+.badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:.5px;display:inline-block}
+.badge-green{color:#059669;background:#D1FAE5}.badge-blue{color:#2563EB;background:#DBEAFE}
+.badge-amber{color:#D97706;background:#FEF3C7}.badge-red{color:#DC2626;background:#FEE2E2}
+.badge-cyan{color:#0891B2;background:#CFFAFE}.badge-gray{color:#6B7280;background:#F3F4F6}
+.ship-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #E5E7EB;align-items:flex-start}
+.ship-item:last-child{border-bottom:none}
+.ship-bar{width:4px;min-height:40px;border-radius:2px;flex-shrink:0}
+.ship-meta{display:flex;align-items:center;gap:8px;margin-bottom:2px;flex-wrap:wrap}
+.ship-name{font-size:13px;font-weight:700}
+.ship-note{font-size:11px;color:#4B5563;margin-top:2px;line-height:1.4}
+.progress{height:8px;background:#E5E7EB;border-radius:4px;overflow:hidden;display:inline-block}
+.progress-fill{height:100%;border-radius:4px}
+.bar-chart{display:flex;align-items:flex-end;gap:16px;height:200px;padding:20px 8px 24px;position:relative}
+.bar-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar-pair{display:flex;gap:3px;align-items:flex-end;height:150px}
+.bar{width:28px;border-radius:4px 4px 0 0;position:relative}
+.bar-val{font-size:9px;font-weight:700;position:absolute;top:-14px;left:50%;transform:translateX(-50%);white-space:nowrap}
+.bar-label{font-size:10px;font-weight:600;color:#4B5563}
+.legend{display:flex;gap:16px;justify-content:center;margin-top:8px}
+.legend-item{display:flex;align-items:center;gap:4px;font-size:10px}
+.legend-dot{width:10px;height:10px;border-radius:2px}
+.forecast-bar{display:flex;align-items:flex-end;gap:0;height:220px;padding:20px 0 28px;position:relative}
+.forecast-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;position:relative}
+.forecast-fill{width:70%;border-radius:4px 4px 0 0;position:relative}
+.forecast-val{font-size:10px;font-weight:700}
+.forecast-label{font-size:9px;color:#9CA3AF;text-align:center;line-height:1.1}
+.forecast-danger{position:absolute;left:0;right:0;border-top:2px dashed #DC2626}
+.danger-label{font-size:9px;color:#DC2626;position:absolute;right:4px;top:-12px}
+.dist-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.dist-dot{width:14px;height:14px;border-radius:3px;flex-shrink:0}
+.dist-name{flex:1;font-size:13px;font-weight:500}
+.dist-val{font-size:14px;font-weight:700;font-family:monospace;width:60px;text-align:right}
+.dist-pct{font-size:11px;color:#9CA3AF;width:36px;text-align:right}
+.dist-bar{height:10px;border-radius:4px;margin-top:4px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.kpi-label{font-size:9px;color:#9CA3AF;font-weight:600;text-transform:uppercase}
+.kpi-val{font-size:14px;font-weight:700;font-family:monospace}
+.footer{text-align:center;margin-top:20px;font-size:9px;color:#9CA3AF}
+@media(max-width:640px){.grid-4,.grid-3{grid-template-columns:repeat(2,1fr)}.header{flex-direction:column;gap:8px;align-items:flex-start}}
 </style>
 </head>
 <body>
-<div id="root"></div>
-<script type="text/babel">
-const {useState,useEffect}=React;
-const {BarChart,Bar,XAxis,YAxis,Tooltip,ResponsiveContainer,Legend,LineChart,Line,CartesianGrid,ReferenceLine,PieChart,Pie,Cell}=Recharts;
+<div class="app">
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <div class="brand">BoxBlayde / 214 Central Industries</div>
+      <div class="title">Inventory Command Center</div>
+      <div class="date">May 18, 2026 &middot; Source: ControlPort + Amazon Seller Central</div>
+    </div>
+    <div class="countdown">
+      <div class="countdown-num">34</div>
+      <div class="countdown-label">DAYS TO<br>FATHER'S DAY</div>
+    </div>
+  </div>
 
-const C={green:"#059669",greenL:"#D1FAE5",blue:"#2563EB",blueL:"#DBEAFE",amber:"#D97706",amberL:"#FEF3C7",red:"#DC2626",redL:"#FEE2E2",purple:"#7C3AED",cyan:"#0891B2",cyanL:"#CFFAFE",gray:"#6B7280",grayL:"#F3F4F6",text:"#111827",text2:"#4B5563",text3:"#9CA3AF",border:"#E5E7EB",bg:"#F9FAFB",surface:"#FFFFFF",accent:"#0D7C5F"};
-const FDAY_DAYS=34;
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('overview')">Overview</button>
+    <button class="tab" onclick="showTab('fba')">FBA Status</button>
+    <button class="tab" onclick="showTab('shipments')">Shipments</button>
+    <button class="tab" onclick="showTab('forecast')">Forecast</button>
+  </div>
 
-const INV={
-  devices:{clbAvail:122,lvAvail:591,jjSellable:708,jjTotal:734,fbaOnHand:2053,fbaReserved:24,fbaUnfulfill:22,totalAvail:2761,sellRate7d:33,sellRate14d:49,fbaDoS:40.9},
-  straight:{clbAvail:370,lvAvail:281,jjSellable:651,sellRate:3},
-  serrated:{jjSellable:-127,backorders:127},
-  holster:{jjSellable:-48,backorders:48},
-};
+  <!-- ═══════════ OVERVIEW ═══════════ -->
+  <div id="tab-overview" class="tab-content active">
+    <div class="flex">
+      <div class="stat"><div class="stat-label">Total Devices</div><div class="stat-val c-accent">2,766</div><div class="stat-sub">J&J 708 + FBA 2,053</div></div>
+      <div class="stat"><div class="stat-label">Sell Rate (7d)</div><div class="stat-val">33/day</div><div class="stat-sub">Recovering as FBA restocks</div></div>
+      <div class="stat"><div class="stat-label">Days of Stock</div><div class="stat-val c-green">84d</div><div class="stat-sub">At current 33/day rate</div></div>
+      <div class="stat"><div class="stat-label">FBA On-Hand</div><div class="stat-val c-blue">2,053</div><div class="stat-sub">All 2,004 received</div></div>
+    </div>
 
-const FBA_CHECKIN=[
-  {fc:"LGB8",loc:"Rialto, CA",expected:444,located:444,prime:270},
-  {fc:"GYR3",loc:"Phoenix, AZ",expected:408,located:408,prime:197},
-  {fc:"AVP1",loc:"Hazle Twp, PA",expected:372,located:372,prime:177},
-  {fc:"IND9",loc:"Greenwood, IN",expected:348,located:348,prime:0},
-  {fc:"VGT2",loc:"Las Vegas, NV",expected:432,located:432,prime:0},
-];
+    <div class="alert alert-red">
+      <div class="alert-title c-red">&9888;&xFE0F; LV &rarr; CLB Transfer MISROUTED &mdash; Under Investigation</div>
+      <div class="alert-body">The 204-unit UPS Ground transfer from Las Vegas to Columbus was <strong>misrouted by the courier</strong>. J&J Las Vegas received an inbound shipment without an ASN &mdash; believed to be this transfer returned to sender. LV shows 608 on shelf (only 79 below pre-transfer level), confirming the 204 units never reached Columbus. Columbus has only 122 devices. <strong>Lloyd is investigating.</strong> ControlPort order #214000285.</div>
+    </div>
 
-const SHIPS=[
-  {id:"SH-001",name:"504 Devices \u2192 Columbus",qty:504,method:"Maston",dest:"CLB",status:"received",eta:"May 15",color:C.green,note:"Vessel COLORADO 16E. Received at J&J Columbus ~May 15."},
-  {id:"SH-004",name:"204 Devices LV \u2192 Columbus",qty:204,method:"UPS Ground",dest:"CLB",status:"misrouted",eta:"TBD",color:C.red,
-    note:"ISSUE: Courier appears to have returned shipment to Las Vegas instead of delivering to Columbus. LV receiving team reports an inbound shipment without an ASN \u2014 believed to be this transfer. LV inventory shows 608 on shelf (only 79 below pre-transfer level), confirming the 204 units never left or were returned. Columbus has only 122 devices. Lloyd (BoxBlayde) is investigating. ControlPort order #214000285."},
-  {id:"SH-005",name:"2,004 Devices \u2192 Amazon FBA",qty:2004,method:"UPS DDP",dest:"FBA (5 FCs)",status:"receiving",eta:"May 18-23",color:C.blue,note:"All 2,004 located at 5 FCs. 644 Prime eligible (32%). $32,482 freight. Check-in completing."},
-  {id:"SH-006",name:"1,008 Devices \u2192 Columbus",qty:1008,method:"Maston",dest:"CLB",status:"in_transit",eta:"Jun 12-17",color:C.cyan,note:"Maston fast boat via LA. $5,340 freight. RISK: J&J DG review must be resolved before arrival or units could be held at receiving."},
-  {id:"SH-002",name:"2,100 Serrated Blade Packs",qty:2100,method:"TBD",dest:"Split",status:"production",eta:"Late May",color:C.amber,note:"Production finishing end of May. IQC 3-4 days. 500 expedited by air (250 Agoura Hills / 250 CLB) requested \u2014 awaiting Nancy confirmation. 127 backorders outstanding."},
-  {id:"SH-003",name:"1,200 Straight Blade Packs",qty:1200,method:"TBD",dest:"TBD",status:"production",eta:"Late May",color:C.amber,note:"Same production timeline as serrated."},
-  {id:"SH-007",name:"Holsters from India",qty:0,method:"Ocean",dest:"CLB",status:"in_transit",eta:"End of May?",color:C.gray,note:"Sanjeev / Style N Craft. Via Suez or South Africa to NJ. No firm ETA or qty. 48 backorders."},
-];
+    <div class="alert alert-amber">
+      <div class="alert-title c-amber">&9888;&xFE0F; J&J Dangerous Goods Review &mdash; PENDING</div>
+      <div class="alert-body">ControlPort shows a <strong>PENDING dangerous goods review</strong> on BoxBlayde (MSDS under review). Must be resolved before the 1,008-unit Maston arrives ~June 15. Contact Brittan.</div>
+    </div>
 
-const FORECAST=[
-  {week:"May 18-24",start:2761,inbound:0,inNote:"",sold:245,rate:35,end:2516},
-  {week:"May 25-31",start:2516,inbound:0,inNote:"Blades arrive (500 air est.)",sold:315,rate:45,end:2201},
-  {week:"Jun 1-7",start:2201,inbound:0,inNote:"Ad ramp to 100%+",sold:350,rate:50,end:1851},
-  {week:"Jun 8-14",start:1851,inbound:0,inNote:"Peak buying week",sold:385,rate:55,end:1466},
-  {week:"Jun 15-21",start:1466,inbound:1008,inNote:"+1,008 Maston CLB",sold:420,rate:60,end:2054},
-  {week:"Jun 22-28",start:2054,inbound:0,inNote:"Post Father's Day",sold:280,rate:40,end:1774},
-];
+    <!-- Inventory Table -->
+    <div class="card">
+      <div class="card-title">Current Inventory by Location</div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th class="al">Product</th><th>CLB</th><th>LV</th><th>FBA</th><th>Total</th><th>Rate</th><th>Days</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="al"><div class="bold">BoxBlayde Device</div><div style="font-size:10px;color:#9CA3AF">CIN-915894R1</div></td>
+              <td class="ac mono bold">122</td><td class="ac mono bold">591</td><td class="ac mono bold">2,053</td>
+              <td class="ac mono bold c-accent" style="font-size:16px">2,766</td><td class="ac" style="font-size:12px">33/day</td>
+              <td class="ac mono bold c-green">84d</td>
+            </tr>
+            <tr class="alt">
+              <td class="al"><div class="bold">Straight 10-Pack</div><div style="font-size:10px;color:#9CA3AF">BBSTR10PK</div></td>
+              <td class="ac mono bold">370</td><td class="ac mono bold">281</td><td class="ac mono c-gray">0</td>
+              <td class="ac mono bold c-accent">651</td><td class="ac" style="font-size:12px">3/day</td>
+              <td class="ac mono bold c-green">217d</td>
+            </tr>
+            <tr class="out">
+              <td class="al"><div class="bold">Serrated 10-Pack</div><div style="font-size:10px;color:#9CA3AF">BBSER10PK</div><div style="font-size:10px" class="c-red bold">127 backorders</div></td>
+              <td class="ac mono bold c-red">0</td><td class="ac mono bold c-red">0</td><td class="ac mono c-red">0</td>
+              <td class="ac mono bold c-red" style="font-size:16px">0</td><td class="ac c-red" style="font-size:12px">OUT</td>
+              <td class="ac mono bold c-red">OUT</td>
+            </tr>
+            <tr class="out">
+              <td class="al"><div class="bold">Holster</div><div style="font-size:10px;color:#9CA3AF">BB-HOLS-01</div><div style="font-size:10px" class="c-red bold">48 backorders</div></td>
+              <td class="ac mono bold c-red">0</td><td class="ac mono bold c-red">0</td><td class="ac mono c-red">0</td>
+              <td class="ac mono bold c-red" style="font-size:16px">0</td><td class="ac c-red" style="font-size:12px">OUT</td>
+              <td class="ac mono bold c-red">OUT</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-/* Components */
-const Stat=({label,value,sub,color,alert,small})=>React.createElement("div",{style:{background:alert?C.redL:C.surface,border:`1px solid ${alert?"#fca5a540":C.border}`,borderRadius:10,padding:small?"10px 12px":"12px 14px",flex:1,minWidth:small?90:0}},
-  React.createElement("div",{style:{fontSize:9,color:C.text3,fontWeight:600,textTransform:"uppercase",letterSpacing:1,marginBottom:3}},label),
-  React.createElement("div",{style:{fontSize:small?18:24,fontWeight:700,fontFamily:"monospace",color:color||C.text,lineHeight:1.1}},value),
-  sub&&React.createElement("div",{style:{fontSize:10,color:C.text2,marginTop:2}},sub)
-);
+    <!-- Charts Row -->
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <div class="card" style="flex:1;min-width:280">
+        <div class="card-title">Devices + Blades by Location</div>
+        <div class="bar-chart">
+          <div class="bar-group">
+            <div class="bar-pair">
+              <div class="bar" style="height:8px;background:#2563EB"><div class="bar-val c-blue">122</div></div>
+              <div class="bar" style="height:25px;background:#D97706"><div class="bar-val c-amber">370</div></div>
+            </div>
+            <div class="bar-label">CLB</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-pair">
+              <div class="bar" style="height:40px;background:#2563EB"><div class="bar-val c-blue">591</div></div>
+              <div class="bar" style="height:19px;background:#D97706"><div class="bar-val c-amber">281</div></div>
+            </div>
+            <div class="bar-label">LV</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar-pair">
+              <div class="bar" style="height:140px;background:#2563EB"><div class="bar-val c-blue">2,053</div></div>
+            </div>
+            <div class="bar-label">FBA</div>
+          </div>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#2563EB"></div>Devices</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#D97706"></div>Straight Blades</div>
+        </div>
+      </div>
 
-const Alert=({title,children,color,bg,border:b})=>React.createElement("div",{style:{background:bg,border:`1.5px solid ${b}`,borderRadius:10,padding:"12px 16px",marginBottom:12}},
-  React.createElement("div",{style:{fontSize:13,fontWeight:700,color,marginBottom:4}},title),
-  React.createElement("div",{style:{fontSize:12,color:C.text,lineHeight:1.5}},children)
-);
+      <div class="card" style="flex:1;min-width:280">
+        <div class="card-title">Device Distribution</div>
+        <div style="padding:8px 0">
+          <div class="dist-row"><div class="dist-dot" style="background:#059669"></div><div class="dist-name">Columbus</div><div class="dist-val">122</div><div class="dist-pct">4%</div></div>
+          <div style="margin:0 0 12px 22px"><div class="dist-bar" style="width:4%;background:#059669"></div></div>
+          <div class="dist-row"><div class="dist-dot" style="background:#D97706"></div><div class="dist-name">Las Vegas</div><div class="dist-val">591</div><div class="dist-pct">21%</div></div>
+          <div style="margin:0 0 12px 22px"><div class="dist-bar" style="width:21%;background:#D97706"></div></div>
+          <div class="dist-row"><div class="dist-dot" style="background:#2563EB"></div><div class="dist-name">Amazon FBA</div><div class="dist-val">2,053</div><div class="dist-pct">74%</div></div>
+          <div style="margin:0 0 12px 22px"><div class="dist-bar" style="width:74%;background:#2563EB"></div></div>
+        </div>
+      </div>
+    </div>
 
-const TH=({children,align})=>React.createElement("th",{style:{padding:"7px 10px",textAlign:align||"center",fontWeight:600,fontSize:10,textTransform:"uppercase",letterSpacing:.5,background:C.text,color:"#fff"}},children);
-const TD=({children,align,color,bold,bg})=>React.createElement("td",{style:{padding:"6px 10px",textAlign:align||"center",fontFamily:"monospace",fontWeight:bold?700:400,color:color||C.text,fontSize:13,background:bg||"transparent"}},children);
+    <!-- Performance -->
+    <div class="card">
+      <div class="card-title">Last 7 Days (May 12-18) + Ad Spend (14d)</div>
+      <div class="grid-4">
+        <div><div class="kpi-label">Net Revenue</div><div class="kpi-val">$18,491</div></div>
+        <div><div class="kpi-label">Gross Profit</div><div class="kpi-val c-green">$9,593</div></div>
+        <div><div class="kpi-label">Units Sold</div><div class="kpi-val c-blue">286</div></div>
+        <div><div class="kpi-label">Net / Unit</div><div class="kpi-val">$67.98</div></div>
+        <div><div class="kpi-label">Devices (Shopify)</div><div class="kpi-val">71</div></div>
+        <div><div class="kpi-label">Devices (Amazon)</div><div class="kpi-val c-blue">160</div></div>
+        <div><div class="kpi-label">Grainger PO</div><div class="kpi-val c-accent">$1,060</div></div>
+        <div><div class="kpi-label">Return Rate</div><div class="kpi-val c-red">4.9%</div></div>
+        <div><div class="kpi-label">Ad Spend (14d)</div><div class="kpi-val">$19,585</div></div>
+        <div><div class="kpi-label">ROAS (14d)</div><div class="kpi-val">3.53x</div></div>
+        <div><div class="kpi-label">Meta ROAS</div><div class="kpi-val c-red">0.98x &#10060;</div></div>
+        <div><div class="kpi-label">Amz ROAS</div><div class="kpi-val c-green">6.04x &#9989;</div></div>
+      </div>
+    </div>
+  </div>
 
-function InvTable(){
-  const rows=[
-    {name:"BoxBlayde Device",sku:"CIN-915894R1",clb:INV.devices.clbAvail,lv:INV.devices.lvAvail,fba:INV.devices.fbaOnHand,total:INV.devices.totalAvail,rate:"33/day",days:Math.round(INV.devices.totalAvail/33)},
-    {name:"Straight 10-Pack",sku:"BBSTR10PK",clb:INV.straight.clbAvail,lv:INV.straight.lvAvail,fba:0,total:INV.straight.jjSellable,rate:"3/day",days:Math.round(651/3)},
-    {name:"Serrated 10-Pack",sku:"BBSER10PK",clb:0,lv:0,fba:0,total:0,rate:"OUT",days:0,bo:127},
-    {name:"Holster",sku:"BB-HOLS-01",clb:0,lv:0,fba:0,total:0,rate:"OUT",days:0,bo:48},
-  ];
-  return React.createElement("div",{style:{overflowX:"auto",marginBottom:16}},
-    React.createElement("table",null,
-      React.createElement("thead",null,React.createElement("tr",null,
-        React.createElement(TH,{align:"left"},"Product"),React.createElement(TH,null,"CLB"),React.createElement(TH,null,"LV"),React.createElement(TH,null,"FBA"),React.createElement(TH,null,"Total"),React.createElement(TH,null,"Rate"),React.createElement(TH,null,"Days")
-      )),
-      React.createElement("tbody",null,rows.map((r,i)=>
-        React.createElement("tr",{key:i,style:{background:r.total===0?C.redL:i%2===0?C.bg:C.surface,borderBottom:`1px solid ${C.border}`}},
-          React.createElement("td",{style:{padding:"8px 10px"}},
-            React.createElement("div",{style:{fontWeight:600,fontSize:13}},r.name),
-            React.createElement("div",{style:{fontSize:10,color:C.text3}},r.sku),
-            r.bo&&React.createElement("div",{style:{fontSize:10,color:C.red,fontWeight:600}},r.bo+" backorders")
-          ),
-          React.createElement(TD,{bold:true,color:r.clb===0?C.red:C.text},r.clb.toLocaleString()),
-          React.createElement(TD,{bold:true,color:r.lv===0?C.red:C.text},r.lv.toLocaleString()),
-          React.createElement(TD,{bold:true,color:r.fba===0&&r.total>0?C.text3:r.fba===0?C.red:C.text},r.fba.toLocaleString()),
-          React.createElement(TD,{bold:true,color:r.total===0?C.red:C.accent},r.total.toLocaleString()),
-          React.createElement(TD,{color:r.rate==="OUT"?C.red:C.text2},r.rate),
-          React.createElement(TD,{bold:true,color:r.days===0?C.red:r.days<30?C.amber:C.green},r.days>0?r.days+"d":"OUT")
-        )
-      ))
-    )
-  );
+  <!-- ═══════════ FBA STATUS ═══════════ -->
+  <div id="tab-fba" class="tab-content">
+    <div class="flex">
+      <div class="stat"><div class="stat-label">FBA On-Hand</div><div class="stat-val c-blue">2,053</div></div>
+      <div class="stat"><div class="stat-label">All Located</div><div class="stat-val c-green">2,004</div><div class="stat-sub">5 shipments</div></div>
+      <div class="stat"><div class="stat-label">Prime Eligible</div><div class="stat-val c-purple">644</div><div class="stat-sub">32%</div></div>
+      <div class="stat"><div class="stat-label">Days of Supply</div><div class="stat-val c-green">40.9d</div></div>
+    </div>
+
+    <div class="alert alert-green">
+      <div class="alert-title c-green">&#9989; All 2,004 Units Located &mdash; Receiving in Progress</div>
+      <div class="alert-body">All 5 FBA shipments show "Receiving." Every unit located. 644 Prime eligible (32%). <strong>Ramp Amazon PPC now.</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">FBA Check-In by Fulfillment Center</div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th class="al">FC</th><th>Location</th><th>Units</th><th>Prime</th><th style="width:140px">Progress</th></tr></thead>
+          <tbody>
+            <tr><td class="al bold">LGB8</td><td class="ac">Rialto, CA</td><td class="ac mono bold c-green">444</td><td class="ac mono bold c-blue">270</td><td class="ac"><div style="display:flex;align-items:center;gap:6;justify-content:center"><div class="progress" style="width:60px"><div class="progress-fill" style="width:61%;background:#059669"></div></div><span style="font-size:11px;font-weight:600;color:#059669">61%</span></div></td></tr>
+            <tr class="alt"><td class="al bold">GYR3</td><td class="ac">Phoenix, AZ</td><td class="ac mono bold c-green">408</td><td class="ac mono bold c-blue">197</td><td class="ac"><div style="display:flex;align-items:center;gap:6;justify-content:center"><div class="progress" style="width:60px"><div class="progress-fill" style="width:48%;background:#D97706"></div></div><span style="font-size:11px;font-weight:600;color:#D97706">48%</span></div></td></tr>
+            <tr><td class="al bold">AVP1</td><td class="ac">Hazle Twp, PA</td><td class="ac mono bold c-green">372</td><td class="ac mono bold c-blue">177</td><td class="ac"><div style="display:flex;align-items:center;gap:6;justify-content:center"><div class="progress" style="width:60px"><div class="progress-fill" style="width:48%;background:#D97706"></div></div><span style="font-size:11px;font-weight:600;color:#D97706">48%</span></div></td></tr>
+            <tr class="alt"><td class="al bold">IND9</td><td class="ac">Greenwood, IN</td><td class="ac mono bold c-green">348</td><td class="ac mono bold c-gray">0</td><td class="ac"><div style="display:flex;align-items:center;gap:6;justify-content:center"><div class="progress" style="width:60px"><div class="progress-fill" style="width:0%"></div></div><span style="font-size:11px;font-weight:600;color:#9CA3AF">0%</span></div></td></tr>
+            <tr><td class="al bold">VGT2</td><td class="ac">Las Vegas, NV</td><td class="ac mono bold c-green">432</td><td class="ac mono bold c-gray">0</td><td class="ac"><div style="display:flex;align-items:center;gap:6;justify-content:center"><div class="progress" style="width:60px"><div class="progress-fill" style="width:0%"></div></div><span style="font-size:11px;font-weight:600;color:#9CA3AF">0%</span></div></td></tr>
+            <tr class="total-row"><td colspan="2" class="al bold">TOTAL</td><td class="ac mono bold c-green">2,004</td><td class="ac mono bold c-blue">644</td><td class="ac"><span class="bold c-blue">32%</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">FBA Inventory Summary</div>
+      <div class="grid-3">
+        <div><div class="kpi-label">On-Hand</div><div style="font-size:18px;font-weight:700;font-family:monospace">2,053</div><div style="font-size:10px;color:#4B5563">Available for sale</div></div>
+        <div><div class="kpi-label">Reserved</div><div style="font-size:18px;font-weight:700;font-family:monospace">24</div><div style="font-size:10px;color:#4B5563">Orders processing</div></div>
+        <div><div class="kpi-label">Unfulfillable</div><div style="font-size:18px;font-weight:700;font-family:monospace">22</div><div style="font-size:10px;color:#4B5563">Review needed</div></div>
+        <div><div class="kpi-label">Researching</div><div style="font-size:18px;font-weight:700;font-family:monospace">5</div><div style="font-size:10px;color:#4B5563">Amazon investigating</div></div>
+        <div><div class="kpi-label">90-Day Revenue</div><div style="font-size:18px;font-weight:700;font-family:monospace">$146,090</div><div style="font-size:10px;color:#4B5563">1,464 units</div></div>
+        <div><div class="kpi-label">Sell-Through</div><div style="font-size:18px;font-weight:700;font-family:monospace">2.228</div><div style="font-size:10px;color:#4B5563">90-day rate</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ SHIPMENTS ═══════════ -->
+  <div id="tab-shipments" class="tab-content">
+    <div class="flex">
+      <div class="stat"><div class="stat-label">Received</div><div class="stat-val c-green">1</div></div>
+      <div class="stat"><div class="stat-label">Receiving</div><div class="stat-val c-blue">1</div></div>
+      <div class="stat"><div class="stat-label">In Transit</div><div class="stat-val" style="color:#0891B2">2</div></div>
+      <div class="stat"><div class="stat-label">Production</div><div class="stat-val c-amber">2</div></div>
+      <div class="stat" style="background:#FEE2E2;border-color:rgba(220,38,38,.25)"><div class="stat-label">Misrouted</div><div class="stat-val c-red">1</div></div>
+    </div>
+
+    <div style="font-size:13px;font-weight:700;margin-bottom:4px;color:#DC2626">&#9888;&#65039; Needs Resolution</div>
+    <div class="card" style="border-color:rgba(220,38,38,.25);padding:4px 16px">
+      <div class="ship-item"><div class="ship-bar" style="background:#DC2626"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-red">Misrouted</span><span style="font-size:10px;color:#9CA3AF;font-family:monospace">SH-004</span><span style="font-size:10px;color:#9CA3AF">UPS Ground &rarr; CLB</span></div><div class="ship-name">204 Devices LV &rarr; Columbus</div><div class="ship-note">ISSUE: Courier appears to have misrouted this shipment. J&J Las Vegas received an inbound shipment without an ASN &mdash; believed to be this transfer returned to sender. LV shows 608 on shelf (only 79 below pre-transfer level), confirming the 204 units never reached Columbus. Lloyd is investigating. ControlPort order #214000285.</div></div><div style="text-align:right;font-size:11px;color:#4B5563">ETA: <strong>TBD</strong></div></div>
+    </div>
+
+    <div style="font-size:13px;font-weight:700;margin-bottom:4px;color:#4B5563">FBA Receiving</div>
+    <div class="card" style="padding:4px 16px">
+      <div class="ship-item"><div class="ship-bar" style="background:#2563EB"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-blue">Receiving</span><span style="font-size:10px;color:#9CA3AF;font-family:monospace">SH-005</span><span style="font-size:10px;color:#9CA3AF">UPS DDP &rarr; FBA</span></div><div class="ship-name">2,004 Devices &rarr; Amazon FBA</div><div class="ship-note">All 2,004 located at 5 FCs. 644 Prime eligible (32%). $32,482 freight. Check-in completing.</div></div><div style="text-align:right;font-size:11px;color:#4B5563">ETA: <strong>May 18-23</strong></div></div>
+    </div>
+
+    <div style="font-size:13px;font-weight:700;margin-bottom:4px;color:#4B5563">In Transit</div>
+    <div class="card" style="padding:4px 16px">
+      <div class="ship-item"><div class="ship-bar" style="background:#0891B2"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-cyan">In Transit</span><span style="font-size:10px;color:#9CA3AF;font-family:monospace">SH-006</span><span style="font-size:10px;color:#9CA3AF">Maston &rarr; CLB</span></div><div class="ship-name">1,008 Devices &rarr; Columbus</div><div class="ship-note">Maston fast boat via LA. $5,340 freight. RISK: J&J DG review must be resolved before arrival.</div></div><div style="text-align:right;font-size:11px;color:#4B5563">ETA: <strong>Jun 12-17</strong></div></div>
+      <div class="ship-item"><div class="ship-bar" style="background:#6B7280"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-gray">In Transit</span><span style="font-size:10px;color:#9CA3AF;font-family:monospace">SH-007</span><span style="font-size:10px;color:#9CA3AF">Ocean &rarr; CLB</span></div><div class="ship-name">Holsters from India</div><div class="ship-note">Sanjeev / Style N Craft. No firm ETA or qty. 48 backorders outstanding.</div></div><div style="text-align:right;font-size:11px;color:#4B5563">ETA: <strong>End of May?</strong></div></div>
+    </div>
+
+    <div style="font-size:13px;font-weight:700;margin-bottom:4px;color:#4B5563">In Production</div>
+    <div class="card" style="padding:4px 16px">
+      <div class="ship-item"><div class="ship-bar" style="background:#D97706"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-amber">Production</span><span style="font-size:10px;color:#9CA3AF;font-family:monospace">SH-002</span></div><div class="ship-name">2,100 Serrated Blade Packs</div><div class="ship-note">Finishing end of May. 500 expedited by air (250 Agoura Hills / 250 CLB) requested &mdash; awaiting confirmation. 127 backorders.</div></div><div style="text-align:right;font-size:11px;color:#4B5563">ETA: <strong>Late May</strong></div></div>
+      <div class="ship-item"><div class="ship-bar" style="background:#D97706"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-amber">Production</span><span style="font-size:10px;color:#9CA3AF;font-family:monospace">SH-003</span></div><div class="ship-name">1,200 Straight Blade Packs</div><div class="ship-note">Same timeline as serrated.</div></div><div style="text-align:right;font-size:11px;color:#4B5563">ETA: <strong>Late May</strong></div></div>
+    </div>
+
+    <div style="font-size:13px;font-weight:700;margin-bottom:4px;color:#4B5563">Completed</div>
+    <div class="card" style="padding:4px 16px">
+      <div class="ship-item"><div class="ship-bar" style="background:#059669"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-green">Received</span><span style="font-size:10px;color:#9CA3AF;font-family:monospace">SH-001</span><span style="font-size:10px;color:#9CA3AF">Maston &rarr; CLB</span></div><div class="ship-name">504 Devices &rarr; Columbus</div><div class="ship-note">Vessel COLORADO 16E. Received at J&J Columbus ~May 15.</div></div><div style="text-align:right;font-size:11px;color:#4B5563">ETA: <strong>May 15</strong></div></div>
+    </div>
+  </div>
+
+  <!-- ═══════════ FORECAST ═══════════ -->
+  <div id="tab-forecast" class="tab-content">
+    <div class="flex">
+      <div class="stat"><div class="stat-label">Father's Day End</div><div class="stat-val c-green">2,059</div><div class="stat-sub">Jun 21 projected</div></div>
+      <div class="stat"><div class="stat-label">Peak Rate</div><div class="stat-val c-amber">~60/day</div><div class="stat-sub">Jun 15-21</div></div>
+      <div class="stat"><div class="stat-label">Low Point</div><div class="stat-val c-amber">1,471</div><div class="stat-sub">Jun 14 (before Maston)</div></div>
+      <div class="stat"><div class="stat-label">End of June</div><div class="stat-val c-green">1,779</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Device Inventory Projection (End of Week)</div>
+      <div class="forecast-bar" style="position:relative">
+        <div class="forecast-danger" style="bottom:27px"><div class="danger-label">Danger: 500</div></div>
+        <div class="forecast-col"><div class="forecast-val c-green">2,521</div><div class="forecast-fill" style="height:144px;background:#2563EB;opacity:.7"></div><div class="forecast-label">May 24</div></div>
+        <div class="forecast-col"><div class="forecast-val c-green">2,206</div><div class="forecast-fill" style="height:126px;background:#2563EB;opacity:.7"></div><div class="forecast-label">May 31</div></div>
+        <div class="forecast-col"><div class="forecast-val c-green">1,856</div><div class="forecast-fill" style="height:106px;background:#2563EB;opacity:.7"></div><div class="forecast-label">Jun 7</div></div>
+        <div class="forecast-col"><div class="forecast-val c-amber">1,471</div><div class="forecast-fill" style="height:84px;background:#D97706;opacity:.7"></div><div class="forecast-label">Jun 14</div></div>
+        <div class="forecast-col"><div class="forecast-val c-green">2,059</div><div class="forecast-fill" style="height:118px;background:#059669"></div><div class="forecast-label">Jun 21<br>&#127873;</div></div>
+        <div class="forecast-col"><div class="forecast-val c-green">1,779</div><div class="forecast-fill" style="height:102px;background:#2563EB;opacity:.7"></div><div class="forecast-label">Jun 28</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Weekly Device Forecast &mdash; May 18 through June 28</div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th class="al">Week</th><th>Start</th><th>Inbound</th><th>Rate</th><th>Sold</th><th>End</th><th class="al">Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="al bold" style="font-size:12px;white-space:nowrap">May 18-24</td><td class="ac mono">2,766</td><td class="ac mono c-gray">&mdash;</td><td class="ac" style="font-size:12px;color:#4B5563">~35/d</td><td class="ac mono c-red">-245</td><td class="ac mono bold c-green">2,521</td><td class="al" style="font-size:11px;color:#4B5563">FBA check-in completing</td></tr>
+            <tr class="alt"><td class="al bold" style="font-size:12px;white-space:nowrap">May 25-31</td><td class="ac mono">2,521</td><td class="ac mono c-gray">&mdash;</td><td class="ac" style="font-size:12px;color:#4B5563">~45/d</td><td class="ac mono c-red">-315</td><td class="ac mono bold c-green">2,206</td><td class="al" style="font-size:11px;color:#4B5563">FBA fully live, ads ramping</td></tr>
+            <tr><td class="al bold" style="font-size:12px;white-space:nowrap">Jun 1-7</td><td class="ac mono">2,206</td><td class="ac mono c-gray">&mdash;</td><td class="ac" style="font-size:12px;color:#4B5563">~50/d</td><td class="ac mono c-red">-350</td><td class="ac mono bold c-green">1,856</td><td class="al" style="font-size:11px;color:#4B5563">Father's Day ramp begins</td></tr>
+            <tr class="alt"><td class="al bold" style="font-size:12px;white-space:nowrap">Jun 8-14</td><td class="ac mono">1,856</td><td class="ac mono c-gray">&mdash;</td><td class="ac" style="font-size:12px;color:#4B5563">~55/d</td><td class="ac mono c-red">-385</td><td class="ac mono bold c-amber">1,471</td><td class="al" style="font-size:11px;color:#4B5563">Peak buying week</td></tr>
+            <tr class="fd"><td class="al bold" style="font-size:12px;white-space:nowrap">Jun 15-21 &#127873;</td><td class="ac mono">1,471</td><td class="ac mono c-green">+1,008</td><td class="ac" style="font-size:12px;color:#4B5563">~60/d</td><td class="ac mono c-red">-420</td><td class="ac mono bold c-green">2,059</td><td class="al" style="font-size:11px;color:#4B5563">+1,008 Maston arrives</td></tr>
+            <tr><td class="al bold" style="font-size:12px;white-space:nowrap">Jun 22-28</td><td class="ac mono">2,059</td><td class="ac mono c-gray">&mdash;</td><td class="ac" style="font-size:12px;color:#4B5563">~40/d</td><td class="ac mono c-red">-280</td><td class="ac mono bold c-green">1,779</td><td class="al" style="font-size:11px;color:#4B5563">Post Father's Day</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="alert alert-amber">
+      <div class="alert-title c-amber">Assumptions & Risks</div>
+      <div class="alert-body" style="line-height:1.7">
+        <strong>Sell rates:</strong> 33/day recovering to 45 (FBA restock), ramping to 60 (Father's Day peak), normalizing to 40 post-holiday.<br>
+        <strong>Critical:</strong> Jun 8-14 is the low point (1,471) before the 1,008 Maston arrives.<br>
+        <strong>Risks:</strong> Maston must clear customs + J&J DG review. Misrouted 204-unit transfer not in forecast until resolved. Serrated at zero with 127 backorders &mdash; 500 air expedite requested, no confirmation yet.
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">BOXBLAYDE INVENTORY COMMAND CENTER v5 &middot; May 18, 2026 &middot; ControlPort + Amazon Seller Central</div>
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(el) { el.classList.remove('active'); });
+  document.getElementById('tab-' + id).classList.add('active');
+  var tabs = document.querySelectorAll('.tab');
+  var tabIds = ['overview', 'fba', 'shipments', 'forecast'];
+  var idx = tabIds.indexOf(id);
+  if (idx >= 0 && tabs[idx]) tabs[idx].classList.add('active');
 }
-
-function FBATable(){
-  return React.createElement("div",{style:{overflowX:"auto",marginBottom:16}},
-    React.createElement("table",null,
-      React.createElement("thead",null,React.createElement("tr",null,
-        React.createElement(TH,{align:"left"},"FC"),React.createElement(TH,null,"Location"),React.createElement(TH,null,"Expected"),React.createElement(TH,null,"Located"),React.createElement(TH,null,"Prime"),React.createElement(TH,null,"Progress")
-      )),
-      React.createElement("tbody",null,
-        FBA_CHECKIN.map((f,i)=>{
-          const pct=Math.round(f.prime/f.expected*100);
-          return React.createElement("tr",{key:i,style:{borderBottom:`1px solid ${C.border}`,background:i%2===0?C.bg:C.surface}},
-            React.createElement("td",{style:{padding:"6px 10px",fontWeight:700,fontSize:13}},f.fc),
-            React.createElement(TD,{align:"left"},f.loc),
-            React.createElement(TD,{bold:true},f.expected),
-            React.createElement(TD,{bold:true,color:C.green},f.located),
-            React.createElement(TD,{bold:true,color:f.prime>0?C.blue:C.text3},f.prime),
-            React.createElement(TD,null,
-              React.createElement("div",{style:{display:"flex",alignItems:"center",gap:6,justifyContent:"center"}},
-                React.createElement("div",{style:{width:60,height:8,background:C.border,borderRadius:4,overflow:"hidden"}},
-                  React.createElement("div",{style:{width:pct+"%",height:"100%",background:pct>50?C.green:C.amber,borderRadius:4}})
-                ),
-                React.createElement("span",{style:{fontSize:11,fontWeight:600,color:pct>50?C.green:pct>0?C.amber:C.text3}},pct+"%")
-              )
-            )
-          );
-        }),
-        React.createElement("tr",{style:{background:C.blueL,borderTop:`2px solid ${C.blue}`}},
-          React.createElement("td",{colSpan:2,style:{padding:"6px 10px",fontWeight:700}},"TOTAL"),
-          React.createElement(TD,{bold:true},"2,004"),React.createElement(TD,{bold:true,color:C.green},"2,004"),
-          React.createElement(TD,{bold:true,color:C.blue},"644"),
-          React.createElement(TD,null,React.createElement("span",{style:{fontWeight:700,color:C.blue}},"32%"))
-        )
-      )
-    )
-  );
-}
-
-function ForecastTbl(){
-  return React.createElement("div",{style:{overflowX:"auto"}},
-    React.createElement("table",null,
-      React.createElement("thead",null,React.createElement("tr",null,
-        React.createElement(TH,{align:"left"},"Week"),React.createElement(TH,null,"Start"),React.createElement(TH,null,"Inbound"),React.createElement(TH,null,"Rate"),React.createElement(TH,null,"Sold"),React.createElement(TH,null,"End"),React.createElement(TH,{align:"left"},"Notes")
-      )),
-      React.createElement("tbody",null,FORECAST.map((f,i)=>{
-        const isFD=f.week.includes("Jun 15");
-        return React.createElement("tr",{key:i,style:{background:isFD?C.amberL:i%2===0?C.bg:C.surface,borderBottom:`1px solid ${C.border}`}},
-          React.createElement("td",{style:{padding:"6px 10px",fontWeight:700,fontSize:12,whiteSpace:"nowrap"}},f.week+(isFD?" \uD83C\uDF81":"")),
-          React.createElement(TD,null,f.start.toLocaleString()),
-          React.createElement(TD,{color:f.inbound>0?C.green:C.text3},f.inbound>0?"+"+f.inbound.toLocaleString():"\u2014"),
-          React.createElement(TD,{color:C.text2},"~"+f.rate+"/d"),
-          React.createElement(TD,{color:C.red},"-"+f.sold),
-          React.createElement(TD,{bold:true,color:f.end<500?C.red:f.end<1000?C.amber:C.green},f.end.toLocaleString()),
-          React.createElement("td",{style:{padding:"6px 10px",fontSize:11,color:C.text2}},f.inNote)
-        );
-      }))
-    )
-  );
-}
-
-function ShipCard({s}){
-  const stMap={received:{l:"Received",c:C.green,b:C.greenL},receiving:{l:"Receiving",c:C.blue,b:C.blueL},in_transit:{l:"In Transit",c:C.cyan,b:C.cyanL},production:{l:"Production",c:C.amber,b:C.amberL},misrouted:{l:"Misrouted",c:C.red,b:C.redL}};
-  const st=stMap[s.status]||{l:s.status,c:C.gray,b:C.grayL};
-  return React.createElement("div",{style:{display:"flex",gap:12,padding:"10px 0",borderBottom:`1px solid ${C.border}`,alignItems:"flex-start"}},
-    React.createElement("div",{style:{width:4,minHeight:40,borderRadius:2,background:s.color,flexShrink:0}}),
-    React.createElement("div",{style:{flex:1}},
-      React.createElement("div",{style:{display:"flex",alignItems:"center",gap:8,marginBottom:2,flexWrap:"wrap"}},
-        React.createElement("span",{style:{fontSize:10,fontWeight:700,color:st.c,background:st.b,padding:"2px 7px",borderRadius:3,textTransform:"uppercase",letterSpacing:.5}},st.l),
-        React.createElement("span",{style:{fontSize:10,color:C.text3,fontFamily:"monospace"}},s.id),
-        React.createElement("span",{style:{fontSize:10,color:C.text3}},s.method+" \u2192 "+s.dest)
-      ),
-      React.createElement("div",{style:{fontSize:13,fontWeight:700}},(s.qty>0?s.qty.toLocaleString()+" ":"")+s.name),
-      React.createElement("div",{style:{fontSize:11,color:C.text2,marginTop:2,lineHeight:1.4}},s.note)
-    ),
-    React.createElement("div",{style:{textAlign:"right",flexShrink:0,fontSize:11,color:C.text2}},
-      React.createElement("div",null,"ETA: ",React.createElement("strong",null,s.eta))
-    )
-  );
-}
-
-function App(){
-  const [tab,setTab]=useState("overview");
-  const devTotal=INV.devices.totalAvail;
-  const daysOfStock=Math.round(devTotal/33);
-
-  const distData=[{name:"CLB",devices:122,blades:370},{name:"LV",devices:591,blades:281},{name:"FBA",devices:2053,blades:0}];
-  const pieData=[{name:"Columbus",value:122,color:C.green},{name:"Las Vegas",value:591,color:C.amber},{name:"Amazon FBA",value:2053,color:C.blue}];
-  const forecastChart=FORECAST.map(f=>({name:f.week.split("-")[0],end:f.end}));
-  const tabs=[{id:"overview",l:"\uD83D\uDCCA Overview"},{id:"fba",l:"\uD83D\uDCE6 FBA Status"},{id:"shipments",l:"\uD83D\uDEA2 Shipments"},{id:"forecast",l:"\uD83D\uDCC8 Forecast"}];
-
-  const mkTabs=()=>React.createElement("div",{style:{display:"flex",gap:2,marginBottom:16,overflowX:"auto"}},
-    tabs.map(t=>React.createElement("button",{key:t.id,onClick:()=>setTab(t.id),style:{padding:"8px 16px",fontSize:12,fontWeight:600,whiteSpace:"nowrap",background:tab===t.id?C.accent:"transparent",color:tab===t.id?"#fff":C.text3,border:`1px solid ${tab===t.id?C.accent:C.border}`,borderRadius:6}},t.l))
-  );
-
-  const header=React.createElement("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:12}},
-    React.createElement("div",null,
-      React.createElement("div",{style:{fontSize:10,fontWeight:700,letterSpacing:2.5,color:C.accent,textTransform:"uppercase"}},"BoxBlayde / 214 Central Industries"),
-      React.createElement("div",{style:{fontSize:22,fontWeight:700}},"Inventory Command Center"),
-      React.createElement("div",{style:{fontSize:12,color:C.text3}},"May 18, 2026 \u00B7 Actual data from ControlPort + Amazon")
-    ),
-    React.createElement("div",{style:{background:C.redL,border:`1.5px solid ${C.red}40`,borderRadius:10,padding:"8px 14px",textAlign:"center"}},
-      React.createElement("div",{style:{fontFamily:"monospace",fontSize:28,fontWeight:700,color:C.red,lineHeight:1}},FDAY_DAYS),
-      React.createElement("div",{style:{fontSize:9,fontWeight:700,color:C.red,letterSpacing:1}},"DAYS TO FATHER'S DAY")
-    )
-  );
-
-  const overview=React.createElement(React.Fragment,null,
-    React.createElement("div",{style:{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}},
-      React.createElement(Stat,{label:"Total Devices",value:devTotal.toLocaleString(),sub:"J&J 708 + FBA 2,053",color:C.accent}),
-      React.createElement(Stat,{label:"Sell Rate (7d)",value:"33/day",sub:"Recovering as FBA restocks",color:C.text}),
-      React.createElement(Stat,{label:"Days of Stock",value:daysOfStock+"d",sub:"At current rate",color:C.green}),
-      React.createElement(Stat,{label:"FBA On-Hand",value:"2,053",sub:"All 2,004 received",color:C.blue})
-    ),
-    React.createElement(Alert,{title:"\u26A0\uFE0F LV \u2192 CLB Transfer MISROUTED \u2014 Under Investigation",color:C.red,bg:C.redL,border:C.red+"40"},
-      "The 204-unit UPS Ground transfer from Las Vegas to Columbus appears to have been misrouted by the courier. J&J Las Vegas has received an inbound shipment without an ASN \u2014 believed to be this transfer returned to sender. LV inventory shows 608 on shelf (only 79 below pre-transfer level), confirming the 204 units never reached Columbus. Columbus has only 122 devices available. Lloyd is investigating. ControlPort order #214000285."
-    ),
-    React.createElement(Alert,{title:"\u26A0\uFE0F J&J Dangerous Goods Review \u2014 PENDING",color:C.amber,bg:C.amberL,border:C.amber+"40"},
-      "ControlPort shows a PENDING dangerous goods review on BoxBlayde (MSDS documentation under review). Must be resolved before the 1,008-unit Maston arrives ~June 15. Contact Brittan."
-    ),
-    React.createElement("div",{style:{background:C.surface,border:`1px solid ${C.border}`,borderRadius:10,padding:16,marginBottom:16}},
-      React.createElement("div",{style:{fontSize:14,fontWeight:700,marginBottom:10}},"Current Inventory by Location"),
-      React.createElement(InvTable,null)
-    ),
-    React.createElement("div",{style:{display:"flex",gap:12,marginBottom:16,flexWrap:"wrap"}},
-      React.createElement("div",{style:{flex:1,minWidth:280,background:C.surface,border:`1px solid ${C.border}`,borderRadius:10,padding:16}},
-        React.createElement("div",{style:{fontSize:13,fontWeight:700,marginBottom:10}},"Device Distribution"),
-        React.createElement(ResponsiveContainer,{width:"100%",height:200},
-          React.createElement(PieChart,null,
-            React.createElement(Pie,{data:pieData,dataKey:"value",cx:"50%",cy:"50%",outerRadius:70,innerRadius:35,paddingAngle:3,label:({name,value})=>name+": "+value,style:{fontSize:10}},
-              pieData.map((e,i)=>React.createElement(Cell,{key:i,fill:e.color}))
-            ),
-            React.createElement(Tooltip,{contentStyle:{fontSize:12}})
-          )
-        )
-      ),
-      React.createElement("div",{style:{flex:1,minWidth:280,background:C.surface,border:`1px solid ${C.border}`,borderRadius:10,padding:16}},
-        React.createElement("div",{style:{fontSize:13,fontWeight:700,marginBottom:10}},"Inventory by Location"),
-        React.createElement(ResponsiveContainer,{width:"100%",height:200},
-          React.createElement(BarChart,{data:distData,barGap:4},
-            React.createElement(XAxis,{dataKey:"name",tick:{fontSize:11},axisLine:false,tickLine:false}),
-            React.createElement(YAxis,{tick:{fontSize:10},axisLine:false,tickLine:false}),
-            React.createElement(Tooltip,{contentStyle:{fontSize:12}}),
-            React.createElement(Legend,{wrapperStyle:{fontSize:10}}),
-            React.createElement(Bar,{dataKey:"devices",name:"Devices",fill:C.blue,radius:[4,4,0,0]}),
-            React.createElement(Bar,{dataKey:"blades",name:"Straight Blades",fill:C.amber,radius:[4,4,0,0]})
-          )
-        )
-      )
-    ),
-    React.createElement("div",{style:{background:C.surface,border:`1px solid ${C.border}`,borderRadius:10,padding:16}},
-      React.createElement("div",{style:{fontSize:14,fontWeight:700,marginBottom:10}},"Last 7 Days (May 12-18) + Ad Spend (14d)"),
-      React.createElement("div",{style:{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:10}},
-        [{l:"Net Revenue",v:"$18,491"},{l:"Gross Profit",v:"$9,593"},{l:"Units Sold",v:"286"},{l:"Net/Unit",v:"$67.98"},
-         {l:"Devices (Shop)",v:"71"},{l:"Devices (Amz)",v:"160"},{l:"Grainger PO",v:"$1,060"},{l:"Return Rate",v:"4.9%"},
-         {l:"Ad Spend (14d)",v:"$19,585"},{l:"ROAS (14d)",v:"3.53x"},{l:"Meta ROAS",v:"0.98x \u274C"},{l:"Amz ROAS",v:"6.04x \u2705"}
-        ].map((x,i)=>React.createElement("div",{key:i},
-          React.createElement("div",{style:{fontSize:9,color:C.text3,fontWeight:600,textTransform:"uppercase"}},x.l),
-          React.createElement("div",{style:{fontSize:14,fontWeight:700,fontFamily:"monospace"}},x.v)
-        ))
-      )
-    )
-  );
-
-  const fbaTab=React.createElement(React.Fragment,null,
-    React.createElement("div",{style:{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}},
-      React.createElement(Stat,{label:"FBA On-Hand",value:"2,053",color:C.blue}),
-      React.createElement(Stat,{label:"All Located",value:"2,004",sub:"5 shipments",color:C.green}),
-      React.createElement(Stat,{label:"Prime Eligible",value:"644",sub:"32%",color:C.purple}),
-      React.createElement(Stat,{label:"Days of Supply",value:"40.9d",color:C.green})
-    ),
-    React.createElement(Alert,{title:"\u2705 All 2,004 Units Located \u2014 Receiving in Progress",color:C.green,bg:C.greenL,border:C.green+"40"},
-      "All 5 FBA shipments show \u201CReceiving.\u201D Every unit located. 644 Prime eligible (32%). Ramp Amazon PPC now."
-    ),
-    React.createElement("div",{style:{background:C.surface,border:`1px solid ${C.border}`,borderRadius:10,padding:16}},
-      React.createElement("div",{style:{fontSize:14,fontWeight:700,marginBottom:10}},"FBA Check-In by Fulfillment Center"),
-      React.createElement(FBATable,null)
-    )
-  );
-
-  const shipTab=React.createElement(React.Fragment,null,
-    React.createElement("div",{style:{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}},
-      React.createElement(Stat,{label:"Received",value:SHIPS.filter(s=>s.status==="received").length,color:C.green,small:true}),
-      React.createElement(Stat,{label:"Receiving",value:"1",color:C.blue,small:true}),
-      React.createElement(Stat,{label:"In Transit",value:SHIPS.filter(s=>s.status==="in_transit").length,color:C.cyan,small:true}),
-      React.createElement(Stat,{label:"Production",value:SHIPS.filter(s=>s.status==="production").length,color:C.amber,small:true}),
-      React.createElement(Stat,{label:"Misrouted",value:"1",color:C.red,small:true,alert:true})
-    ),
-    ["misrouted","receiving","in_transit","production","received"].map(status=>{
-      const items=SHIPS.filter(s=>s.status===status);
-      if(!items.length) return null;
-      const labels={received:"Completed",receiving:"FBA Receiving",misrouted:"\u26A0\uFE0F Needs Resolution",in_transit:"In Transit",production:"In Production"};
-      return React.createElement("div",{key:status,style:{marginBottom:16}},
-        React.createElement("div",{style:{fontSize:13,fontWeight:700,marginBottom:4,color:status==="misrouted"?C.red:C.text2}},labels[status]),
-        React.createElement("div",{style:{background:C.surface,border:`1px solid ${status==="misrouted"?C.red+"40":C.border}`,borderRadius:10,padding:"4px 16px"}},
-          items.map(s=>React.createElement(ShipCard,{key:s.id,s}))
-        )
-      );
-    })
-  );
-
-  const forecastTab=React.createElement(React.Fragment,null,
-    React.createElement("div",{style:{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}},
-      React.createElement(Stat,{label:"Father's Day Week End",value:FORECAST[4].end.toLocaleString(),sub:"Jun 21",color:C.green}),
-      React.createElement(Stat,{label:"Peak Rate",value:"~60/day",sub:"Jun 15-21",color:C.amber}),
-      React.createElement(Stat,{label:"Low Point (Jun 14)",value:FORECAST[3].end.toLocaleString(),sub:"Before Maston",color:C.amber}),
-      React.createElement(Stat,{label:"End of June",value:FORECAST[5].end.toLocaleString(),color:C.green})
-    ),
-    React.createElement("div",{style:{background:C.surface,border:`1px solid ${C.border}`,borderRadius:10,padding:16,marginBottom:16}},
-      React.createElement("div",{style:{fontSize:14,fontWeight:700,marginBottom:12}},"Device Inventory Projection"),
-      React.createElement(ResponsiveContainer,{width:"100%",height:250},
-        React.createElement(LineChart,{data:forecastChart},
-          React.createElement(CartesianGrid,{strokeDasharray:"3 3",stroke:C.border}),
-          React.createElement(XAxis,{dataKey:"name",tick:{fontSize:11},axisLine:false}),
-          React.createElement(YAxis,{tick:{fontSize:10},axisLine:false,domain:[0,"auto"]}),
-          React.createElement(Tooltip,{contentStyle:{fontSize:12}}),
-          React.createElement(ReferenceLine,{y:500,stroke:C.red,strokeDasharray:"3 3",label:{value:"Danger",fontSize:10,fill:C.red}}),
-          React.createElement(Line,{type:"monotone",dataKey:"end",name:"End of Week",stroke:C.blue,strokeWidth:3,dot:{r:6,fill:C.blue}})
-        )
-      )
-    ),
-    React.createElement("div",{style:{background:C.surface,border:`1px solid ${C.border}`,borderRadius:10,padding:16,marginBottom:16}},
-      React.createElement("div",{style:{fontSize:14,fontWeight:700,marginBottom:10}},"Weekly Device Forecast"),
-      React.createElement(ForecastTbl,null)
-    ),
-    React.createElement("div",{style:{background:C.amberL,border:`1.5px solid ${C.amber}40`,borderRadius:10,padding:"12px 16px"}},
-      React.createElement("div",{style:{fontSize:13,fontWeight:700,color:C.amber,marginBottom:6}},"Assumptions & Risks"),
-      React.createElement("div",{style:{fontSize:12,color:C.text2,lineHeight:1.7}},
-        "Sell rates: 33/day recovering to 45 (FBA restock), ramping to 60 (Father\u2019s Day peak), normalizing to 40 post-holiday. Critical: Jun 8-14 is low point (1,466) before 1,008 Maston arrives. Maston must clear customs + J&J DG review. Misrouted LV\u2192CLB transfer (204 units) not included in forecast until resolved. Serrated at zero with 127 backorders \u2014 500 air expedite requested, no confirmation yet."
-      )
-    )
-  );
-
-  return React.createElement("div",{style:{maxWidth:960,margin:"0 auto",padding:"16px 14px 40px"}},
-    header, mkTabs(),
-    tab==="overview"&&overview,
-    tab==="fba"&&fbaTab,
-    tab==="shipments"&&shipTab,
-    tab==="forecast"&&forecastTab,
-    React.createElement("div",{style:{textAlign:"center",marginTop:20,fontSize:9,color:C.text3}},
-      "BOXBLAYDE INVENTORY COMMAND CENTER v5 \u00B7 May 18, 2026 \u00B7 Source: ControlPort + Amazon Seller Central"
-    )
-  );
-}
-
-ReactDOM.render(React.createElement(App), document.getElementById("root"));
 </script>
 </body>
 </html>
