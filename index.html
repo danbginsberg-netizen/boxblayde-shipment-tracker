@@ -30,18 +30,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,san
 .alert-red{background:#FEE2E2;border:1.5px solid rgba(220,38,38,.25)}
 .alert-amber{background:#FEF3C7;border:1.5px solid rgba(217,119,6,.25)}
 .alert-green{background:#D1FAE5;border:1.5px solid rgba(5,150,105,.25)}
+.alert-blue{background:#DBEAFE;border:1.5px solid rgba(37,99,235,.25)}
 .alert-title{font-size:13px;font-weight:700;margin-bottom:4px}
 .alert-body{font-size:12px;line-height:1.5}
 table{border-collapse:collapse;width:100%}
 th{padding:7px 10px;font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.5px;background:#111827;color:#fff}
 td{padding:6px 10px;font-size:13px;border-bottom:1px solid #E5E7EB}
-tr.alt{background:#F9FAFB}
-tr.out{background:#FEE2E2}
-tr.fd{background:#FEF3C7}
-tr.total-row{background:#DBEAFE;border-top:2px solid #2563EB}
+tr.alt{background:#F9FAFB}tr.out{background:#FEE2E2}tr.fd{background:#FEF3C7}tr.total-row{background:#DBEAFE;border-top:2px solid #2563EB}
 .mono{font-family:monospace}.bold{font-weight:700}
-.c-red{color:#DC2626}.c-green{color:#059669}.c-blue{color:#2563EB}.c-amber{color:#D97706}.c-gray{color:#9CA3AF}.c-accent{color:#0D7C5F}.c-purple{color:#7C3AED}
-.al{text-align:left}.ac{text-align:center}.ar{text-align:right}
+.c-red{color:#DC2626}.c-green{color:#059669}.c-blue{color:#2563EB}.c-amber{color:#D97706}.c-gray{color:#9CA3AF}.c-accent{color:#0D7C5F}.c-purple{color:#7C3AED}.c-cyan{color:#0891B2}
+.al{text-align:left}.ac{text-align:center}
 .badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:.5px;display:inline-block}
 .badge-green{color:#059669;background:#D1FAE5}.badge-blue{color:#2563EB;background:#DBEAFE}
 .badge-amber{color:#D97706;background:#FEF3C7}.badge-red{color:#DC2626;background:#FEE2E2}
@@ -54,7 +52,7 @@ tr.total-row{background:#DBEAFE;border-top:2px solid #2563EB}
 .ship-note{font-size:11px;color:#4B5563;margin-top:2px;line-height:1.4}
 .progress{height:8px;background:#E5E7EB;border-radius:4px;overflow:hidden;display:inline-block}
 .progress-fill{height:100%;border-radius:4px}
-.bar-chart{display:flex;align-items:flex-end;gap:16px;height:200px;padding:20px 8px 24px;position:relative}
+.bar-chart{display:flex;align-items:flex-end;gap:16px;height:200px;padding:20px 8px 24px}
 .bar-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
 .bar-pair{display:flex;gap:3px;align-items:flex-end;height:150px}
 .bar{width:28px;border-radius:4px 4px 0 0;position:relative}
@@ -63,13 +61,6 @@ tr.total-row{background:#DBEAFE;border-top:2px solid #2563EB}
 .legend{display:flex;gap:16px;justify-content:center;margin-top:8px}
 .legend-item{display:flex;align-items:center;gap:4px;font-size:10px}
 .legend-dot{width:10px;height:10px;border-radius:2px}
-.forecast-bar{display:flex;align-items:flex-end;gap:0;height:220px;padding:20px 0 28px;position:relative}
-.forecast-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;position:relative}
-.forecast-fill{width:70%;border-radius:4px 4px 0 0;position:relative}
-.forecast-val{font-size:10px;font-weight:700}
-.forecast-label{font-size:9px;color:#9CA3AF;text-align:center;line-height:1.1}
-.forecast-danger{position:absolute;left:0;right:0;border-top:2px dashed #DC2626}
-.danger-label{font-size:9px;color:#DC2626;position:absolute;right:4px;top:-12px}
 .dist-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
 .dist-dot{width:14px;height:14px;border-radius:3px;flex-shrink:0}
 .dist-name{flex:1;font-size:13px;font-weight:500}
@@ -80,26 +71,32 @@ tr.total-row{background:#DBEAFE;border-top:2px solid #2563EB}
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .kpi-label{font-size:9px;color:#9CA3AF;font-weight:600;text-transform:uppercase}
 .kpi-val{font-size:14px;font-weight:700;font-family:monospace}
+.forecast-bar{display:flex;align-items:flex-end;gap:0;height:220px;padding:20px 0 28px;position:relative}
+.forecast-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
+.forecast-fill{width:70%;border-radius:4px 4px 0 0}
+.forecast-val{font-size:10px;font-weight:700}
+.forecast-danger{position:absolute;left:0;right:0;border-top:2px dashed #DC2626}
+.danger-label{font-size:9px;color:#DC2626;position:absolute;right:4px;top:-12px}
+.timeline-row{display:flex;align-items:center;gap:0;margin-bottom:6px}
+.tl-label{width:120px;font-size:10px;font-weight:600;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tl-track{flex:1;height:18px;background:#F3F4F6;border-radius:4px;position:relative;overflow:visible}
+.tl-fill{position:absolute;height:100%;border-radius:4px;opacity:.75}
+.tl-marker{position:absolute;width:2px;height:100%;background:#DC2626;top:0}
 .footer{text-align:center;margin-top:20px;font-size:9px;color:#9CA3AF}
 @media(max-width:640px){.grid-4,.grid-3{grid-template-columns:repeat(2,1fr)}.header{flex-direction:column;gap:8px;align-items:flex-start}}
 </style>
 </head>
 <body>
 <div class="app">
-  <!-- HEADER -->
   <div class="header">
     <div>
       <div class="brand">BoxBlayde / 214 Central Industries</div>
       <div class="title">Inventory Command Center</div>
-      <div class="date">May 18, 2026 &middot; Source: ControlPort + Amazon Seller Central</div>
+      <div class="date">Updated May 19, 2026 3:00 PM ET &middot; Source: ControlPort + Amazon + Nancy email</div>
     </div>
-    <div class="countdown">
-      <div class="countdown-num">34</div>
-      <div class="countdown-label">DAYS TO<br>FATHER'S DAY</div>
-    </div>
+    <div class="countdown"><div class="countdown-num">33</div><div class="countdown-label">DAYS TO<br>FATHER'S DAY</div></div>
   </div>
 
-  <!-- TABS -->
   <div class="tabs">
     <button class="tab active" onclick="showTab('overview')">Overview</button>
     <button class="tab" onclick="showTab('fba')">FBA Status</button>
@@ -107,7 +104,7 @@ tr.total-row{background:#DBEAFE;border-top:2px solid #2563EB}
     <button class="tab" onclick="showTab('forecast')">Forecast</button>
   </div>
 
-  <!-- ═══════════ OVERVIEW ═══════════ -->
+  <!-- ═══ OVERVIEW ═══ -->
   <div id="tab-overview" class="tab-content active">
     <div class="flex">
       <div class="stat"><div class="stat-label">Total Devices</div><div class="stat-val c-accent">2,766</div><div class="stat-sub">J&J 708 + FBA 2,053</div></div>
@@ -116,84 +113,50 @@ tr.total-row{background:#DBEAFE;border-top:2px solid #2563EB}
       <div class="stat"><div class="stat-label">FBA On-Hand</div><div class="stat-val c-blue">2,053</div><div class="stat-sub">All 2,004 received</div></div>
     </div>
 
+    <!-- NEW: Blade update -->
+    <div class="alert alert-blue">
+      <div class="alert-title c-blue">&#128230; Blade Packs Update (Nancy, May 19)</div>
+      <div class="alert-body">
+        <strong>500 expedited serrated (air):</strong> Production complete Jun 1 &rarr; Sofeast receives Jun 3 &rarr; IQC Jun 4 &rarr; Air ship Jun 4 &rarr; <strong>US delivery ~Jun 7-10.</strong> 250 to Agoura Hills (Rob), 250 to Columbus.<br>
+        <strong>Remaining 2,800 packs</strong> (1,600 serrated + 1,200 straight): Ready for fast boat ~Jun 5. Shelly sending freight quote. <strong>Destinations needed from us.</strong>
+      </div>
+    </div>
+
     <div class="alert alert-red">
-      <div class="alert-title c-red">&9888;&xFE0F; LV &rarr; CLB Transfer MISROUTED &mdash; Under Investigation</div>
-      <div class="alert-body">The 204-unit UPS Ground transfer from Las Vegas to Columbus was <strong>misrouted by the courier</strong>. J&J Las Vegas received an inbound shipment without an ASN &mdash; believed to be this transfer returned to sender. LV shows 608 on shelf (only 79 below pre-transfer level), confirming the 204 units never reached Columbus. Columbus has only 122 devices. <strong>Lloyd is investigating.</strong> ControlPort order #214000285.</div>
+      <div class="alert-title c-red">&#9888;&#65039; LV &rarr; CLB Transfer MISROUTED &mdash; Under Investigation</div>
+      <div class="alert-body">204-unit UPS Ground transfer misrouted by courier. J&J LV received inbound without ASN &mdash; believed to be this transfer returned to sender. LV shows 608 on shelf. Columbus has only 122 devices. <strong>Lloyd investigating.</strong> ControlPort #214000285.</div>
     </div>
 
     <div class="alert alert-amber">
-      <div class="alert-title c-amber">&9888;&xFE0F; J&J Dangerous Goods Review &mdash; PENDING</div>
-      <div class="alert-body">ControlPort shows a <strong>PENDING dangerous goods review</strong> on BoxBlayde (MSDS under review). Must be resolved before the 1,008-unit Maston arrives ~June 15. Contact Brittan.</div>
+      <div class="alert-title c-amber">&#9888;&#65039; J&J Dangerous Goods Review &mdash; PENDING</div>
+      <div class="alert-body">ControlPort: PENDING DG review on BoxBlayde (MSDS under review). Must be resolved before 1,008-unit Maston arrives ~Jun 15. Contact Brittan.</div>
     </div>
 
-    <!-- Inventory Table -->
     <div class="card">
       <div class="card-title">Current Inventory by Location</div>
       <div style="overflow-x:auto">
         <table>
           <thead><tr><th class="al">Product</th><th>CLB</th><th>LV</th><th>FBA</th><th>Total</th><th>Rate</th><th>Days</th></tr></thead>
           <tbody>
-            <tr>
-              <td class="al"><div class="bold">BoxBlayde Device</div><div style="font-size:10px;color:#9CA3AF">CIN-915894R1</div></td>
-              <td class="ac mono bold">122</td><td class="ac mono bold">591</td><td class="ac mono bold">2,053</td>
-              <td class="ac mono bold c-accent" style="font-size:16px">2,766</td><td class="ac" style="font-size:12px">33/day</td>
-              <td class="ac mono bold c-green">84d</td>
-            </tr>
-            <tr class="alt">
-              <td class="al"><div class="bold">Straight 10-Pack</div><div style="font-size:10px;color:#9CA3AF">BBSTR10PK</div></td>
-              <td class="ac mono bold">370</td><td class="ac mono bold">281</td><td class="ac mono c-gray">0</td>
-              <td class="ac mono bold c-accent">651</td><td class="ac" style="font-size:12px">3/day</td>
-              <td class="ac mono bold c-green">217d</td>
-            </tr>
-            <tr class="out">
-              <td class="al"><div class="bold">Serrated 10-Pack</div><div style="font-size:10px;color:#9CA3AF">BBSER10PK</div><div style="font-size:10px" class="c-red bold">127 backorders</div></td>
-              <td class="ac mono bold c-red">0</td><td class="ac mono bold c-red">0</td><td class="ac mono c-red">0</td>
-              <td class="ac mono bold c-red" style="font-size:16px">0</td><td class="ac c-red" style="font-size:12px">OUT</td>
-              <td class="ac mono bold c-red">OUT</td>
-            </tr>
-            <tr class="out">
-              <td class="al"><div class="bold">Holster</div><div style="font-size:10px;color:#9CA3AF">BB-HOLS-01</div><div style="font-size:10px" class="c-red bold">48 backorders</div></td>
-              <td class="ac mono bold c-red">0</td><td class="ac mono bold c-red">0</td><td class="ac mono c-red">0</td>
-              <td class="ac mono bold c-red" style="font-size:16px">0</td><td class="ac c-red" style="font-size:12px">OUT</td>
-              <td class="ac mono bold c-red">OUT</td>
-            </tr>
+            <tr><td class="al"><div class="bold">BoxBlayde Device</div><div style="font-size:10px" class="c-gray">CIN-915894R1</div></td><td class="ac mono bold">122</td><td class="ac mono bold">591</td><td class="ac mono bold">2,053</td><td class="ac mono bold c-accent" style="font-size:16px">2,766</td><td class="ac" style="font-size:12px">33/day</td><td class="ac mono bold c-green">84d</td></tr>
+            <tr class="alt"><td class="al"><div class="bold">Straight 10-Pack</div><div style="font-size:10px" class="c-gray">BBSTR10PK</div></td><td class="ac mono bold">370</td><td class="ac mono bold">281</td><td class="ac mono c-gray">0</td><td class="ac mono bold c-accent">651</td><td class="ac" style="font-size:12px">3/day</td><td class="ac mono bold c-green">217d</td></tr>
+            <tr class="out"><td class="al"><div class="bold">Serrated 10-Pack</div><div style="font-size:10px" class="c-gray">BBSER10PK</div><div style="font-size:10px" class="c-red bold">127 backorders</div></td><td class="ac mono bold c-red">0</td><td class="ac mono bold c-red">0</td><td class="ac mono c-red">0</td><td class="ac mono bold c-red" style="font-size:16px">0</td><td class="ac c-red" style="font-size:12px">OUT</td><td class="ac mono bold c-red">OUT</td></tr>
+            <tr class="out"><td class="al"><div class="bold">Holster</div><div style="font-size:10px" class="c-gray">BB-HOLS-01</div><div style="font-size:10px" class="c-red bold">48 backorders</div></td><td class="ac mono bold c-red">0</td><td class="ac mono bold c-red">0</td><td class="ac mono c-red">0</td><td class="ac mono bold c-red" style="font-size:16px">0</td><td class="ac c-red" style="font-size:12px">OUT</td><td class="ac mono bold c-red">OUT</td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- Charts Row -->
     <div style="display:flex;gap:12px;flex-wrap:wrap">
       <div class="card" style="flex:1;min-width:280">
         <div class="card-title">Devices + Blades by Location</div>
         <div class="bar-chart">
-          <div class="bar-group">
-            <div class="bar-pair">
-              <div class="bar" style="height:8px;background:#2563EB"><div class="bar-val c-blue">122</div></div>
-              <div class="bar" style="height:25px;background:#D97706"><div class="bar-val c-amber">370</div></div>
-            </div>
-            <div class="bar-label">CLB</div>
-          </div>
-          <div class="bar-group">
-            <div class="bar-pair">
-              <div class="bar" style="height:40px;background:#2563EB"><div class="bar-val c-blue">591</div></div>
-              <div class="bar" style="height:19px;background:#D97706"><div class="bar-val c-amber">281</div></div>
-            </div>
-            <div class="bar-label">LV</div>
-          </div>
-          <div class="bar-group">
-            <div class="bar-pair">
-              <div class="bar" style="height:140px;background:#2563EB"><div class="bar-val c-blue">2,053</div></div>
-            </div>
-            <div class="bar-label">FBA</div>
-          </div>
+          <div class="bar-group"><div class="bar-pair"><div class="bar" style="height:8px;background:#2563EB"><div class="bar-val c-blue">122</div></div><div class="bar" style="height:25px;background:#D97706"><div class="bar-val c-amber">370</div></div></div><div class="bar-label">CLB</div></div>
+          <div class="bar-group"><div class="bar-pair"><div class="bar" style="height:40px;background:#2563EB"><div class="bar-val c-blue">591</div></div><div class="bar" style="height:19px;background:#D97706"><div class="bar-val c-amber">281</div></div></div><div class="bar-label">LV</div></div>
+          <div class="bar-group"><div class="bar-pair"><div class="bar" style="height:140px;background:#2563EB"><div class="bar-val c-blue">2,053</div></div></div><div class="bar-label">FBA</div></div>
         </div>
-        <div class="legend">
-          <div class="legend-item"><div class="legend-dot" style="background:#2563EB"></div>Devices</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#D97706"></div>Straight Blades</div>
-        </div>
+        <div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#2563EB"></div>Devices</div><div class="legend-item"><div class="legend-dot" style="background:#D97706"></div>Straight Blades</div></div>
       </div>
-
       <div class="card" style="flex:1;min-width:280">
         <div class="card-title">Device Distribution</div>
         <div style="padding:8px 0">
@@ -207,7 +170,6 @@ tr.total-row{background:#DBEAFE;border-top:2px solid #2563EB}
       </div>
     </div>
 
-    <!-- Performance -->
     <div class="card">
       <div class="card-title">Last 7 Days (May 12-18) + Ad Spend (14d)</div>
       <div class="grid-4">
@@ -227,7 +189,7 @@ tr.total-row{background:#DBEAFE;border-top:2px solid #2563EB}
     </div>
   </div>
 
-  <!-- ═══════════ FBA STATUS ═══════════ -->
+  <!-- ═══ FBA STATUS ═══ -->
   <div id="tab-fba" class="tab-content">
     <div class="flex">
       <div class="stat"><div class="stat-label">FBA On-Hand</div><div class="stat-val c-blue">2,053</div></div>
@@ -235,114 +197,139 @@ tr.total-row{background:#DBEAFE;border-top:2px solid #2563EB}
       <div class="stat"><div class="stat-label">Prime Eligible</div><div class="stat-val c-purple">644</div><div class="stat-sub">32%</div></div>
       <div class="stat"><div class="stat-label">Days of Supply</div><div class="stat-val c-green">40.9d</div></div>
     </div>
-
     <div class="alert alert-green">
       <div class="alert-title c-green">&#9989; All 2,004 Units Located &mdash; Receiving in Progress</div>
-      <div class="alert-body">All 5 FBA shipments show "Receiving." Every unit located. 644 Prime eligible (32%). <strong>Ramp Amazon PPC now.</strong></div>
+      <div class="alert-body">All 5 FBA shipments show "Receiving." 644 Prime eligible (32%). <strong>Ramp Amazon PPC now.</strong></div>
     </div>
-
     <div class="card">
       <div class="card-title">FBA Check-In by Fulfillment Center</div>
       <div style="overflow-x:auto">
         <table>
           <thead><tr><th class="al">FC</th><th>Location</th><th>Units</th><th>Prime</th><th style="width:140px">Progress</th></tr></thead>
           <tbody>
-            <tr><td class="al bold">LGB8</td><td class="ac">Rialto, CA</td><td class="ac mono bold c-green">444</td><td class="ac mono bold c-blue">270</td><td class="ac"><div style="display:flex;align-items:center;gap:6;justify-content:center"><div class="progress" style="width:60px"><div class="progress-fill" style="width:61%;background:#059669"></div></div><span style="font-size:11px;font-weight:600;color:#059669">61%</span></div></td></tr>
-            <tr class="alt"><td class="al bold">GYR3</td><td class="ac">Phoenix, AZ</td><td class="ac mono bold c-green">408</td><td class="ac mono bold c-blue">197</td><td class="ac"><div style="display:flex;align-items:center;gap:6;justify-content:center"><div class="progress" style="width:60px"><div class="progress-fill" style="width:48%;background:#D97706"></div></div><span style="font-size:11px;font-weight:600;color:#D97706">48%</span></div></td></tr>
-            <tr><td class="al bold">AVP1</td><td class="ac">Hazle Twp, PA</td><td class="ac mono bold c-green">372</td><td class="ac mono bold c-blue">177</td><td class="ac"><div style="display:flex;align-items:center;gap:6;justify-content:center"><div class="progress" style="width:60px"><div class="progress-fill" style="width:48%;background:#D97706"></div></div><span style="font-size:11px;font-weight:600;color:#D97706">48%</span></div></td></tr>
-            <tr class="alt"><td class="al bold">IND9</td><td class="ac">Greenwood, IN</td><td class="ac mono bold c-green">348</td><td class="ac mono bold c-gray">0</td><td class="ac"><div style="display:flex;align-items:center;gap:6;justify-content:center"><div class="progress" style="width:60px"><div class="progress-fill" style="width:0%"></div></div><span style="font-size:11px;font-weight:600;color:#9CA3AF">0%</span></div></td></tr>
-            <tr><td class="al bold">VGT2</td><td class="ac">Las Vegas, NV</td><td class="ac mono bold c-green">432</td><td class="ac mono bold c-gray">0</td><td class="ac"><div style="display:flex;align-items:center;gap:6;justify-content:center"><div class="progress" style="width:60px"><div class="progress-fill" style="width:0%"></div></div><span style="font-size:11px;font-weight:600;color:#9CA3AF">0%</span></div></td></tr>
+            <tr><td class="al bold">LGB8</td><td class="ac">Rialto, CA</td><td class="ac mono bold c-green">444</td><td class="ac mono bold c-blue">270</td><td class="ac"><div style="display:flex;align-items:center;gap:6px;justify-content:center"><div class="progress" style="width:60px"><div class="progress-fill" style="width:61%;background:#059669"></div></div><span style="font-size:11px;font-weight:600;color:#059669">61%</span></div></td></tr>
+            <tr class="alt"><td class="al bold">GYR3</td><td class="ac">Phoenix, AZ</td><td class="ac mono bold c-green">408</td><td class="ac mono bold c-blue">197</td><td class="ac"><div style="display:flex;align-items:center;gap:6px;justify-content:center"><div class="progress" style="width:60px"><div class="progress-fill" style="width:48%;background:#D97706"></div></div><span style="font-size:11px;font-weight:600;color:#D97706">48%</span></div></td></tr>
+            <tr><td class="al bold">AVP1</td><td class="ac">Hazle Twp, PA</td><td class="ac mono bold c-green">372</td><td class="ac mono bold c-blue">177</td><td class="ac"><div style="display:flex;align-items:center;gap:6px;justify-content:center"><div class="progress" style="width:60px"><div class="progress-fill" style="width:48%;background:#D97706"></div></div><span style="font-size:11px;font-weight:600;color:#D97706">48%</span></div></td></tr>
+            <tr class="alt"><td class="al bold">IND9</td><td class="ac">Greenwood, IN</td><td class="ac mono bold c-green">348</td><td class="ac mono bold c-gray">0</td><td class="ac"><div style="display:flex;align-items:center;gap:6px;justify-content:center"><div class="progress" style="width:60px"><div class="progress-fill" style="width:0%"></div></div><span style="font-size:11px;font-weight:600;color:#9CA3AF">0%</span></div></td></tr>
+            <tr><td class="al bold">VGT2</td><td class="ac">Las Vegas, NV</td><td class="ac mono bold c-green">432</td><td class="ac mono bold c-gray">0</td><td class="ac"><div style="display:flex;align-items:center;gap:6px;justify-content:center"><div class="progress" style="width:60px"><div class="progress-fill" style="width:0%"></div></div><span style="font-size:11px;font-weight:600;color:#9CA3AF">0%</span></div></td></tr>
             <tr class="total-row"><td colspan="2" class="al bold">TOTAL</td><td class="ac mono bold c-green">2,004</td><td class="ac mono bold c-blue">644</td><td class="ac"><span class="bold c-blue">32%</span></td></tr>
           </tbody>
         </table>
       </div>
     </div>
-
-    <div class="card">
-      <div class="card-title">FBA Inventory Summary</div>
-      <div class="grid-3">
-        <div><div class="kpi-label">On-Hand</div><div style="font-size:18px;font-weight:700;font-family:monospace">2,053</div><div style="font-size:10px;color:#4B5563">Available for sale</div></div>
-        <div><div class="kpi-label">Reserved</div><div style="font-size:18px;font-weight:700;font-family:monospace">24</div><div style="font-size:10px;color:#4B5563">Orders processing</div></div>
-        <div><div class="kpi-label">Unfulfillable</div><div style="font-size:18px;font-weight:700;font-family:monospace">22</div><div style="font-size:10px;color:#4B5563">Review needed</div></div>
-        <div><div class="kpi-label">Researching</div><div style="font-size:18px;font-weight:700;font-family:monospace">5</div><div style="font-size:10px;color:#4B5563">Amazon investigating</div></div>
-        <div><div class="kpi-label">90-Day Revenue</div><div style="font-size:18px;font-weight:700;font-family:monospace">$146,090</div><div style="font-size:10px;color:#4B5563">1,464 units</div></div>
-        <div><div class="kpi-label">Sell-Through</div><div style="font-size:18px;font-weight:700;font-family:monospace">2.228</div><div style="font-size:10px;color:#4B5563">90-day rate</div></div>
-      </div>
-    </div>
   </div>
 
-  <!-- ═══════════ SHIPMENTS ═══════════ -->
+  <!-- ═══ SHIPMENTS ═══ -->
   <div id="tab-shipments" class="tab-content">
     <div class="flex">
       <div class="stat"><div class="stat-label">Received</div><div class="stat-val c-green">1</div></div>
       <div class="stat"><div class="stat-label">Receiving</div><div class="stat-val c-blue">1</div></div>
-      <div class="stat"><div class="stat-label">In Transit</div><div class="stat-val" style="color:#0891B2">2</div></div>
+      <div class="stat"><div class="stat-label">In Transit</div><div class="stat-val c-cyan">2</div></div>
       <div class="stat"><div class="stat-label">Production</div><div class="stat-val c-amber">2</div></div>
       <div class="stat" style="background:#FEE2E2;border-color:rgba(220,38,38,.25)"><div class="stat-label">Misrouted</div><div class="stat-val c-red">1</div></div>
     </div>
 
+    <!-- Gantt Timeline -->
+    <div class="card">
+      <div class="card-title">Shipment Timeline (May 1 &rarr; Jun 30)</div>
+      <div style="font-size:9px;color:#9CA3AF;display:flex;margin-bottom:4px;padding-left:120px">
+        <span style="flex:1;text-align:center">May 1</span><span style="flex:1;text-align:center">May 15</span><span style="flex:1;text-align:center">Jun 1</span><span style="flex:1;text-align:center">Jun 15</span><span style="flex:1;text-align:center">Jun 30</span>
+      </div>
+      <!-- SH-005: FBA UPS DDP -->
+      <div class="timeline-row"><div class="tl-label">2,004 &rarr; FBA</div><div class="tl-track"><div class="tl-fill" style="left:20%;width:12%;background:#2563EB"></div><div class="tl-marker" style="left:83.6%"></div></div></div>
+      <!-- SH-006: 1,008 Maston CLB -->
+      <div class="timeline-row"><div class="tl-label">1,008 &rarr; CLB</div><div class="tl-track"><div class="tl-fill" style="left:20%;width:55%;background:#0891B2"></div><div class="tl-marker" style="left:83.6%"></div></div></div>
+      <!-- SH-002: Serrated 500 air -->
+      <div class="timeline-row"><div class="tl-label">500 ser. (air)</div><div class="tl-track"><div class="tl-fill" style="left:50%;width:18%;background:#D97706"></div><div class="tl-marker" style="left:83.6%"></div></div></div>
+      <!-- SH-002b: Serrated 1,600 boat -->
+      <div class="timeline-row"><div class="tl-label">1,600 ser. (boat)</div><div class="tl-track"><div class="tl-fill" style="left:55%;width:40%;background:#D97706;opacity:.4"></div><div class="tl-marker" style="left:83.6%"></div></div></div>
+      <!-- SH-003: Straight 1,200 boat -->
+      <div class="timeline-row"><div class="tl-label">1,200 str. (boat)</div><div class="tl-track"><div class="tl-fill" style="left:55%;width:40%;background:#D97706;opacity:.4"></div><div class="tl-marker" style="left:83.6%"></div></div></div>
+      <!-- SH-007: Holsters -->
+      <div class="timeline-row"><div class="tl-label">Holsters (India)</div><div class="tl-track"><div class="tl-fill" style="left:0%;width:50%;background:#6B7280;opacity:.3"></div><div class="tl-marker" style="left:83.6%"></div></div></div>
+      <div style="font-size:9px;color:#DC2626;text-align:right;margin-top:2px">Red line = Father's Day (Jun 21)</div>
+    </div>
+
     <div style="font-size:13px;font-weight:700;margin-bottom:4px;color:#DC2626">&#9888;&#65039; Needs Resolution</div>
     <div class="card" style="border-color:rgba(220,38,38,.25);padding:4px 16px">
-      <div class="ship-item"><div class="ship-bar" style="background:#DC2626"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-red">Misrouted</span><span style="font-size:10px;color:#9CA3AF;font-family:monospace">SH-004</span><span style="font-size:10px;color:#9CA3AF">UPS Ground &rarr; CLB</span></div><div class="ship-name">204 Devices LV &rarr; Columbus</div><div class="ship-note">ISSUE: Courier appears to have misrouted this shipment. J&J Las Vegas received an inbound shipment without an ASN &mdash; believed to be this transfer returned to sender. LV shows 608 on shelf (only 79 below pre-transfer level), confirming the 204 units never reached Columbus. Lloyd is investigating. ControlPort order #214000285.</div></div><div style="text-align:right;font-size:11px;color:#4B5563">ETA: <strong>TBD</strong></div></div>
+      <div class="ship-item"><div class="ship-bar" style="background:#DC2626"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-red">Misrouted</span><span style="font-size:10px" class="c-gray mono">SH-004</span><span style="font-size:10px" class="c-gray">UPS Ground &rarr; CLB</span></div><div class="ship-name">204 Devices LV &rarr; Columbus</div><div class="ship-note">Courier misrouted. J&J LV received inbound without ASN. Lloyd investigating. ControlPort #214000285.</div></div><div style="text-align:right;font-size:11px" class="c-gray">ETA: <strong>TBD</strong></div></div>
     </div>
 
-    <div style="font-size:13px;font-weight:700;margin-bottom:4px;color:#4B5563">FBA Receiving</div>
+    <div style="font-size:13px;font-weight:700;margin-bottom:4px" class="c-gray">FBA Receiving</div>
     <div class="card" style="padding:4px 16px">
-      <div class="ship-item"><div class="ship-bar" style="background:#2563EB"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-blue">Receiving</span><span style="font-size:10px;color:#9CA3AF;font-family:monospace">SH-005</span><span style="font-size:10px;color:#9CA3AF">UPS DDP &rarr; FBA</span></div><div class="ship-name">2,004 Devices &rarr; Amazon FBA</div><div class="ship-note">All 2,004 located at 5 FCs. 644 Prime eligible (32%). $32,482 freight. Check-in completing.</div></div><div style="text-align:right;font-size:11px;color:#4B5563">ETA: <strong>May 18-23</strong></div></div>
+      <div class="ship-item"><div class="ship-bar" style="background:#2563EB"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-blue">Receiving</span><span style="font-size:10px" class="c-gray mono">SH-005</span></div><div class="ship-name">2,004 Devices &rarr; Amazon FBA</div><div class="ship-note">All 2,004 located at 5 FCs. 644 Prime eligible (32%). $32,482 freight.</div></div><div style="text-align:right;font-size:11px" class="c-gray">ETA: <strong>May 18-23</strong></div></div>
     </div>
 
-    <div style="font-size:13px;font-weight:700;margin-bottom:4px;color:#4B5563">In Transit</div>
+    <div style="font-size:13px;font-weight:700;margin-bottom:4px" class="c-gray">In Transit</div>
     <div class="card" style="padding:4px 16px">
-      <div class="ship-item"><div class="ship-bar" style="background:#0891B2"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-cyan">In Transit</span><span style="font-size:10px;color:#9CA3AF;font-family:monospace">SH-006</span><span style="font-size:10px;color:#9CA3AF">Maston &rarr; CLB</span></div><div class="ship-name">1,008 Devices &rarr; Columbus</div><div class="ship-note">Maston fast boat via LA. $5,340 freight. RISK: J&J DG review must be resolved before arrival.</div></div><div style="text-align:right;font-size:11px;color:#4B5563">ETA: <strong>Jun 12-17</strong></div></div>
-      <div class="ship-item"><div class="ship-bar" style="background:#0891B2"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-cyan">In Transit</span><span style="font-size:10px;color:#9CA3AF;font-family:monospace">SH-007</span><span style="font-size:10px;color:#9CA3AF">Hapag-Lloyd &rarr; Newark &rarr; CLB</span></div><div class="ship-name">Holsters from India</div><div class="ship-note">Sanjeev / Style N Craft confirmed 5/13. Vessel TORRENTE V 6118 (Hapag-Lloyd, IMO 9447914), container HLXU 8529327 (40'HQ). ETD Nhava Sheva 5/4; ETA Newark <strong>6/6</strong> (firm). Qty TBD. 48 backorders outstanding &mdash; covers all open Grainger holster POs. Realistic J&J Columbus arrival ~6/16 after customs/inland. Next production run dispatching end-July / early-August.</div></div><div style="text-align:right;font-size:11px;color:#4B5563">ETA Newark: <strong>Jun 6</strong></div></div>
+      <div class="ship-item"><div class="ship-bar" style="background:#0891B2"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-cyan">In Transit</span><span style="font-size:10px" class="c-gray mono">SH-006</span></div><div class="ship-name">1,008 Devices &rarr; Columbus (Maston)</div><div class="ship-note">$5,340 freight. RISK: J&J DG review must clear before arrival.</div></div><div style="text-align:right;font-size:11px" class="c-gray">ETA: <strong>Jun 12-17</strong></div></div>
+      <div class="ship-item"><div class="ship-bar" style="background:#6B7280"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-gray">In Transit</span><span style="font-size:10px" class="c-gray mono">SH-007</span></div><div class="ship-name">Holsters from India</div><div class="ship-note">Sanjeev / Style N Craft. No firm ETA. 48 backorders.</div></div><div style="text-align:right;font-size:11px" class="c-gray">ETA: <strong>End of May?</strong></div></div>
     </div>
 
-    <div style="font-size:13px;font-weight:700;margin-bottom:4px;color:#4B5563">In Production</div>
+    <div style="font-size:13px;font-weight:700;margin-bottom:4px" class="c-gray">In Production &mdash; Blade Packs</div>
     <div class="card" style="padding:4px 16px">
-      <div class="ship-item"><div class="ship-bar" style="background:#D97706"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-amber">Production</span><span style="font-size:10px;color:#9CA3AF;font-family:monospace">SH-002</span></div><div class="ship-name">2,100 Serrated Blade Packs</div><div class="ship-note">Finishing end of May. 500 expedited by air (250 Agoura Hills / 250 CLB) requested &mdash; awaiting confirmation. 127 backorders.</div></div><div style="text-align:right;font-size:11px;color:#4B5563">ETA: <strong>Late May</strong></div></div>
-      <div class="ship-item"><div class="ship-bar" style="background:#D97706"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-amber">Production</span><span style="font-size:10px;color:#9CA3AF;font-family:monospace">SH-003</span></div><div class="ship-name">1,200 Straight Blade Packs</div><div class="ship-note">Same timeline as serrated.</div></div><div style="text-align:right;font-size:11px;color:#4B5563">ETA: <strong>Late May</strong></div></div>
+      <div class="ship-item"><div class="ship-bar" style="background:#D97706"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-amber">Confirmed</span><span style="font-size:10px" class="c-gray mono">SH-002a</span><span style="font-size:10px" class="c-gray">Air &rarr; AH + CLB</span></div><div class="ship-name">500 Serrated Blade Packs (Expedited Air)</div><div class="ship-note"><strong>Nancy confirmed May 19:</strong> Production done Jun 1. Sofeast receives Jun 3. IQC Jun 4. Air ship Jun 4. US delivery ~Jun 7-10. Split: 250 to Agoura Hills (Rob), 250 to Columbus. Shelly providing freight quote after packing list received.</div></div><div style="text-align:right;font-size:11px" class="c-gray">Ship: <strong>Jun 4</strong><br>Arrive: <strong>~Jun 7-10</strong></div></div>
+      <div class="ship-item"><div class="ship-bar" style="background:#D97706"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-amber">Production</span><span style="font-size:10px" class="c-gray mono">SH-002b</span><span style="font-size:10px" class="c-gray">Fast Boat &rarr; TBD</span></div><div class="ship-name">1,600 Serrated + 1,200 Straight Blade Packs</div><div class="ship-note">Ready for shipment ~Jun 5. Fast boat. Shelly sending freight quote. <strong>Destinations needed from us.</strong> Recommended split: CLB 1,000 ser / 800 str. LV 600 ser / 400 str. Fast boat 25-30d &rarr; arrives ~Jul 1-5.</div></div><div style="text-align:right;font-size:11px" class="c-gray">Ship: <strong>~Jun 5</strong><br>Arrive: <strong>~Jul 1-5</strong></div></div>
     </div>
 
-    <div style="font-size:13px;font-weight:700;margin-bottom:4px;color:#4B5563">Completed</div>
+    <div style="font-size:13px;font-weight:700;margin-bottom:4px" class="c-gray">Completed</div>
     <div class="card" style="padding:4px 16px">
-      <div class="ship-item"><div class="ship-bar" style="background:#059669"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-green">Received</span><span style="font-size:10px;color:#9CA3AF;font-family:monospace">SH-001</span><span style="font-size:10px;color:#9CA3AF">Maston &rarr; CLB</span></div><div class="ship-name">504 Devices &rarr; Columbus</div><div class="ship-note">Vessel COLORADO 16E. Received at J&J Columbus ~May 15.</div></div><div style="text-align:right;font-size:11px;color:#4B5563">ETA: <strong>May 15</strong></div></div>
+      <div class="ship-item"><div class="ship-bar" style="background:#059669"></div><div style="flex:1"><div class="ship-meta"><span class="badge badge-green">Received</span><span style="font-size:10px" class="c-gray mono">SH-001</span></div><div class="ship-name">504 Devices &rarr; Columbus (Maston)</div><div class="ship-note">Vessel COLORADO 16E. Received ~May 15.</div></div><div style="text-align:right;font-size:11px" class="c-gray"><strong>May 15</strong></div></div>
     </div>
   </div>
 
-  <!-- ═══════════ FORECAST ═══════════ -->
+  <!-- ═══ FORECAST ═══ -->
   <div id="tab-forecast" class="tab-content">
     <div class="flex">
       <div class="stat"><div class="stat-label">Father's Day End</div><div class="stat-val c-green">2,059</div><div class="stat-sub">Jun 21 projected</div></div>
       <div class="stat"><div class="stat-label">Peak Rate</div><div class="stat-val c-amber">~60/day</div><div class="stat-sub">Jun 15-21</div></div>
       <div class="stat"><div class="stat-label">Low Point</div><div class="stat-val c-amber">1,471</div><div class="stat-sub">Jun 14 (before Maston)</div></div>
-      <div class="stat"><div class="stat-label">End of June</div><div class="stat-val c-green">1,779</div></div>
+      <div class="stat"><div class="stat-label">Serrated Back</div><div class="stat-val c-green">~Jun 8</div><div class="stat-sub">500 air expedite</div></div>
     </div>
 
     <div class="card">
       <div class="card-title">Device Inventory Projection (End of Week)</div>
       <div class="forecast-bar" style="position:relative">
         <div class="forecast-danger" style="bottom:27px"><div class="danger-label">Danger: 500</div></div>
-        <div class="forecast-col"><div class="forecast-val c-green">2,521</div><div class="forecast-fill" style="height:144px;background:#2563EB;opacity:.7"></div><div class="forecast-label">May 24</div></div>
-        <div class="forecast-col"><div class="forecast-val c-green">2,206</div><div class="forecast-fill" style="height:126px;background:#2563EB;opacity:.7"></div><div class="forecast-label">May 31</div></div>
-        <div class="forecast-col"><div class="forecast-val c-green">1,856</div><div class="forecast-fill" style="height:106px;background:#2563EB;opacity:.7"></div><div class="forecast-label">Jun 7</div></div>
-        <div class="forecast-col"><div class="forecast-val c-amber">1,471</div><div class="forecast-fill" style="height:84px;background:#D97706;opacity:.7"></div><div class="forecast-label">Jun 14</div></div>
-        <div class="forecast-col"><div class="forecast-val c-green">2,059</div><div class="forecast-fill" style="height:118px;background:#059669"></div><div class="forecast-label">Jun 21<br>&#127873;</div></div>
-        <div class="forecast-col"><div class="forecast-val c-green">1,779</div><div class="forecast-fill" style="height:102px;background:#2563EB;opacity:.7"></div><div class="forecast-label">Jun 28</div></div>
+        <div class="forecast-col"><div class="forecast-val c-green">2,521</div><div class="forecast-fill" style="height:144px;background:#2563EB;opacity:.7"></div><div style="font-size:9px;color:#9CA3AF">May 24</div></div>
+        <div class="forecast-col"><div class="forecast-val c-green">2,206</div><div class="forecast-fill" style="height:126px;background:#2563EB;opacity:.7"></div><div style="font-size:9px;color:#9CA3AF">May 31</div></div>
+        <div class="forecast-col"><div class="forecast-val c-green">1,856</div><div class="forecast-fill" style="height:106px;background:#2563EB;opacity:.7"></div><div style="font-size:9px;color:#9CA3AF">Jun 7</div></div>
+        <div class="forecast-col"><div class="forecast-val c-amber">1,471</div><div class="forecast-fill" style="height:84px;background:#D97706;opacity:.7"></div><div style="font-size:9px;color:#9CA3AF">Jun 14</div></div>
+        <div class="forecast-col"><div class="forecast-val c-green">2,059</div><div class="forecast-fill" style="height:118px;background:#059669"></div><div style="font-size:9px;color:#9CA3AF">Jun 21 &#127873;</div></div>
+        <div class="forecast-col"><div class="forecast-val c-green">1,779</div><div class="forecast-fill" style="height:102px;background:#2563EB;opacity:.7"></div><div style="font-size:9px;color:#9CA3AF">Jun 28</div></div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">Weekly Device Forecast &mdash; May 18 through June 28</div>
+      <div class="card-title">Weekly Device Forecast</div>
       <div style="overflow-x:auto">
         <table>
-          <thead><tr><th class="al">Week</th><th>Start</th><th>Inbound</th><th>Rate</th><th>Sold</th><th>End</th><th class="al">Notes</th></tr></thead>
+          <thead><tr><th class="al">Week</th><th>Start</th><th>In</th><th>Rate</th><th>Sold</th><th>End</th><th class="al">Notes</th></tr></thead>
           <tbody>
-            <tr><td class="al bold" style="font-size:12px;white-space:nowrap">May 18-24</td><td class="ac mono">2,766</td><td class="ac mono c-gray">&mdash;</td><td class="ac" style="font-size:12px;color:#4B5563">~35/d</td><td class="ac mono c-red">-245</td><td class="ac mono bold c-green">2,521</td><td class="al" style="font-size:11px;color:#4B5563">FBA check-in completing</td></tr>
-            <tr class="alt"><td class="al bold" style="font-size:12px;white-space:nowrap">May 25-31</td><td class="ac mono">2,521</td><td class="ac mono c-gray">&mdash;</td><td class="ac" style="font-size:12px;color:#4B5563">~45/d</td><td class="ac mono c-red">-315</td><td class="ac mono bold c-green">2,206</td><td class="al" style="font-size:11px;color:#4B5563">FBA fully live, ads ramping</td></tr>
-            <tr><td class="al bold" style="font-size:12px;white-space:nowrap">Jun 1-7</td><td class="ac mono">2,206</td><td class="ac mono c-gray">&mdash;</td><td class="ac" style="font-size:12px;color:#4B5563">~50/d</td><td class="ac mono c-red">-350</td><td class="ac mono bold c-green">1,856</td><td class="al" style="font-size:11px;color:#4B5563">Father's Day ramp begins</td></tr>
-            <tr class="alt"><td class="al bold" style="font-size:12px;white-space:nowrap">Jun 8-14</td><td class="ac mono">1,856</td><td class="ac mono c-gray">&mdash;</td><td class="ac" style="font-size:12px;color:#4B5563">~55/d</td><td class="ac mono c-red">-385</td><td class="ac mono bold c-amber">1,471</td><td class="al" style="font-size:11px;color:#4B5563">Peak buying week</td></tr>
-            <tr class="fd"><td class="al bold" style="font-size:12px;white-space:nowrap">Jun 15-21 &#127873;</td><td class="ac mono">1,471</td><td class="ac mono c-green">+1,008</td><td class="ac" style="font-size:12px;color:#4B5563">~60/d</td><td class="ac mono c-red">-420</td><td class="ac mono bold c-green">2,059</td><td class="al" style="font-size:11px;color:#4B5563">+1,008 Maston arrives</td></tr>
-            <tr><td class="al bold" style="font-size:12px;white-space:nowrap">Jun 22-28</td><td class="ac mono">2,059</td><td class="ac mono c-gray">&mdash;</td><td class="ac" style="font-size:12px;color:#4B5563">~40/d</td><td class="ac mono c-red">-280</td><td class="ac mono bold c-green">1,779</td><td class="al" style="font-size:11px;color:#4B5563">Post Father's Day</td></tr>
+            <tr><td class="al bold" style="font-size:12px;white-space:nowrap">May 18-24</td><td class="ac mono">2,766</td><td class="ac mono c-gray">&mdash;</td><td class="ac" style="font-size:12px" class="c-gray">~35/d</td><td class="ac mono c-red">-245</td><td class="ac mono bold c-green">2,521</td><td class="al" style="font-size:11px;color:#4B5563">FBA check-in completing</td></tr>
+            <tr class="alt"><td class="al bold" style="font-size:12px;white-space:nowrap">May 25-31</td><td class="ac mono">2,521</td><td class="ac mono c-gray">&mdash;</td><td class="ac" style="font-size:12px">~45/d</td><td class="ac mono c-red">-315</td><td class="ac mono bold c-green">2,206</td><td class="al" style="font-size:11px;color:#4B5563">FBA live, ads ramping</td></tr>
+            <tr><td class="al bold" style="font-size:12px;white-space:nowrap">Jun 1-7</td><td class="ac mono">2,206</td><td class="ac mono c-gray">&mdash;</td><td class="ac" style="font-size:12px">~50/d</td><td class="ac mono c-red">-350</td><td class="ac mono bold c-green">1,856</td><td class="al" style="font-size:11px;color:#4B5563">Father's Day ramp. Serrated air arrives ~Jun 7-10</td></tr>
+            <tr class="alt"><td class="al bold" style="font-size:12px;white-space:nowrap">Jun 8-14</td><td class="ac mono">1,856</td><td class="ac mono c-gray">&mdash;</td><td class="ac" style="font-size:12px">~55/d</td><td class="ac mono c-red">-385</td><td class="ac mono bold c-amber">1,471</td><td class="al" style="font-size:11px;color:#4B5563">Peak buying. Serrated blades back in stock.</td></tr>
+            <tr class="fd"><td class="al bold" style="font-size:12px;white-space:nowrap">Jun 15-21 &#127873;</td><td class="ac mono">1,471</td><td class="ac mono c-green">+1,008</td><td class="ac" style="font-size:12px">~60/d</td><td class="ac mono c-red">-420</td><td class="ac mono bold c-green">2,059</td><td class="al" style="font-size:11px;color:#4B5563">FATHER'S DAY. +1,008 Maston CLB.</td></tr>
+            <tr><td class="al bold" style="font-size:12px;white-space:nowrap">Jun 22-28</td><td class="ac mono">2,059</td><td class="ac mono c-gray">&mdash;</td><td class="ac" style="font-size:12px">~40/d</td><td class="ac mono c-red">-280</td><td class="ac mono bold c-green">1,779</td><td class="al" style="font-size:11px;color:#4B5563">Post Father's Day</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Blade Forecast -->
+    <div class="card">
+      <div class="card-title">Blade Pack Forecast</div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th class="al">Week</th><th>Serrated Avail</th><th>Straight Avail</th><th class="al">Events</th></tr></thead>
+          <tbody>
+            <tr><td class="al bold" style="font-size:12px">May 18-24</td><td class="ac mono bold c-red">0</td><td class="ac mono bold">651</td><td class="al" style="font-size:11px;color:#4B5563">Still out of serrated. 127 backorders.</td></tr>
+            <tr class="alt"><td class="al bold" style="font-size:12px">May 25-31</td><td class="ac mono bold c-red">0</td><td class="ac mono bold">630</td><td class="al" style="font-size:11px;color:#4B5563">Waiting on production completion Jun 1.</td></tr>
+            <tr><td class="al bold" style="font-size:12px">Jun 1-7</td><td class="ac mono bold c-red">0</td><td class="ac mono bold">609</td><td class="al" style="font-size:11px;color:#4B5563">500 serrated ships by air ~Jun 4. In transit.</td></tr>
+            <tr class="alt"><td class="al bold" style="font-size:12px">Jun 8-14</td><td class="ac mono bold c-green">~440</td><td class="ac mono bold">588</td><td class="al" style="font-size:11px;color:#4B5563">500 serrated arrives ~Jun 7-10. Back in stock! Backorders clear.</td></tr>
+            <tr class="fd"><td class="al bold" style="font-size:12px">Jun 15-21 &#127873;</td><td class="ac mono bold c-green">~380</td><td class="ac mono bold">567</td><td class="al" style="font-size:11px;color:#4B5563">Father's Day week. Serrated available for bundles.</td></tr>
+            <tr><td class="al bold" style="font-size:12px">Jun 22-28</td><td class="ac mono bold c-green">~320</td><td class="ac mono bold">546</td><td class="al" style="font-size:11px;color:#4B5563">Post FD. Remaining 1,600 ser + 1,200 str arrive by boat ~Jul 1-5.</td></tr>
           </tbody>
         </table>
       </div>
@@ -351,25 +338,25 @@ tr.total-row{background:#DBEAFE;border-top:2px solid #2563EB}
     <div class="alert alert-amber">
       <div class="alert-title c-amber">Assumptions & Risks</div>
       <div class="alert-body" style="line-height:1.7">
-        <strong>Sell rates:</strong> 33/day recovering to 45 (FBA restock), ramping to 60 (Father's Day peak), normalizing to 40 post-holiday.<br>
-        <strong>Critical:</strong> Jun 8-14 is the low point (1,471) before the 1,008 Maston arrives.<br>
-        <strong>Risks:</strong> Maston must clear customs + J&J DG review. Misrouted 204-unit transfer not in forecast until resolved. Serrated at zero with 127 backorders &mdash; 500 air expedite requested, no confirmation yet.
+        <strong>Devices:</strong> 33/day recovering to 45, ramping to 60 at peak, normalizing to 40. Low point Jun 14 (1,471) before Maston.<br>
+        <strong>Serrated:</strong> 500 air expedite confirmed Jun 4 ship / Jun 7-10 arrival. Remaining 1,600 by boat ~Jun 5 ship / Jul 1-5 arrival.<br>
+        <strong>Risks:</strong> Maston 1,008 must clear customs + DG review. Misrouted 204 transfer not in forecast. Holster ETA unknown.
       </div>
     </div>
   </div>
 
-  <div class="footer">BOXBLAYDE INVENTORY COMMAND CENTER v6 &middot; May 18, 2026 &middot; ControlPort + Amazon Seller Central</div>
+  <div class="footer">BOXBLAYDE INVENTORY COMMAND CENTER v5.1 &middot; Updated May 19, 2026 3:00 PM ET &middot; ControlPort + Amazon + Nancy Email</div>
 </div>
 
 <script>
-function showTab(id) {
-  document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
-  document.querySelectorAll('.tab').forEach(function(el) { el.classList.remove('active'); });
-  document.getElementById('tab-' + id).classList.add('active');
-  var tabs = document.querySelectorAll('.tab');
-  var tabIds = ['overview', 'fba', 'shipments', 'forecast'];
-  var idx = tabIds.indexOf(id);
-  if (idx >= 0 && tabs[idx]) tabs[idx].classList.add('active');
+function showTab(id){
+  document.querySelectorAll('.tab-content').forEach(function(e){e.classList.remove('active')});
+  document.querySelectorAll('.tab').forEach(function(e){e.classList.remove('active')});
+  document.getElementById('tab-'+id).classList.add('active');
+  var ids=['overview','fba','shipments','forecast'];
+  var tabs=document.querySelectorAll('.tab');
+  var i=ids.indexOf(id);
+  if(i>=0&&tabs[i])tabs[i].classList.add('active');
 }
 </script>
 </body>
