@@ -3,628 +3,654 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoxBlayde Inventory Command Center</title>
+<title>BoxBlayde Inventory &amp; Shipment Command Center v7.0</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:#F9FAFB;color:#111827;font-size:14px;line-height:1.45}
-.app{max-width:980px;margin:0 auto;padding:16px 14px 48px}
-button{font-family:inherit;cursor:pointer}
-table{border-collapse:collapse;width:100%}
-.header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px;gap:12px}
-.brand{font-size:10px;font-weight:700;letter-spacing:2.5px;color:#0D7C5F;text-transform:uppercase}
-.title{font-size:23px;font-weight:700;letter-spacing:-.3px}
-.date{font-size:12px;color:#9CA3AF;margin-top:2px}
-.countdown{background:#FEF3C7;border:1.5px solid rgba(217,119,6,.3);border-radius:10px;padding:8px 16px;text-align:center;flex-shrink:0}
-.countdown-num{font-family:ui-monospace,Menlo,monospace;font-size:28px;font-weight:700;color:#D97706;line-height:1}
-.countdown-label{font-size:9px;font-weight:700;color:#D97706;letter-spacing:1px}
-.tabs{display:flex;gap:4px;margin-bottom:16px;overflow-x:auto;padding-bottom:2px}
-.tab{padding:8px 15px;font-size:12px;font-weight:600;white-space:nowrap;border:1px solid #E5E7EB;border-radius:7px;background:#fff;color:#6B7280;transition:.12s}
-.tab:hover{border-color:#0D7C5F;color:#0D7C5F}
-.tab.active{background:#0D7C5F;color:#fff;border-color:#0D7C5F}
-.tab-content{display:none}
-.tab-content.active{display:block}
-.flex{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.stat{background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:11px 14px;flex:1;min-width:140px}
-.stat-label{font-size:9px;color:#9CA3AF;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-.stat-val{font-size:24px;font-weight:700;line-height:1.05}
-.stat-sub{font-size:11px;color:#6B7280;margin-top:3px}
-.card{background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:16px;margin-bottom:12px}
-.card-title{font-size:14px;font-weight:700;margin-bottom:12px}
-.alert{border-radius:10px;padding:12px 16px;margin-bottom:12px}
-.alert-green{background:#D1FAE5;border:1.5px solid rgba(5,150,105,.3)}
-.alert-red{background:#FEE2E2;border:1.5px solid rgba(220,38,38,.3)}
-.alert-amber{background:#FEF3C7;border:1.5px solid rgba(217,119,6,.3)}
-.alert-blue{background:#DBEAFE;border:1.5px solid rgba(37,99,235,.3)}
-.alert-title{font-size:13px;font-weight:700;margin-bottom:5px}
-.alert-body{font-size:12.5px;color:#374151;line-height:1.6}
-.c-accent{color:#0D7C5F}.c-green{color:#059669}.c-blue{color:#2563EB}.c-amber{color:#D97706}.c-red{color:#DC2626}.c-gray{color:#6B7280}.c-purple{color:#7C3AED}
-.mono{font-family:ui-monospace,Menlo,monospace}
-.bold{font-weight:700}
-.al{text-align:left}.ac{text-align:center}.ar{text-align:right}
-th{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:#6B7280;font-weight:700;padding:8px 10px;border-bottom:2px solid #E5E7EB;text-align:left}
-td{padding:9px 10px;border-bottom:1px solid #F3F4F6;font-size:12.5px}
-tr.alt{background:#FAFAFA}
-tr.out td{background:#FEF2F2}
-tr.good td{background:#F0FDF4}
-.pill{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
-.pill-green{background:#D1FAE5;color:#047857}.pill-red{background:#FEE2E2;color:#B91C1C}.pill-amber{background:#FEF3C7;color:#B45309}.pill-blue{background:#DBEAFE;color:#1D4ED8}.pill-gray{background:#F3F4F6;color:#4B5563}.pill-cyan{background:#CFFAFE;color:#0E7490}.pill-purple{background:#EDE9FE;color:#6D28D9}
-.pcard{border:1px solid #E5E7EB;border-radius:10px;padding:14px 16px;margin-bottom:10px;background:#fff;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
-.pcard.oos{border-color:rgba(220,38,38,.35);background:#FEF6F6}
-.pcard.arriving{border-color:rgba(37,99,235,.35);background:#F5F9FF}
-.pcard-left{flex:1;min-width:240px}
-.pcard-name{font-size:15px;font-weight:700}
-.pcard-sku{font-size:10px;color:#9CA3AF;font-family:ui-monospace,monospace;margin-bottom:8px}
-.locrow{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-.locchip{font-size:11px;padding:3px 9px;border-radius:6px;background:#F3F4F6;color:#374151}
-.locchip b{font-family:ui-monospace,monospace}
-.bar{height:8px;border-radius:5px;background:#F3F4F6;overflow:hidden;display:flex;margin-top:8px}
-.bar span{height:100%}
-.pcard-right{text-align:right;min-width:110px}
-.pcard-total{font-size:26px;font-weight:700;line-height:1}
-.pcard-rate{font-size:11px;color:#6B7280;margin-top:3px}
-.shipsec{font-size:12px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:.5px;margin:14px 0 6px}
-.ship{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid #F3F4F6}
-.ship:last-child{border-bottom:none}
-.ship-bar{width:4px;border-radius:3px;flex-shrink:0}
-.ship-main{flex:1}
-.ship-meta{display:flex;gap:8px;align-items:center;margin-bottom:3px;flex-wrap:wrap}
-.ship-name{font-size:13.5px;font-weight:700}
-.ship-note{font-size:11.5px;color:#6B7280;margin-top:2px;line-height:1.5}
-.ship-eta{text-align:right;font-size:11px;color:#4B5563;flex-shrink:0;min-width:92px}
-.cmp{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #F3F4F6}
-.cmp:last-child{border:none}
-.cmp-label{flex:1;font-size:12.5px;font-weight:600}
-.cmp-old{color:#9CA3AF;text-decoration:line-through;font-family:ui-monospace,monospace;font-size:12px}
-.cmp-arrow{color:#9CA3AF}
-.cmp-new{font-family:ui-monospace,monospace;font-weight:700;font-size:13px}
-.footer{text-align:center;margin-top:22px;font-size:9.5px;color:#9CA3AF;letter-spacing:.3px}
-.note{font-size:11px;color:#6B7280}
-ul.tight{margin:6px 0 0 18px}ul.tight li{margin-bottom:4px;font-size:12.5px;color:#374151}
-.track{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px}
-.trackbox{background:#fff;border:1px solid #E5E7EB;border-radius:8px;padding:8px 12px;font-size:11px}
-.trackbox b{font-family:ui-monospace,monospace;font-size:12px;display:block;color:#111827}
-.trackbox span{color:#9CA3AF;text-transform:uppercase;font-size:9px;letter-spacing:.5px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1a2332;--navy-light:#243044;--navy-mid:#2a3a52;
+  --bg:#f4f6f9;--white:#fff;--text:#1e293b;--text-muted:#64748b;
+  --green:#2f7d5b;--green-bg:#e6f4ed;
+  --amber:#d99a1c;--amber-bg:#fef3cd;
+  --red:#b23b3b;--red-bg:#fce4e4;
+  --blue:#2c6394;--blue-bg:#dbeafe;
+  --border:#d1d5db;--stripe:#f8fafc;
+  --shadow:0 1px 3px rgba(0,0,0,.08);
+  --radius:6px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;font-size:14px}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* HEADER */
+.header{background:var(--navy);color:#fff;padding:20px 24px 16px;position:relative}
+.header h1{font-size:clamp(18px,3vw,26px);font-weight:700;letter-spacing:-.3px;margin-bottom:4px}
+.header .subtitle{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13px;color:#94a3b8}
+.header .subtitle span{display:inline-flex;align-items:center;gap:4px}
+.header .subtitle .ver{background:#334155;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600;color:#e2e8f0}
+
+/* SUMMARY BAR */
+.summary-bar{background:var(--navy-light);display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;border-top:1px solid #334155}
+.summary-card{padding:14px 20px;text-align:center}
+.summary-card .label{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:#94a3b8;margin-bottom:4px}
+.summary-card .value{font-size:22px;font-weight:700;color:#f1f5f9}
+.summary-card .sub{font-size:11px;color:#94a3b8;margin-top:2px}
+.summary-card .value.green{color:#6ee7b7}
+.summary-card .value.amber{color:#fcd34d}
+.summary-card .value.red{color:#fca5a5}
+.summary-card .value.blue{color:#93c5fd}
+
+/* MAIN */
+.main{max-width:1280px;margin:0 auto;padding:16px}
+
+/* CRITICAL ACTIONS */
+.critical-box{background:var(--white);border:1px solid var(--border);border-left:5px solid var(--red);border-radius:var(--radius);padding:18px 20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.critical-box h2{font-size:16px;color:var(--red);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.critical-box h2::before{content:"!";display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:var(--red);color:#fff;border-radius:50%;font-size:12px;font-weight:700;flex-shrink:0}
+.action-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.action-list li{display:flex;gap:10px;padding:10px 12px;border-radius:var(--radius);font-size:13px;line-height:1.5}
+.action-list li.red-action{background:var(--red-bg);border:1px solid #f5c2c2}
+.action-list li.amber-action{background:var(--amber-bg);border:1px solid #f0dea3}
+.action-list li .action-num{flex-shrink:0;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;margin-top:1px}
+.action-list li.red-action .action-num{background:var(--red)}
+.action-list li.amber-action .action-num{background:var(--amber)}
+.action-list li .action-text strong{font-weight:600}
+
+/* SECTIONS */
+.section{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden}
+.section summary{cursor:pointer;padding:14px 20px;font-size:15px;font-weight:600;color:var(--navy);list-style:none;display:flex;align-items:center;gap:10px;user-select:none;border-bottom:1px solid transparent;transition:background .15s}
+.section summary:hover{background:#f8fafc}
+.section summary::before{content:"";display:inline-block;width:0;height:0;border-left:6px solid var(--navy);border-top:5px solid transparent;border-bottom:5px solid transparent;transition:transform .2s;flex-shrink:0}
+.section[open] summary::before{transform:rotate(90deg)}
+.section[open] summary{border-bottom:1px solid var(--border);background:#f8fafc}
+.section .body{padding:16px 20px}
+
+/* BADGE */
+.badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600;letter-spacing:.3px;white-space:nowrap;vertical-align:middle}
+.badge-green{background:var(--green-bg);color:var(--green)}
+.badge-amber{background:var(--amber-bg);color:var(--amber)}
+.badge-red{background:var(--red-bg);color:var(--red)}
+.badge-blue{background:var(--blue-bg);color:var(--blue)}
+
+/* TABLES */
+.tbl-wrap{overflow-x:auto;margin:12px 0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--navy);color:#e2e8f0;padding:8px 12px;text-align:left;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+td{padding:8px 12px;border-bottom:1px solid #e5e7eb;vertical-align:top}
+tr:nth-child(even) td{background:var(--stripe)}
+tr:hover td{background:#eef2ff}
+td.mono{font-family:"Cascadia Code","Fira Code",Consolas,monospace;font-size:12px;word-break:break-all}
+
+/* SUB-SECTION */
+.sub-section{margin:16px 0;padding:14px 16px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:var(--radius)}
+.sub-section h4{font-size:14px;color:var(--navy);margin-bottom:8px}
+
+/* NOTE BOX */
+.note{padding:10px 14px;border-radius:var(--radius);font-size:13px;margin:10px 0;line-height:1.5}
+.note-amber{background:var(--amber-bg);border:1px solid #f0dea3;color:#92400e}
+.note-red{background:var(--red-bg);border:1px solid #f5c2c2;color:#991b1b}
+.note-blue{background:var(--blue-bg);border:1px solid #bfdbfe;color:#1e40af}
+.note-green{background:var(--green-bg);border:1px solid #a7f3d0;color:#065f46}
+
+/* CHANNEL CARDS */
+.channels{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin:12px 0}
+.channel{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.channel-head{padding:10px 14px;font-weight:600;font-size:13px;color:#fff}
+.channel-head.ch1{background:var(--navy)}
+.channel-head.ch2{background:var(--blue)}
+.channel-head.ch3{background:var(--green)}
+.channel-body{padding:12px 14px;font-size:13px;line-height:1.6}
+.channel-body li{margin-bottom:4px}
+
+/* CONTACT LIST */
+.contacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:8px;margin:10px 0}
+.contact-card{display:flex;gap:10px;padding:10px 14px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:var(--radius);align-items:flex-start}
+.contact-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff;flex-shrink:0}
+.contact-info .name{font-weight:600;font-size:13px}
+.contact-info .role{font-size:12px;color:var(--text-muted)}
+.contact-info .email{font-size:12px;color:var(--blue)}
+
+/* CHANGELOG */
+.changelog-item{padding:8px 0;border-bottom:1px solid #e5e7eb;font-size:13px}
+.changelog-item:last-child{border-bottom:none}
+.changelog-item .cl-ver{font-weight:700;color:var(--navy)}
+.changelog-item .cl-date{color:var(--text-muted);font-size:12px}
+
+/* UPS GRID */
+.ups-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px;margin:8px 0}
+.ups-num{font-family:"Cascadia Code","Fira Code",Consolas,monospace;font-size:12px;padding:4px 8px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;word-break:break-all}
+
+/* REPLEN PRIORITY */
+.replen-group{margin:12px 0}
+.replen-group h4{font-size:14px;font-weight:600;margin-bottom:8px;color:var(--navy);padding-bottom:4px;border-bottom:2px solid var(--navy)}
+.replen-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.replen-list li{padding:8px 12px;border-radius:var(--radius);font-size:13px;display:flex;gap:8px;align-items:flex-start;line-height:1.5}
+.replen-list li .rnum{flex-shrink:0;width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}
+.replen-list li.urgent{background:var(--red-bg);border:1px solid #f5c2c2}
+.replen-list li.urgent .rnum{background:var(--red)}
+.replen-list li.soon{background:var(--amber-bg);border:1px solid #f0dea3}
+.replen-list li.soon .rnum{background:var(--amber)}
+.replen-list li.normal{background:#f0f9ff;border:1px solid #bae6fd}
+.replen-list li.normal .rnum{background:var(--blue)}
+
+/* FOOTER */
+.footer{text-align:center;padding:24px;font-size:12px;color:var(--text-muted)}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  .header{padding:14px 16px 12px}
+  .section .body{padding:12px 14px}
+  .summary-bar{grid-template-columns:repeat(2,1fr)}
+  table{font-size:12px}
+  th,td{padding:6px 8px}
+  .critical-box{padding:14px 16px}
+}
 </style>
 </head>
 <body>
-<div class="app">
-  <div class="header">
-    <div>
-      <div class="brand">BoxBlayde / 214 Central Industries</div>
-      <div class="title">Inventory Command Center</div>
-      <div class="date">Updated June 23, 2026 &middot; 4:07 PM ET &middot; Source: J&amp;J ControlPort + Amazon Seller Central + Sofeast + Style N Craft + UPS</div>
-    </div>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>BoxBlayde Inventory &amp; Shipment Command Center</h1>
+  <div class="subtitle">
+    <span><span class="ver">v7.0</span></span>
+    <span>Last Updated: August 4, 2026</span>
+    <span>Dashboard auto-generated for GitHub Pages</span>
   </div>
-
-  <div class="tabs">
-    <button class="tab active" onclick="showTab('overview')">Overview</button>
-    <button class="tab" onclick="showTab('fba')">FBA Status</button>
-    <button class="tab" onclick="showTab('shipments')">Shipments</button>
-    <button class="tab" onclick="showTab('blades')">Blade Packs</button>
-    <button class="tab" onclick="showTab('holsters')">Holsters</button>
-    <button class="tab" onclick="showTab('freight')">Freight</button>
-    <button class="tab" onclick="showTab('forecast')">Forecast</button>
-    <button class="tab" onclick="showTab('compare')">Jun 22 &rarr; Jun 23</button>
-  </div>
-
-  <!-- ════════ OVERVIEW ════════ -->
-  <div id="tab-overview" class="tab-content active">
-    <div class="flex">
-      <div class="stat"><div class="stat-label">Network Devices</div><div class="stat-val c-accent">~2,490</div><div class="stat-sub">J&amp;J 1,598 + FBA ~890</div></div>
-      <div class="stat"><div class="stat-label">FBA Stock</div><div class="stat-val c-amber">890</div><div class="stat-sub">LOW STOCK &middot; ~22 DoS</div></div>
-      <div class="stat"><div class="stat-label">Serrated B/O</div><div class="stat-val c-red">&minus;240</div><div class="stat-sub">Relief on shelf ~Fri 6/26</div></div>
-      <div class="stat"><div class="stat-label">Available to Import</div><div class="stat-val c-blue">~2,718</div><div class="stat-sub">Last of this version</div></div>
-    </div>
-
-    <div class="alert alert-amber">
-      <div class="alert-title c-amber">&#9989; Devices: J&amp;J healthy, but FBA is low &mdash; reorder the available stock</div>
-      <div class="alert-body">The full device picture, now that J&amp;J and Amazon are reconciled separately: <b>J&amp;J 1,598</b> (Columbus 1,194 + LV 404) and <b>FBA ~890 fulfillable</b> (945 total) &mdash; network ~2,490. J&amp;J has months of cover, but <b>Amazon flags LOW STOCK</b> at ~22 days of supply (recommended min ~947). The <b>1,008 Maston is still NOT received</b> (no check-in at J&amp;J, 0 inbound at FBA) &mdash; held up in the China customs delay. <b>Recommendation below: bring in the ~2,718 finished units still available at the factory</b> (the last of this version) and weight the first tranche to FBA. See the reorder card.</div>
-    </div>
-
-    <div class="alert alert-green">
-      <div class="alert-title c-green">&#128230; Holsters: Las Vegas shelved &amp; clearing backlog; Columbus put-away still pending</div>
-      <div class="alert-body">Both holster ASNs are booked in at J&amp;J (CLB 600 + LV 413). <b>Las Vegas is now shelved &mdash; 341 on shelf and already turning the backlog.</b> <b>Columbus is received but not yet put away</b> (0 on shelf, &minus;1). Net holster position has swung from &minus;73 to <b>+340 sellable</b> &mdash; effectively recovered, now driven by LV stock. The 5-unit <b>Grainger</b> B2B backorder (ship target 6/26) can fill from available holster inventory. <b>Remaining nudge: get Brittan to complete the Columbus put-away</b> so East Coast / Grainger fulfillment runs from the closer FC. See the <b>Holsters</b> tab.</div>
-    </div>
-
-    <div class="alert alert-red">
-      <div class="alert-title c-red">&#128230; LV re-label charge ($200&ndash;300) &mdash; still no answer from Brittan; pushing J&amp;J to cover it</div>
-      <div class="alert-body">The LV facility move is complete (new address <b>1840 Aerojet Way, North Las Vegas, NV 89030</b>). The stuck LV blade sea cartons will need re-labeling to that address at the US forwarder &mdash; a <b>$200&ndash;300 charge.</b> Brittan said she'd ask the team but <b>has not responded.</b> Position: since the re-label is only necessary because J&amp;J changed the LV site <b>without advance warning</b>, <b>J&amp;J should absorb the cost.</b> Follow-up email to Brittan is ready to send (urgent). Columbus cartons unaffected.</div>
-    </div>
-
-    <div class="alert alert-red">
-      <div class="alert-title c-red">&#9888;&#65039; J&amp;J dangerous-goods (DG) review STILL pending (confirmed on J&amp;J 6/23)</div>
-      <div class="alert-body">The J&amp;J device record still shows a <b>PENDING dangerous-goods review</b> (MSDS / UN 3481 lithium-battery docs) as of the 6/23 screen. This continues to gate any device inbound to J&amp;J &mdash; including the delayed <b>1,008 Maston.</b> One more reason to weight the device reorder toward <b>FBA</b>, which doesn't sit behind J&amp;J's DG gate. <b>Keep escalating to Brittan</b> alongside the re-label ask.</div>
-    </div>
-
-    <div class="alert alert-amber">
-      <div class="alert-title c-amber">&#9888;&#65039; Serrated recovering (&minus;240) &mdash; Columbus air lands 6/24, on shelf ~Fri 6/26</div>
-      <div class="alert-body"><b>Air serrated is in the US and working.</b> Rob's <b>300 (Agoura)</b> are clearing the DTC backlog now. The <b>300 to J&amp;J Columbus arrive tomorrow (Wed 6/24)</b> per UPS tracking and should be <b>on the shelf by Fri 6/26</b> &mdash; that starts working down the &minus;240 (CLB &minus;172, LV &minus;68) and covers the Grainger serrated line (target 6/29). <b>Sea blades remain stuck in Chinese customs</b> &mdash; not released, not sailed; that's the full restock and it's still pending. Straight is ample (512). See the <b>Blade Packs</b> tab.</div>
-    </div>
-
-    <div class="alert alert-blue">
-      <div class="alert-title c-blue">&#128230; DEVICE REORDER &mdash; recommendation for Rob: bring in the ~2,718 available units (last of this version)</div>
-      <div class="alert-body">FBA is low (~22 DoS) and the 1,008 Maston is stuck, so the next device inflow matters &mdash; but there's no need to overpay for speed. The factory still holds <b>~2,718 finished units of the current version</b> (5,730 confirmed on shelf May 6, minus the 2,004 FBA air and 1,008 Maston shipped since). <b>These are the last of this version &mdash; no more will be produced</b> (the next version moves to USB-C and updated parts). <b>Recommendation: import the full ~2,718 by boat</b> &mdash; <b>no air.</b> July is a soft month, so ocean transit (~25&ndash;35 days) still lands replenishment in early August, well within FBA's runway at lower summer demand. Prioritize a sea lot to <b>FBA</b> (the low channel) plus a sea lot to <b>J&amp;J</b> for the balance. Product is on consignment, so there's no cash penalty to bringing it in &mdash; <b>no need to stagger beyond those lots</b>, and freight (~$5/unit sea vs. ~$15&ndash;16 air) is the only cost. <b>Confirm the exact count + sea quotes with Nancy and route to Rob.</b> See the Forecast tab.</div>
-    </div>
-
-    <div class="alert alert-amber">
-      <div class="alert-title c-amber">&#128295; New: tracking small parts &mdash; chargers &amp; blade guards (Sofeast, 6/22)</div>
-      <div class="alert-body"><b>Chargers:</b> we've sold through most of the chargers harvested from defective returns and are about to re-flash defects to resell &mdash; running low. Sofeast has <b>no charger stock</b>; a 500-pc run is <b>$2.72/unit + a $449 machine-setup charge</b>, with a <b>35&ndash;40 day lead time</b> (electronic-component sourcing). Nancy suggests bundling the charger run with the next mass-production order to avoid the $449. <b>Blade guards:</b> supplier <b>has stock</b> at <b>$1.23/unit</b> (same as mass production), <b>~3-day delivery</b> for 500 pcs. <b>Suggested: add 500 blade guards to the next inbound now (cheap, in-stock); hold chargers to bundle with the next device/mass-production run.</b></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Current Position by Product</div>
-
-      <div class="pcard">
-        <div class="pcard-left">
-          <div class="pcard-name">BoxBlayde Cordless Box Cutter</div>
-          <div class="pcard-sku">42358257287357 / ASIN B0DD7YBRWT &middot; $99.00</div>
-          <div class="bar"><span style="width:48%;background:#0D7C5F"></span><span style="width:16%;background:#34D399"></span><span style="width:36%;background:#2563EB"></span></div>
-          <div class="locrow">
-            <span class="locchip">CLB <b>1,194</b></span>
-            <span class="locchip">LV <b>404</b></span>
-            <span class="locchip" style="background:#FEF3C7;color:#92400E">FBA <b>890</b> (low)</span>
-            <span class="locchip">+1,008 Maston (stuck)</span>
-          </div>
-        </div>
-        <div class="pcard-right">
-          <div class="pcard-total c-accent">~2,490</div>
-          <div class="pcard-rate">J&amp;J 1,598 + FBA 890</div>
-          <div style="margin-top:4px"><span class="pill pill-amber">FBA LOW</span></div>
-        </div>
-      </div>
-
-      <div class="pcard oos">
-        <div class="pcard-left">
-          <div class="pcard-name">Blades 10-Pack &mdash; Serrated</div>
-          <div class="pcard-sku">BBSER10PK &middot; $9.99</div>
-          <div class="locrow">
-            <span class="locchip" style="background:#FEE2E2;color:#B91C1C">CLB <b>&minus;172</b></span>
-            <span class="locchip" style="background:#FEE2E2;color:#B91C1C">LV <b>&minus;68</b></span>
-            <span class="locchip" style="background:#DBEAFE;color:#1D4ED8">+300 &rarr; CLB on shelf ~6/26</span>
-            <span class="locchip">+sea (stuck CN customs)</span>
-          </div>
-        </div>
-        <div class="pcard-right">
-          <div class="pcard-total c-red">&minus;240</div>
-          <div class="pcard-rate">CLB on shelf ~Fri 6/26</div>
-          <div style="margin-top:4px"><span class="pill pill-red">OUT OF STOCK</span></div>
-        </div>
-      </div>
-
-      <div class="pcard">
-        <div class="pcard-left">
-          <div class="pcard-name">Blades 10-Pack &mdash; Straight</div>
-          <div class="pcard-sku">BBSTR10PK &middot; $9.99</div>
-          <div class="bar"><span style="width:53%;background:#0D7C5F"></span><span style="width:47%;background:#34D399"></span></div>
-          <div class="locrow">
-            <span class="locchip">CLB <b>272</b></span>
-            <span class="locchip">LV <b>240</b></span>
-            <span class="locchip">+sea (stuck CN customs)</span>
-          </div>
-        </div>
-        <div class="pcard-right">
-          <div class="pcard-total c-accent">512</div>
-          <div class="pcard-rate">~3/day &middot; ample</div>
-          <div style="margin-top:4px"><span class="pill pill-green">HEALTHY</span></div>
-        </div>
-      </div>
-
-      <div class="pcard">
-        <div class="pcard-left">
-          <div class="pcard-name">Stasel-BoxBlayde Holster</div>
-          <div class="pcard-sku">BB-HOLS-01 &middot; $24.00</div>
-          <div class="bar"><span style="width:100%;background:#0D7C5F"></span></div>
-          <div class="locrow">
-            <span class="locchip" style="background:#FEE2E2;color:#B91C1C">CLB <b>&minus;1</b> (not shelved)</span>
-            <span class="locchip">LV <b>341</b> on shelf</span>
-            <span class="locchip">600 @ CLB awaiting put-away</span>
-          </div>
-        </div>
-        <div class="pcard-right">
-          <div class="pcard-total c-accent">340</div>
-          <div class="pcard-rate">LV clearing backlog</div>
-          <div style="margin-top:4px"><span class="pill pill-green">RECOVERED</span></div>
-        </div>
-      </div>
-
-      <div class="pcard">
-        <div class="pcard-left">
-          <div class="pcard-name">Charger (small part &mdash; monitor)</div>
-          <div class="pcard-sku">Spare/replacement &middot; supplier $2.72/unit</div>
-          <div class="locrow">
-            <span class="locchip" style="background:#FEE2E2;color:#B91C1C">Low &mdash; sold through returns stock</span>
-            <span class="locchip">re-flashing defects to resell</span>
-            <span class="locchip">new run: 35&ndash;40d + $449 setup</span>
-          </div>
-        </div>
-        <div class="pcard-right">
-          <div class="pcard-total c-amber">LOW</div>
-          <div class="pcard-rate">bundle w/ next prod run</div>
-          <div style="margin-top:4px"><span class="pill pill-amber">MONITOR</span></div>
-        </div>
-      </div>
-
-      <div class="pcard">
-        <div class="pcard-left">
-          <div class="pcard-name">Blade Guard (small part &mdash; monitor)</div>
-          <div class="pcard-sku">Spare/replacement &middot; supplier $1.23/unit</div>
-          <div class="locrow">
-            <span class="locchip" style="background:#D1FAE5;color:#065F46">Supplier has stock</span>
-            <span class="locchip">~3-day delivery (500 pc)</span>
-            <span class="locchip">add to next inbound</span>
-          </div>
-        </div>
-        <div class="pcard-right">
-          <div class="pcard-total c-green">In stock</div>
-          <div class="pcard-rate">$1.23 &middot; 3-day</div>
-          <div style="margin-top:4px"><span class="pill pill-green">AVAILABLE</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ════════ FBA STATUS ════════ -->
-  <div id="tab-fba" class="tab-content">
-    <div class="alert alert-amber" style="margin-bottom:12px">
-      <div class="alert-title c-red">&#9888;&#65039; Amazon flags LOW STOCK &mdash; 890 fulfillable, ~22 days of supply</div>
-      <div class="alert-body">As of the 6/23 Seller Central pull, FBA on-hand is <b>890 fulfillable</b> (945 total). Amazon's health tool marks the device <b>Low stock</b> against a recommended minimum of <b>947</b> (~22 days of supply); historical days-of-supply is 46.8. Inbound is <b>0</b> &mdash; the 1,008 Maston has not begun checking in. Last 90 days: <b>1,453 units / $144,825.</b> <b>This is the channel driving the device reorder recommendation</b> &mdash; weight the first tranche here.</div>
-    </div>
-    <div class="flex">
-      <div class="stat"><div class="stat-label">FBA On-Hand</div><div class="stat-val c-amber">890</div><div class="stat-sub">Fulfillable now</div></div>
-      <div class="stat"><div class="stat-label">Days of Supply</div><div class="stat-val c-amber">~22</div><div class="stat-sub">Rec. min 947 &middot; LOW</div></div>
-      <div class="stat"><div class="stat-label">Inbound</div><div class="stat-val c-red">0</div><div class="stat-sub">Maston not checking in</div></div>
-      <div class="stat"><div class="stat-label">90-Day Sales</div><div class="stat-val">$144.8K</div><div class="stat-sub">1,453 units</div></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">FBA Inventory Overview &mdash; BoxBlayde Device (ASIN B0DD7YBRWT) &middot; 6/23</div>
-      <table>
-        <tr><th>Bucket</th><th class="ar">Units</th><th class="al">Note</th></tr>
-        <tr><td class="bold">On-hand</td><td class="ar mono">890</td><td>Fulfillable, sellable now</td></tr>
-        <tr class="alt"><td class="bold">Reserved</td><td class="ar mono">37</td><td>Allocated to open customer orders</td></tr>
-        <tr><td class="bold">Researching</td><td class="ar mono">3</td><td>Amazon reconciling</td></tr>
-        <tr class="out"><td class="bold">Unfulfillable</td><td class="ar mono c-red">15</td><td>Create a removal/disposition order to clear</td></tr>
-        <tr class="alt"><td class="bold">Inbound</td><td class="ar mono c-red">0</td><td>No replenishment en route &mdash; Maston not checked in</td></tr>
-        <tr><td class="bold">Total</td><td class="ar mono bold">945</td><td>Low stock vs. rec. min 947 (~22 DoS)</td></tr>
-      </table>
-    </div>
-
-    <div class="card">
-      <div class="card-title">May 6 Air Shipment (2,004 units) &mdash; FC Check-In</div>
-      <table>
-        <tr><th>FC</th><th>Location</th><th class="ar">Expected</th><th class="ar">Located</th><th class="ar">Prime</th><th class="al">Status</th></tr>
-        <tr><td class="bold">LGB8</td><td>Rialto, CA</td><td class="ar mono">444</td><td class="ar mono">444</td><td class="ar mono">402</td><td><span class="pill pill-blue">Receiving</span></td></tr>
-        <tr class="alt"><td class="bold">VGT2</td><td>Las Vegas, NV</td><td class="ar mono">432</td><td class="ar mono">432</td><td class="ar mono">395</td><td><span class="pill pill-blue">Receiving</span></td></tr>
-        <tr><td class="bold">GYR3</td><td>Phoenix, AZ</td><td class="ar mono">408</td><td class="ar mono">408</td><td class="ar mono">388</td><td><span class="pill pill-blue">Receiving</span></td></tr>
-        <tr class="alt"><td class="bold">AVP1</td><td>Hazle Twp, PA</td><td class="ar mono">372</td><td class="ar mono">372</td><td class="ar mono">294</td><td><span class="pill pill-blue">Receiving</span></td></tr>
-        <tr><td class="bold">IND9</td><td>Greenwood, IN</td><td class="ar mono">348</td><td class="ar mono">348</td><td class="ar mono">216</td><td><span class="pill pill-blue">Receiving</span></td></tr>
-        <tr class="alt"><td class="bold">Total</td><td>5 FCs</td><td class="ar mono bold">2,004</td><td class="ar mono bold">2,004</td><td class="ar mono bold">1,695</td><td><span class="pill pill-green">All located</span></td></tr>
-      </table>
-      <div class="note" style="margin-top:8px">All 2,004 units located. Remaining Prime gap (IND9, AVP1) clears as Amazon finishes processing. No units lost.</div>
-    </div>
-
-    <div class="alert alert-amber">
-      <div class="alert-title c-amber">&#9888;&#65039; The recurring "Incorrect tracking information" defect &mdash; what's happening</div>
-      <div class="alert-body">
-        Each FC shows 30&ndash;37 <b>box-level</b> defects, all the same: <i>Incorrect tracking information (small-parcel shipments)</i>. Critically: <b>0 shipment-level and 0 product-level defects, $0.00 fees.</b> Amazon received everything anyway. A process flag, not a lost-inventory or charge event.
-        <br><br>
-        <b>Why it recurs on China deliveries:</b> with UPS DDP, the per-box tracking Amazon expects doesn't reconcile at scan &mdash; usually because (1) boxes travel under a consolidated master air waybill, so per-box tracking doesn't resolve to each FBA box ID; (2) the DDP broker re-labels parcels domestically after customs, breaking the original tracking chain; or (3) one tracking number is entered against many boxes in the plan.
-        <br><br>
-        <b>Fix going forward:</b> require the forwarder to supply a <b>unique, scannable tracking number per carton</b>, entered <b>per-box before delivery</b> &mdash; or switch to Amazon Partnered Carrier (UPS), where tracking auto-populates and this defect disappears. For now: <b>Acknowledge</b> the box defects (no penalty) and watch IPI &mdash; repeated defects can eventually trigger fees/delays even though they haven't yet.
-      </div>
-    </div>
-  </div>
-
-  <!-- ════════ SHIPMENTS ════════ -->
-  <div id="tab-shipments" class="tab-content">
-    <div class="shipsec">&#9989; Received / Closed</div>
-    <div class="card" style="padding:6px 16px">
-      <div class="ship"><div class="ship-bar" style="background:#059669"></div><div class="ship-main">
-        <div class="ship-meta"><span class="pill pill-green">Received</span><span class="note mono">504 &middot; Maston</span></div>
-        <div class="ship-name">504 Devices &rarr; J&amp;J Columbus</div>
-        <div class="ship-note">Vessel COLORADO 16E. Fully checked in &mdash; reflected in current J&amp;J 993.</div>
-      </div><div class="ship-eta">Done</div></div>
-
-      <div class="ship"><div class="ship-bar" style="background:#059669"></div><div class="ship-main">
-        <div class="ship-meta"><span class="pill pill-green">Received</span><span class="note mono">204 &middot; UPS Ground</span></div>
-        <div class="ship-name">204 Devices &mdash; LV &rarr; Columbus transfer</div>
-        <div class="ship-note">ControlPort #214000285. <b>180 of 204 received &mdash; 24 units (2 cases) short.</b> UPS claim outstanding for $725.</div>
-      </div><div class="ship-eta">Done<br><span class="c-red">claim open</span></div></div>
-
-      <div class="ship"><div class="ship-bar" style="background:#059669"></div><div class="ship-main">
-        <div class="ship-meta"><span class="pill pill-green">Received</span><span class="note mono">2,004 &middot; UPS DDP Air</span></div>
-        <div class="ship-name">2,004 Devices &rarr; Amazon FBA (5 FCs)</div>
-        <div class="ship-note">All located. 1,695 Prime. $32,482 freight. Non-blocking box tracking defects &mdash; see FBA tab.</div>
-      </div><div class="ship-eta">Done</div></div>
-
-      <div class="ship"><div class="ship-bar" style="background:#059669"></div><div class="ship-main">
-        <div class="ship-meta"><span class="pill pill-green">Received</span><span class="note mono">1,013 &middot; holsters</span></div>
-        <div class="ship-name">1,013 Holsters &rarr; J&amp;J (CLB 600 + LV 413)</div>
-        <div class="ship-note">Both ASNs booked in (CLB 600 + LV 413). <b>Las Vegas shelved &mdash; 341 on shelf, clearing backlog.</b> Columbus received but <b>not yet put away</b> (0 on shelf). Net holster recovered to +340 sellable.</div>
-      </div><div class="ship-eta">LV shelved<br><span class="c-amber">CLB put-away</span></div></div>
-
-      <div class="ship"><div class="ship-bar" style="background:#059669"></div><div class="ship-main">
-        <div class="ship-meta"><span class="pill pill-green">Received</span><span class="note mono">300 serrated &middot; air</span></div>
-        <div class="ship-name">300 Serrated (air) &rarr; Rob / Agoura Hills</div>
-        <div class="ship-note">Landed. Rob is hand-working the DTC/backlog orders with these now.</div>
-      </div><div class="ship-eta">Done</div></div>
-    </div>
-
-    <div class="shipsec">&#128674; In Transit</div>
-    <div class="card" style="padding:6px 16px">
-      <div class="ship"><div class="ship-bar" style="background:#2563EB"></div><div class="ship-main">
-        <div class="ship-meta"><span class="pill pill-blue">In Transit</span><span class="note mono">300 serrated &middot; air</span></div>
-        <div class="ship-name">300 Serrated (air) &rarr; J&amp;J Columbus</div>
-        <div class="ship-note"><b>Arrives tomorrow (Wed 6/24)</b> per UPS tracking; on shelf by ~Fri 6/26. Starts clearing the &minus;240 serrated backorder and covers the Grainger serrated B2B line (6/29).</div>
-      </div><div class="ship-eta">ETA CLB<br><b>Wed 6/24</b></div></div>
-
-      <div class="ship"><div class="ship-bar" style="background:#DC2626"></div><div class="ship-main">
-        <div class="ship-meta"><span class="pill pill-red">Stuck</span><span class="note mono">1,008 &middot; Maston</span></div>
-        <div class="ship-name">1,008 Devices &rarr; J&amp;J Columbus</div>
-        <div class="ship-note">Maston fast boat. $5,340 freight. <b>Still not received</b> &mdash; no check-in at J&amp;J, 0 inbound at FBA. Held by the China customs delay (no update). Also gated by the pending J&amp;J DG review on arrival.</div>
-      </div><div class="ship-eta">ETA<br><b>TBD</b><br><span class="c-red">stuck</span></div></div>
-    </div>
-
-    <div class="shipsec">&#9888;&#65039; Stuck in China customs &mdash; sea blades (not yet sailed)</div>
-    <div class="card" style="padding:6px 16px">
-      <div class="ship"><div class="ship-bar" style="background:#DC2626"></div><div class="ship-main">
-        <div class="ship-meta"><span class="pill pill-red">Sea &middot; stuck CN customs</span><span class="note mono">2,700 packs &middot; 10 ctn</span></div>
-        <div class="ship-name">Sea &rarr; J&amp;J Columbus (1,700) + Las Vegas (1,000)</div>
-        <div class="ship-note"><b>Still not released by Chinese customs</b> &mdash; has not sailed. The <b>4 LV cartons (600 ser + 400 str)</b> will be <b>re-labeled to the new LV address (1840 Aerojet Way) at the US freight-forwarder warehouse</b> on arrival &mdash; a <b>$200&ndash;300 charge pending Brittan's approval.</b> Columbus 6 cartons unaffected. Need new vessel/ETD from Nancy once released.</div>
-      </div><div class="ship-eta">ETA<br><b>TBD</b><br><span class="c-red">stuck</span></div></div>
-    </div>
-
-    <div class="shipsec">&#128203; J&amp;J ControlPort ASN Status (6/23)</div>
-    <div class="card">
-      <table>
-        <tr><th>ASN</th><th>FC</th><th>Sender</th><th class="ar">Items</th><th>Status</th></tr>
-        <tr class="good"><td class="bold">Stasel-holster June2026 (Columbus)</td><td>CLB</td><td>Style N Craft</td><td class="ar mono">600</td><td><span class="pill pill-green">Booked in</span></td></tr>
-        <tr class="good"><td class="bold">Stasel-holster June2026 Las Vegas</td><td>LV</td><td>Style N Craft</td><td class="ar mono">413</td><td><span class="pill pill-green">Booked in</span></td></tr>
-        <tr><td class="bold">June26 Serrated Blades Columbus</td><td>CLB</td><td>214 Central</td><td class="ar mono">300</td><td><span class="pill pill-blue">Active &middot; arr 6/24</span></td></tr>
-        <tr class="alt"><td class="bold">June26 Serrated+Straight Columbus</td><td>CLB</td><td>214 Central</td><td class="ar mono">1,700</td><td><span class="pill pill-amber">Active &middot; sea stuck</span></td></tr>
-        <tr><td class="bold">June26 Serrated+Straight Las Vegas</td><td>LV</td><td>214 Central</td><td class="ar mono">1,000</td><td><span class="pill pill-amber">Active &middot; re-label pending</span></td></tr>
-      </table>
-      <div class="note" style="margin-top:8px">Both holster ASNs are <b>booked in</b> (received) &mdash; LV shelved, CLB put-away pending. The 300 serrated air ASN goes active on tomorrow's delivery. The two sea ASNs (1,700 CLB + 1,000 LV) stay open until customs releases; the <b>LV ASN is the one that needs the new 1840 Aerojet Way address</b> applied at re-label.</div>
-    </div>
-
-    <div class="shipsec">&#128221; On the Horizon</div>
-    <div class="card" style="padding:6px 16px">
-      <div class="ship"><div class="ship-bar" style="background:#9CA3AF"></div><div class="ship-main">
-        <div class="ship-meta"><span class="pill pill-gray">Next run</span><span class="note mono">Holsters &middot; India</span></div>
-        <div class="ship-name">Next Holster Run &mdash; 1,000 units (agreed 6/3)</div>
-        <div class="ship-note">Dan + Rob agreed to reorder 1,000 from Sanjeev on his next vessel: ETD ~late Jul / 1st wk Aug, ETA NY ~end Aug / 1st wk Sept. Backfills summer/fall. Dan negotiating PO, pushing deposit out. A later 2nd 1,000 may shift to China (Vira) &mdash; see Holsters tab.</div>
-      </div><div class="ship-eta">ETD<br><b>~late Jul</b></div></div>
-
-      <div class="ship"><div class="ship-bar" style="background:#2563EB"></div><div class="ship-main">
-        <div class="ship-meta"><span class="pill pill-blue">Proposed</span><span class="note mono">~2,718 &middot; devices</span></div>
-        <div class="ship-name">Device Reorder &mdash; last of this version (~2,718 available)</div>
-        <div class="ship-note">Pending Rob's approval. Bring in the finished units still at the factory before they're stranded (next version = USB-C). <b>All by boat &mdash; no air</b> (July soft; ocean ~25&ndash;35d lands early Aug). Sea lot to FBA (low channel) + sea lot to J&amp;J for the balance. Consignment = no cash penalty, so no need to stagger. Confirm count + sea quotes with Nancy.</div>
-      </div><div class="ship-eta">ETD<br><b>on approval</b></div></div>
-    </div>
-  </div>
-
-  <!-- ════════ BLADE PACKS ════════ -->
-  <div id="tab-blades" class="tab-content">
-    <div class="alert alert-red">
-      <div class="alert-title c-red">UPDATE 6/23 &mdash; Columbus air lands tomorrow; sea still stuck in China</div>
-      <div class="alert-body"><b>(1) Air serrated is working.</b> Rob's <b>300 (Agoura)</b> are clearing the DTC backlog. The <b>300 to J&amp;J Columbus arrive tomorrow (Wed 6/24)</b> per UPS tracking and should be <b>on the shelf by Fri 6/26</b> &mdash; beginning to clear the &minus;240 backorder (CLB &minus;172, LV &minus;68) and covering the Grainger serrated line (6/29). <b>(2) Sea blades remain stuck in Chinese customs</b> &mdash; not released, not sailed. On US arrival the 4 LV cartons (600 ser + 400 str) get re-labeled to the new LV address (1840 Aerojet Way) at the forwarder &mdash; <b>the $200&ndash;300 charge still has no answer from Brittan</b> (follow-up going out, pushing J&amp;J to cover it). Open: Brittan on the charge; new vessel/ETD from Nancy once customs releases.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Shipment Plan, Tracking &amp; Schedule (booked 6/7)</div>
-      <table>
-        <tr><th>Lane</th><th>Mode</th><th class="ar">Ctn</th><th class="ar">Ser</th><th class="ar">Str</th><th class="ar">Freight</th><th>Tracking / Vessel</th><th>Sched</th></tr>
-        <tr class="good"><td class="bold">&rarr; Rob (Agoura Hills)</td><td><span class="pill pill-green">Air &middot; received</span></td><td class="ar mono">1</td><td class="ar mono">300</td><td class="ar mono">&mdash;</td><td class="ar mono">$349</td><td class="mono" style="font-size:10px">delivered</td><td>Rob working backlog</td></tr>
-        <tr class="alt"><td class="bold">&rarr; J&amp;J Columbus</td><td><span class="pill pill-blue">Air &middot; arriving</span></td><td class="ar mono">1</td><td class="ar mono">300</td><td class="ar mono">&mdash;</td><td class="ar mono">$349</td><td class="mono" style="font-size:10px">arr 6/24</td><td>On shelf ~Fri 6/26</td></tr>
-        <tr><td class="bold">&rarr; J&amp;J Columbus</td><td><span class="pill pill-red">Sea &middot; held</span></td><td class="ar mono">6</td><td class="ar mono">900</td><td class="ar mono">800</td><td class="ar mono">$413</td><td class="mono" style="font-size:10px">1ZY515H10328898988<br>(rolling vessel)</td><td>Held CN customs<br>new ETD TBD</td></tr>
-        <tr class="out"><td class="bold">&rarr; J&amp;J Las Vegas</td><td><span class="pill pill-red">Sea &middot; stuck</span></td><td class="ar mono">4</td><td class="ar mono">600</td><td class="ar mono">400</td><td class="ar mono">$287</td><td class="mono" style="font-size:10px">re-label at US FF<br>($200&ndash;300, Brittan)</td><td>Stuck CN customs<br>&rarr; new LV addr</td></tr>
-        <tr class="good"><td class="bold">Total</td><td></td><td class="ar mono bold">12</td><td class="ar mono bold">2,100</td><td class="ar mono bold">1,200</td><td class="ar mono bold">$1,398</td><td></td><td></td></tr>
-      </table>
-      <div class="note" style="margin-top:8px">3,300 packs total; reconciles to the production order. All four UPS 1Z tracking numbers verified (format + check digit). All DDP &mdash; duties &amp; final delivery included. Product cost (~$3,273) on the consignment tab; <b>freight ($1,398) is the only cash out.</b></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Where each product lands</div>
-      <table>
-        <tr><th>Destination</th><th class="ar">Serrated</th><th class="ar">Straight</th><th class="al">Effect</th></tr>
-        <tr><td class="bold">Columbus (air 300 + sea 900/800)</td><td class="ar mono">1,200</td><td class="ar mono">800</td><td>Air 300 clears CLB serrated (&minus;141) first</td></tr>
-        <tr class="alt"><td class="bold">Las Vegas (sea)</td><td class="ar mono">600</td><td class="ar mono">400</td><td>Clears LV serrated (&minus;47) + restock</td></tr>
-        <tr><td class="bold">Rob / Agoura Hills (air)</td><td class="ar mono">300</td><td class="ar mono">&mdash;</td><td>Hand-fulfill DTC / Grainger samples</td></tr>
-      </table>
-    </div>
-
-    <div class="alert alert-amber">
-      <div class="alert-title c-amber">Serrated recovery underway &mdash; Columbus relief ~6/29</div>
-      <div class="alert-body">Air serrated has landed: Rob's 300 are clearing DTC backlog now, and the Columbus 300 arrive tomorrow (Wed 6/24) and should be on the shelf by Fri 6/26. That works down the &minus;240 backorder (CLB &minus;172, LV &minus;68), but full recovery waits on the sea cartons, which are still stuck in Chinese customs. <b>Keep customer-facing serrated messaging at a restock date</b> until the Columbus relief posts and FBA/B2B inventory goes positive.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Status &amp; next steps</div>
-      <ul class="tight">
-        <li><b>Columbus serrated (300, air):</b> confirm Wed 6/24 receipt and J&amp;J put-away so it ships ~6/29; this covers the Grainger serrated line (revised ship 6/29).</li>
-        <li><b>Rob's 300 (air):</b> confirm how many DTC/backlog orders cleared so the serrated sellable position can be trued up.</li>
-        <li><b>Sea blades:</b> get the new vessel/ETD from Nancy once Chinese customs releases &mdash; still not sailed.</li>
-        <li><b>LV re-label:</b> get Brittan's approval on the $200&ndash;300 re-label charge at the US freight forwarder so the 4 LV cartons route to 1840 Aerojet Way.</li>
-        <li><b>Customer messaging:</b> hold serrated at a restock date until Columbus relief posts.</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- ════════ HOLSTERS ════════ -->
-  <div id="tab-holsters" class="tab-content">
-    <div class="alert alert-green">
-      <div class="alert-title c-green">&#128230; Las Vegas shelved &amp; clearing backlog &mdash; Columbus put-away still pending</div>
-      <div class="alert-body">Both holster ASNs are booked in at J&amp;J (CLB 600 + LV 413). <b>Las Vegas is now on the shelf &mdash; 341 available and already turning the backlog of orders.</b> <b>Columbus is received but not yet put away</b> (0 on shelf, &minus;1 with one earmarked). Net holster position is back to <b>+340 sellable</b> &mdash; effectively recovered. The 5-unit <b>Grainger</b> B2B backorder can fill from available stock (6/26 target). <b>Remaining nudge: get Brittan to finish the Columbus put-away</b> so East Coast / Grainger fulfillment runs from the nearer FC rather than shipping LV&rarr;Louisville.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Shipment Detail</div>
-      <div class="track">
-        <div class="trackbox"><span>Vessel</span><b>TORRENTE V.6118</b></div>
-        <div class="trackbox"><span>Carrier</span><b>Hapag-Lloyd</b></div>
-        <div class="trackbox"><span>IMO</span><b>9447914</b></div>
-        <div class="trackbox"><span>Container</span><b>HLXU 8529327</b></div>
-        <div class="trackbox"><span>Equipment</span><b>40' HQ</b></div>
-        <div class="trackbox"><span>ETD Nhava Sheva</span><b>May 4, 2026</b></div>
-        <div class="trackbox"><span>US customs</span><b>Released 6/11</b></div>
-        <div class="trackbox"><span>Status</span><b>LV shelved / CLB put-away</b></div>
-        <div class="trackbox"><span>Qty</span><b>1,013 units</b></div>
-        <div class="trackbox"><span>Unit (DDP)</span><b>$11.48</b></div>
-      </div>
-      <div class="note" style="margin-top:10px">Live position via MarineTraffic / VesselFinder by IMO 9447914. Route via Dubai &amp; Suez (no South-Africa reroute materialized).</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Path to shelf &amp; backorder clearance</div>
-      <table>
-        <tr><th>Stage</th><th>Est. date</th><th class="al">Note</th></tr>
-        <tr class="good"><td class="bold">Dispatched to J&amp;J (UPS Ground)</td><td class="mono">Jun 16 &#10003;</td><td>Order #012126 &mdash; CLB 600 / LV 413</td></tr>
-        <tr class="good"><td class="bold">Delivered &amp; received at J&amp;J</td><td class="mono">end of last wk &#10003;</td><td>Both ASNs booked in (CLB 600 + LV 413)</td></tr>
-        <tr class="good"><td class="bold">Las Vegas put-away / on shelf</td><td class="mono">done &#10003;</td><td>341 on shelf &mdash; clearing backlog</td></tr>
-        <tr class="out"><td class="bold">Columbus put-away / on shelf</td><td class="mono">PENDING</td><td>0 on shelf &mdash; awaiting put-away</td></tr>
-        <tr class="alt"><td class="bold">Grainger B2B (5 units)</td><td class="mono">~6/26</td><td>Fills from available holster stock</td></tr>
-      </table>
-      <div class="note" style="margin-top:8px">Holster position has recovered to <b>+340 sellable</b> on the LV put-away. The open <b>Grainger</b> holster backorder (5 units across PO 4650035429, 4650205320, 4650713231) can fill from available inventory at the 6/26 target. <b>The one remaining step is the Columbus put-away</b> so East Coast / Grainger orders ship from the closer FC instead of LV&rarr;Louisville.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Sourcing strategy &mdash; India vs. China (decided 6/3)</div>
-      <table>
-        <tr><th>Order</th><th>Supplier</th><th class="ar">Qty</th><th>Timing</th><th class="al">Status</th></tr>
-        <tr class="good"><td class="bold">Current (received)</td><td>Style N Craft (India)</td><td class="ar mono">1,013</td><td>At J&amp;J, put-away pending</td><td><span class="pill pill-amber">Shelving</span></td></tr>
-        <tr><td class="bold">Near-term reorder</td><td>Style N Craft (India)</td><td class="ar mono">1,000</td><td>ETD ~late Jul; ETA NY ~end Aug</td><td><span class="pill pill-amber">Agreed &mdash; PO pending</span></td></tr>
-        <tr class="alt"><td class="bold">Possible 2nd-half order</td><td>China (Vira)</td><td class="ar mono">~1,000</td><td>If needed this year</td><td><span class="pill pill-gray">Sampling/testing</span></td></tr>
-      </table>
-      <div class="alert-body" style="margin-top:10px">
-        <b>Why the shift:</b> Style N Craft's India fulfillment has been slow (this order: factory 3rd week April &rarr; port May 4 &rarr; NY June 9 &mdash; ~2 months door-to-port, before the domestic leg). The plan is to test a China source at similar cost with better logistics. <b>Rob is leading the China discourse (contact: Vira); sampling/testing is in progress.</b>
-        <br><br>
-        <b>Decision (Dan + Rob, 6/3):</b> place one more 1,000-unit order with Sanjeev now to backfill summer/fall &mdash; safe near-term move while China is still being qualified. Dan is negotiating the PO and pushing the deposit out as far as possible to preserve cash. Whether a <i>second</i> 1,000 is needed later this year &mdash; and whether it ships from China rather than India &mdash; depends on demand and how the China samples test out. Annual demand ~3,000 units supports a rolling 1,000-unit cadence.
-      </div>
-    </div>
-  </div>
-
-  <!-- ════════ FREIGHT ════════ -->
-  <div id="tab-freight" class="tab-content">
-    <div class="card">
-      <div class="card-title">Blade Freight Quote &mdash; Cost Impact</div>
-      <div class="flex">
-        <div class="stat"><div class="stat-label">Total Freight (cash out)</div><div class="stat-val c-amber">$1,398</div><div class="stat-sub">12 cartons / 3,300 packs</div></div>
-        <div class="stat"><div class="stat-label">Blended</div><div class="stat-val">$0.42</div><div class="stat-sub">per pack</div></div>
-        <div class="stat"><div class="stat-label">Air Portion</div><div class="stat-val c-red">$698</div><div class="stat-sub">$1.16/pack &middot; 600 packs</div></div>
-        <div class="stat"><div class="stat-label">Sea Portion</div><div class="stat-val c-cyan">$700</div><div class="stat-sub">$0.26/pack &middot; 2,700 packs</div></div>
-      </div>
-      <div class="note">Product cost (~$3,273) is on the consignment tab &mdash; not cash. Freight is the entire out-of-pocket. As a share of goods value, total freight is ~43%; the air leg alone runs ~111% of pack value, the sea leg ~26%.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">The air-expedite decision, in dollars</div>
-      <div class="alert alert-green" style="margin:0">
-        <div class="alert-body">
-          If the 600 serrated air packs were sea-freighted instead, freight would be only ~<b>$156</b>. The air choice costs ~<b>$542 more</b> &mdash; that's the price to pull 600 serrated packs forward ~2 weeks so 300 land at Columbus near Father's Day and clear most of the ~190 backorders. At $9.99 retail, those 300 packs are ~$3,000 of recoverable sales (plus avoided lost-customer cost). <b>$542 to unlock that is cheap insurance.</b>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Freight vs. prior shipments</div>
-      <table>
-        <tr><th>Shipment</th><th>Mode</th><th class="ar">$/unit</th><th class="ar">% of cost</th><th class="al">Read</th></tr>
-        <tr><td class="bold">2,004 devices</td><td>UPS DDP Air</td><td class="ar mono">$16.21</td><td class="ar mono c-red">54%</td><td>Expensive but necessary for FBA restock</td></tr>
-        <tr class="alt"><td class="bold">1,008 devices</td><td>Maston Sea</td><td class="ar mono">$5.30</td><td class="ar mono c-green">18%</td><td>Benchmark ocean economics</td></tr>
-        <tr><td class="bold">504 devices</td><td>Maston Sea</td><td class="ar mono">$5.27</td><td class="ar mono c-green">17%</td><td>Benchmark ocean economics</td></tr>
-        <tr class="alt"><td class="bold">600 blade packs</td><td>Air DDP</td><td class="ar mono">$1.16</td><td class="ar mono c-red">111%</td><td>Tiny $ &mdash; freight &gt; cheap goods' value</td></tr>
-        <tr><td class="bold">2,700 blade packs</td><td>Sea DDP</td><td class="ar mono">$0.26</td><td class="ar mono c-green">26%</td><td>In line with device ocean rate</td></tr>
-      </table>
-      <div class="note" style="margin-top:8px">Per-unit, blades look cheap because the items are tiny; on a <b>value basis</b>, blade air is the worst ratio of any lane (you pay more in freight than the goods cost). But the absolute number is trivial ($698), and devices &mdash; the heavy, high-value, battery-bearing units &mdash; are where freight dollars actually concentrate. Sea blade freight (26%) mirrors Maston device economics (17&ndash;18%).</div>
-    </div>
-  </div>
-
-  <!-- ════════ FORECAST ════════ -->
-  <div id="tab-forecast" class="tab-content">
-    <div class="card">
-      <div class="card-title">Device Forecast &mdash; through Father's Day &amp; after</div>
-      <table>
-        <tr><th>Week</th><th class="ar">Start</th><th class="ar">Inbound</th><th class="ar">Rate/day</th><th class="ar">Sold</th><th class="ar">End</th><th class="al">Note</th></tr>
-        <tr><td class="bold">Jun 1&ndash;7</td><td class="ar mono">2,531</td><td class="ar mono">0</td><td class="ar mono">47</td><td class="ar mono">330</td><td class="ar mono bold">2,201</td><td>Father's Day ramp begins</td></tr>
-        <tr class="alt"><td class="bold">Jun 8&ndash;14</td><td class="ar mono">2,201</td><td class="ar mono">0</td><td class="ar mono">55</td><td class="ar mono">385</td><td class="ar mono bold">1,816</td><td>Peak buying week; low point</td></tr>
-        <tr><td class="bold">Jun 15&ndash;21</td><td class="ar mono">1,816</td><td class="ar mono c-green">+1,008</td><td class="ar mono">60</td><td class="ar mono">420</td><td class="ar mono bold">2,404</td><td>1,008 Maston lands (if DG clears)</td></tr>
-        <tr class="alt"><td class="bold">Jun 22&ndash;28</td><td class="ar mono">2,404</td><td class="ar mono">0</td><td class="ar mono">40</td><td class="ar mono">280</td><td class="ar mono bold">2,124</td><td>Post-holiday normalization</td></tr>
-      </table>
-      <div class="note" style="margin-top:8px">Device floor ~1,816 mid-June is comfortable. The only thing that turns this red is the DG review blocking the 1,008 Maston at receiving.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Device reorder &mdash; the ~2,718 available, all by boat (last of this version)</div>
-      <table>
-        <tr><th>Tranche</th><th>Dest</th><th>Mode</th><th class="ar">Units</th><th class="al">Rationale</th></tr>
-        <tr class="alt"><td class="bold">Lot 1</td><td>Amazon FBA</td><td>Sea (Maston/ZIM)</td><td class="ar mono">~1,500</td><td>Refill the low channel; lands early Aug, ahead of soft-July burn</td></tr>
-        <tr><td class="bold">Lot 2</td><td>J&amp;J (CLB/LV)</td><td>Sea (Maston/ZIM)</td><td class="ar mono">balance</td><td>Months of cover already; DG must clear before J&amp;J receives</td></tr>
-        <tr class="good"><td class="bold">Total</td><td>&mdash;</td><td>All boat</td><td class="ar mono bold">~2,718</td><td>Clears all current-version finished goods</td></tr>
-      </table>
-      <div class="note" style="margin-top:8px">Basis: 5,730 finished units confirmed on shelf at the factory (May 6), minus 2,004 (FBA air) and 1,008 (Maston) shipped since = <b>~2,718 remaining</b> &mdash; consistent with Rob/Dan's "over 2,000." <b>No more of this version will be produced</b> (next version moves to USB-C + updated parts), so these are worth importing in full rather than stranding. <b>All by boat &mdash; no air:</b> July is soft, so ocean transit (~25&ndash;35 days) still replenishes FBA in early August within its runway, and sea runs ~$5/unit vs. ~$15&ndash;16 air. Product is on consignment, so there's <b>no cash penalty to importing it all</b> &mdash; staggering is optional, not necessary. Note: the J&amp;J lot still needs the DG review cleared before receiving; the FBA lot isn't DG-gated. <b>Confirm the exact count + sea quotes with Nancy; route to Rob.</b> Optional add-on per Sofeast 6/22: 500 blade guards in stock at $1.23 (3-day) &mdash; cheap to ride along; hold chargers to bundle with the next production run to avoid the $449 setup.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Accessory &amp; parts outlook</div>
-      <table>
-        <tr><th>Product</th><th class="ar">Now</th><th class="al">Relief</th><th class="al">Status</th></tr>
-        <tr class="out"><td class="bold">Serrated</td><td class="ar mono c-red">&minus;240</td><td>300 &rarr; CLB on shelf ~6/26; Rob's 300 working backlog; sea stuck</td><td>Recovering &mdash; relief ~6/26</td></tr>
-        <tr><td class="bold">Straight</td><td class="ar mono">512</td><td>+sea (stuck CN customs)</td><td>Ample &mdash; no concern</td></tr>
-        <tr class="good"><td class="bold">Holster</td><td class="ar mono">340</td><td>LV shelved (341); CLB put-away pending</td><td>Recovered</td></tr>
-        <tr class="alt"><td class="bold">Charger</td><td class="ar mono c-amber">Low</td><td>Re-flashing defect returns; new run 35&ndash;40d + $449</td><td>Monitor &mdash; bundle next run</td></tr>
-        <tr><td class="bold">Blade guard</td><td class="ar mono c-green">In stock</td><td>Supplier stock, $1.23, ~3-day</td><td>Add to next inbound</td></tr>
-      </table>
-    </div>
-
-    <div class="alert alert-amber">
-      <div class="alert-title c-amber">Forecast assumptions</div>
-      <div class="alert-body">Device network ~2,490 split <b>J&amp;J 1,598 + FBA ~890</b> (the "Browse Inventory" view is J&amp;J-only; FBA is tracked separately). FBA is the constraint at ~22 DoS &mdash; hence the reorder. The <b>1,008 Maston is still not received</b> (China customs delay) and remains gated by the pending J&amp;J DG review. <b>Blades:</b> Columbus serrated 300 lands 6/24, on shelf ~6/26; sea blades stuck in Chinese customs; LV re-label ($200&ndash;300) pending Brittan. <b>Holster recovered</b> (LV shelved 341). <b>Parts:</b> chargers low (bundle a run), blade guards in stock. The device-forecast table above predates the holiday and is kept for reference; refresh once Maston firms up.</div>
-    </div>
-  </div>
-
-  <!-- ════════ COMPARE ════════ -->
-  <div id="tab-compare" class="tab-content">
-    <div class="card">
-      <div class="card-title">What changed since the last report (Jun 22 &rarr; Jun 23)</div>
-      <div class="cmp"><div class="cmp-label">Holster (LV)</div><span class="cmp-old">received, not shelved</span><span class="cmp-arrow">&rarr;</span><span class="cmp-new c-green">shelved, 341</span><span class="pill pill-green">recovered</span></div>
-      <div class="cmp"><div class="cmp-label">Holster net</div><span class="cmp-old">&minus;73</span><span class="cmp-arrow">&rarr;</span><span class="cmp-new c-green">+340</span><span class="pill pill-green">+413</span></div>
-      <div class="cmp"><div class="cmp-label">Serrated air (CLB)</div><span class="cmp-old">in transit</span><span class="cmp-arrow">&rarr;</span><span class="cmp-new c-blue">arrives 6/24</span><span class="pill pill-blue">on shelf ~6/26</span></div>
-      <div class="cmp"><div class="cmp-label">Serrated backorder</div><span class="cmp-old">239</span><span class="cmp-arrow">&rarr;</span><span class="cmp-new c-red">240</span><span class="pill pill-gray">flat &mdash; relief imminent</span></div>
-      <div class="cmp"><div class="cmp-label">Device view corrected</div><span class="cmp-old">1,648 "total"</span><span class="cmp-arrow">&rarr;</span><span class="cmp-new c-green">J&amp;J 1,598 + FBA 890</span><span class="pill pill-green">~2,490 net</span></div>
-      <div class="cmp"><div class="cmp-label">FBA stock</div><span class="cmp-old">(not seen)</span><span class="cmp-arrow">&rarr;</span><span class="cmp-new c-amber">890 / LOW</span><span class="pill pill-amber">~22 DoS</span></div>
-      <div class="cmp"><div class="cmp-label">1,008 Maston</div><span class="cmp-old">confirm</span><span class="cmp-arrow">&rarr;</span><span class="cmp-new c-red">still not received</span><span class="pill pill-red">CN customs</span></div>
-      <div class="cmp"><div class="cmp-label">LV re-label charge</div><span class="cmp-old">pending Brittan</span><span class="cmp-arrow">&rarr;</span><span class="cmp-new c-red">no response</span><span class="pill pill-red">follow-up</span></div>
-      <div class="cmp"><div class="cmp-label">New: parts tracking</div><span class="cmp-old">&mdash;</span><span class="cmp-arrow">&rarr;</span><span class="cmp-new">chargers low / guards in stock</span><span class="pill pill-amber">monitor</span></div>
-      <div class="cmp"><div class="cmp-label">J&amp;J DG review</div><span class="cmp-old">pending</span><span class="cmp-arrow">&rarr;</span><span class="cmp-new c-red">still pending</span><span class="pill pill-red">unresolved</span></div>
-    </div>
-
-    <div class="alert alert-green">
-      <div class="alert-title c-green">Bottom line (June 23)</div>
-      <div class="alert-body">
-        <b>The accessories are turning the corner; the watch item has shifted to devices.</b> Holsters recovered (LV shelved, clearing backlog), serrated relief lands on the Columbus shelf this Friday, straight is ample, and Grainger is handled (sent, dates aligned). The new priority is <b>Amazon device stock running low while the 1,008 Maston sits stuck in China customs.</b>
-        <br><br>
-        <b>What needs you, in order:</b>
-        <br>1. <b>Device reorder decision (Rob):</b> import the ~2,718 available units (last of this version) <b>all by boat</b> &mdash; a sea lot to FBA, the balance by sea to J&amp;J. July's soft, so no air needed. Confirm count + sea quotes with Nancy.
-        <br>2. <b>Send the Brittan follow-up</b> (ready): push J&amp;J to cover the $200&ndash;300 LV re-label, since the site change was unannounced &mdash; no response yet.
-        <br>3. <b>Finish Columbus holster put-away</b> &mdash; LV is carrying fulfillment; CLB just needs shelving.
-        <br>4. <b>Confirm Columbus serrated</b> lands 6/24 / on shelf 6/26 (covers Grainger 6/29) and chase Nancy on the stuck sea blades' new vessel/ETD.
-        <br>5. <b>Parts:</b> add 500 blade guards (in stock, cheap) to the next inbound; bundle a charger run with the next production order.
-      </div>
-    </div>
-  </div>
-
-  <div class="footer">BOXBLAYDE INVENTORY COMMAND CENTER v6.7 &middot; June 23, 2026 4:07 PM ET &middot; ControlPort + Amazon Seller Central + Sofeast + Style N Craft + UPS &middot; post-Father's Day</div>
 </div>
 
-<script>
-function showTab(id){
-  var ids=['overview','fba','shipments','blades','holsters','freight','forecast','compare'];
-  document.querySelectorAll('.tab-content').forEach(function(e){e.classList.remove('active')});
-  document.querySelectorAll('.tab').forEach(function(e){e.classList.remove('active')});
-  var el=document.getElementById('tab-'+id); if(el)el.classList.add('active');
-  var i=ids.indexOf(id); var tabs=document.querySelectorAll('.tab');
-  if(i>=0&&tabs[i])tabs[i].classList.add('active');
-}
-</script>
+<!-- SUMMARY BAR -->
+<div class="summary-bar">
+  <div class="summary-card">
+    <div class="label">J&amp;J Devices</div>
+    <div class="value green">491</div>
+    <div class="sub">Sellable (2 warehouses)</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">FBA On-Hand</div>
+    <div class="value amber">377</div>
+    <div class="sub">~27 days supply</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">FBA Inbound</div>
+    <div class="value blue">823</div>
+    <div class="sub">In transit to FCs</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">Ocean Shipment</div>
+    <div class="value green">ARRIVED</div>
+    <div class="sub">Long Beach ~Aug 2</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">FBA Status</div>
+    <div class="value red">LOW STOCK</div>
+    <div class="sub">14 units/day run rate</div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+<!-- CRITICAL ACTIONS (always visible, not collapsible) -->
+<div class="critical-box">
+  <h2>Critical Actions Required</h2>
+  <ol class="action-list">
+    <li class="red-action">
+      <span class="action-num">1</span>
+      <span class="action-text"><strong>Upload tracking spreadsheets to Amazon Seller Central</strong> for all 6 ocean shipments. All show "Missing tracking ID" and 0% received. Shipment IDs: FBA19JHJHTVX, FBA19JHKYQ2N, FBA19JHLMD9Q, FBA19JHLTVY2, FBA19JHLVKYN, FBA19JHNWD3L</span>
+    </li>
+    <li class="red-action">
+      <span class="action-num">2</span>
+      <span class="action-text"><strong>Open Amazon Seller Support case for GYR3</strong> &mdash; 0/120 units received despite "Delivered" status. Reference the Jul 21 J&amp;J transfer batch shipment.</span>
+    </li>
+    <li class="amber-action">
+      <span class="action-num">3</span>
+      <span class="action-text"><strong>Contact Shelly/Sofeast</strong> for customs clearance status and last-mile delivery timeline from Long Beach to Amazon FCs.</span>
+    </li>
+    <li class="amber-action">
+      <span class="action-num">4</span>
+      <span class="action-text"><strong>Monitor LGB8 receiving</strong> &mdash; 137/144 units received (95%). Expect completion shortly.</span>
+    </li>
+  </ol>
+</div>
+
+<!-- SECTION 1: INVENTORY SNAPSHOT -->
+<details class="section" open>
+  <summary>Inventory Snapshot &mdash; August 4, 2026</summary>
+  <div class="body">
+
+    <!-- J&J ControlPort -->
+    <div class="sub-section">
+      <h4>J&amp;J ControlPort (3PL)</h4>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>Product</th><th>Columbus OH</th><th>Las Vegas NV</th><th>Total Sellable</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Devices</strong></td>
+              <td>258 <span style="color:var(--text-muted);font-size:12px">(285 shelf, 27 earmarked)</span></td>
+              <td>233 <span style="color:var(--text-muted);font-size:12px">(242 shelf, 9 earmarked)</span></td>
+              <td><strong>491</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Serrated Blades</strong></td>
+              <td>885 <span style="color:var(--text-muted);font-size:12px">(890 shelf, 5 earmarked)</span></td>
+              <td>572 <span style="color:var(--text-muted);font-size:12px">(575 shelf, 3 earmarked)</span></td>
+              <td><strong>1,457</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Straight Blades</strong></td>
+              <td>993 <span style="color:var(--text-muted);font-size:12px">(994 shelf, 1 earmarked)</span></td>
+              <td>622 <span style="color:var(--text-muted);font-size:12px">(622 shelf, 0 earmarked)</span></td>
+              <td><strong>1,615</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Holsters</strong></td>
+              <td>550 <span style="color:var(--text-muted);font-size:12px">(551 shelf, 1 earmarked)</span></td>
+              <td>329 <span style="color:var(--text-muted);font-size:12px">(330 shelf, 1 earmarked)</span></td>
+              <td><strong>879</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note note-blue">J&amp;J devices down from 1,598 in June &rarr; transferred ~1,100 to FBA per hybrid strategy (run J&amp;J lean for B2B only).</div>
+    </div>
+
+    <!-- Amazon FBA -->
+    <div class="sub-section">
+      <h4>Amazon FBA (US) &nbsp;<span class="badge badge-red">LOW STOCK</span></h4>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>Metric</th><th>Value</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>On-hand (fulfillable)</td><td><strong>377</strong></td></tr>
+            <tr><td>Inbound</td><td><strong>823</strong></td></tr>
+            <tr><td>Reserved</td><td>95</td></tr>
+            <tr><td>Researching</td><td>4</td></tr>
+            <tr><td>Unfulfillable</td><td>10</td></tr>
+            <tr><td>Total</td><td><strong>1,309</strong></td></tr>
+            <tr><td>90-day sales</td><td>$125,857 / 1,263 units</td></tr>
+            <tr><td>Daily run rate</td><td>~14 units/day</td></tr>
+            <tr><td>Days of supply (on-hand)</td><td><strong>~27 days</strong> <span class="badge badge-amber">WATCH</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</details>
+
+<!-- SECTION 2: ACTIVE SHIPMENTS -->
+<details class="section" open>
+  <summary>Active Shipments</summary>
+  <div class="body">
+
+    <!-- Shipment A -->
+    <div class="sub-section">
+      <h4>Shipment A: Ocean &mdash; China &rarr; US/Canada Amazon FBA &nbsp;<span class="badge badge-green">VESSEL ARRIVED</span></h4>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Detail</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>Vessel</td><td>MATSON WAIKIKI 026E (IMO 9349801)</td></tr>
+            <tr><td>Service</td><td>Matson CLX (China-Long Beach Express)</td></tr>
+            <tr><td>Origin</td><td>Yantian, China</td></tr>
+            <tr><td>ETD</td><td>~July 22, 2026</td></tr>
+            <tr><td>ETA Long Beach</td><td>~August 2, 2026</td></tr>
+            <tr><td>Total</td><td>900 devices in 75 cartons (58 US + 17 Canada)</td></tr>
+            <tr><td>Terms</td><td>DDP (Delivered Duty Paid)</td></tr>
+            <tr><td>IMDG</td><td>Non-dangerous per Special Provision 188</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note note-blue">Matson Waikiki now in Bering Sea on Alaska rotation. Cargo discharged at Long Beach ~Aug 2. Awaiting customs clearance and last-mile delivery to Amazon FCs.</div>
+
+      <h4 style="margin-top:16px">US Allocation (696 units, 58 cartons)</h4>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>Shipment ID</th><th>FC</th><th>Units</th><th>Cartons</th><th>Tracking</th><th>Carrier</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="mono">FBA19JHLMD9Q</td>
+              <td>LGB8 (Long Beach)</td>
+              <td>168</td>
+              <td>14</td>
+              <td class="mono">PRO 10005094</td>
+              <td>Truck</td>
+              <td><span class="badge badge-red">Missing Tracking ID</span></td>
+            </tr>
+            <tr>
+              <td class="mono">FBA19JHKYQ2N or FBA19JHLTVY2</td>
+              <td>ORF2 (Chesapeake VA)</td>
+              <td>132</td>
+              <td>11</td>
+              <td class="mono">PRO 10005092 or 10005091</td>
+              <td>Truck</td>
+              <td><span class="badge badge-red">Missing Tracking ID</span></td>
+            </tr>
+            <tr>
+              <td class="mono">FBA19JHLVKYN</td>
+              <td>PSP3 (Palm Springs)</td>
+              <td>144</td>
+              <td>12</td>
+              <td class="mono">PRO 10005093</td>
+              <td>Truck</td>
+              <td><span class="badge badge-red">Missing Tracking ID</span></td>
+            </tr>
+            <tr>
+              <td class="mono">FBA19JHKYQ2N or FBA19JHLTVY2</td>
+              <td>MDW2 (Joliet IL)</td>
+              <td>132</td>
+              <td>11</td>
+              <td class="mono">PRO 10005092 or 10005091</td>
+              <td>Truck</td>
+              <td><span class="badge badge-red">Missing Tracking ID</span></td>
+            </tr>
+            <tr>
+              <td class="mono">FBA19JHJHTVX</td>
+              <td>TOL3 (Perrysburg OH)</td>
+              <td>120</td>
+              <td>10</td>
+              <td>UPS (10 individual 1Z#s)</td>
+              <td>UPS</td>
+              <td><span class="badge badge-red">Missing Tracking ID</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note note-amber">ORF2 and MDW2 both have 11 cartons &mdash; exact shipment-to-FC mapping for these two needs confirmation from Shelly.</div>
+
+      <h4 style="margin-top:16px">Canada Allocation (204 units, 17 cartons)</h4>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>Shipment ID</th><th>FC</th><th>Units</th><th>Cartons</th><th>Tracking</th><th>Carrier</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="mono">FBA19JHNWD3L</td>
+              <td>YXU1 (London ON)</td>
+              <td>204</td>
+              <td>17</td>
+              <td class="mono">PRO 10005089</td>
+              <td>Truck (cross-border)</td>
+              <td><span class="badge badge-red">Missing Tracking ID</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note note-blue">Canada routing is cross-border truck from US west coast, NOT direct from China to Canada.</div>
+
+      <h4 style="margin-top:16px">UPS Tracking Numbers for TOL3 (FBA19JHJHTVX)</h4>
+      <div class="ups-grid">
+        <div class="ups-num">1ZG2B5250329007359</div>
+        <div class="ups-num">1ZG2B5250330922367</div>
+        <div class="ups-num">1ZG2B5250330739977</div>
+        <div class="ups-num">1ZG2B5250323136186</div>
+        <div class="ups-num">1ZG2B5250338546992</div>
+        <div class="ups-num">1ZG2B5250320768400</div>
+        <div class="ups-num">1ZG2B5250320556415</div>
+        <div class="ups-num">1ZG2B5250325227020</div>
+        <div class="ups-num">1ZG2B5250324256232</div>
+        <div class="ups-num">1ZG2B5250330880046</div>
+      </div>
+
+      <div class="note note-blue" style="margin-top:12px"><strong>Amazon Delivery Window:</strong> August 23&ndash;29, 2026</div>
+    </div>
+
+    <!-- Shipment B -->
+    <div class="sub-section">
+      <h4>Shipment B: J&amp;J &rarr; Amazon FBA Transfers (Jul 21 batch)</h4>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>Shipment</th><th>FC</th><th>Shipped</th><th>Received</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Jul 21 batch</td><td>TOL3</td><td>108</td><td>108 / 108</td>
+              <td><span class="badge badge-green">COMPLETE</span></td>
+            </tr>
+            <tr>
+              <td>Jul 21 batch</td><td>LAS1</td><td>120</td><td>120 / 120</td>
+              <td><span class="badge badge-green">COMPLETE</span></td>
+            </tr>
+            <tr>
+              <td>Jul 21 batch</td><td>RDU2</td><td>108</td><td>108 / 108</td>
+              <td><span class="badge badge-green">COMPLETE</span></td>
+            </tr>
+            <tr>
+              <td>Jul 21 batch</td><td>LGB8</td><td>144</td><td>137 / 144</td>
+              <td><span class="badge badge-amber">RECEIVING (95%)</span></td>
+            </tr>
+            <tr>
+              <td>Jul 21 batch</td><td>GYR3</td><td>120</td><td>0 / 120</td>
+              <td><span class="badge badge-red">DELIVERED, NOT RECEIVED</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note note-red"><strong>ACTION NEEDED:</strong> GYR3 shows "Delivered" but 0/120 units received. Open a case with Amazon Seller Support referencing this shipment.</div>
+    </div>
+
+    <!-- Shipment C -->
+    <div class="sub-section">
+      <h4>Shipment C: Sea Blade Packs (10 cartons) &nbsp;<span class="badge badge-green">DELIVERED</span></h4>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Detail</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>Origin</td><td>China</td></tr>
+            <tr><td>Contents</td><td>Serrated + Straight blade packs</td></tr>
+            <tr><td>Split</td><td>Columbus OH + Las Vegas NV (J&amp;J)</td></tr>
+            <tr><td>Status</td><td><span class="badge badge-green">DELIVERED</span> &mdash; Blades now in J&amp;J inventory</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note note-green">Sea blade shortage fully resolved. Serrated: 1,457 / Straight: 1,615. LV address issue (UPS North Las Vegas redirect, tracking 1ZY515H10310733349) appears resolved given current inventory levels.</div>
+    </div>
+
+    <!-- Shipment D -->
+    <div class="sub-section">
+      <h4>Shipment D: 1,008 Matson Device Shipment &nbsp;<span class="badge badge-green">BOOKED IN</span></h4>
+      <p style="font-size:13px;color:var(--text-muted)">Confirmed booked in at J&amp;J per knowledge base. These units are part of the J&amp;J inventory (491 sellable devices represent what remains after ~1,100 transferred to FBA).</p>
+    </div>
+
+  </div>
+</details>
+
+<!-- SECTION 3: STRATEGIC CONTEXT -->
+<details class="section">
+  <summary>Strategic Context &mdash; MCF Hybrid Model (Updated 7/29)</summary>
+  <div class="body">
+    <p style="margin-bottom:12px;font-size:13px;color:var(--text-muted)">Three-channel fulfillment model designed to optimize cost, compliance, and speed-to-customer.</p>
+    <div class="channels">
+      <div class="channel">
+        <div class="channel-head ch1">Channel 1 &mdash; J&amp;J (3PL)</div>
+        <div class="channel-body">
+          <ul style="list-style:disc;padding-left:18px">
+            <li>Runs <strong>LEAN</strong></li>
+            <li>B2B orders only (Grainger, Menards, international)</li>
+            <li>Only channel with compliance labels / EDI capability</li>
+            <li>Target: ~400&ndash;500 device reserve</li>
+          </ul>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="channel-head ch2">Channel 2 &mdash; Amazon FBA + MCF</div>
+        <div class="channel-body">
+          <ul style="list-style:disc;padding-left:18px">
+            <li><strong>MAIN DTC device channel</strong></li>
+            <li>Most device stock sits at Amazon</li>
+            <li>~$12.50/device order all-in</li>
+            <li>Holster to join once GTIN exemption approved</li>
+          </ul>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="channel-head ch3">Channel 3 &mdash; Rob / Agoura Hills CA</div>
+        <div class="channel-body">
+          <ul style="list-style:disc;padding-left:18px">
+            <li>Accessories (blade packs, holsters)</li>
+            <li>Under $7/shipment</li>
+            <li>Lean device buffer for local fulfillment</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</details>
+
+<!-- SECTION 4: REPLENISHMENT GUIDANCE -->
+<details class="section" open>
+  <summary>Replenishment Guidance</summary>
+  <div class="body">
+
+    <div class="replen-group">
+      <h4>Immediate Actions (This Week)</h4>
+      <ol class="replen-list">
+        <li class="urgent">
+          <span class="rnum">1</span>
+          <span>Upload tracking spreadsheets to Amazon Seller Central for all 6 ocean shipments (FBA19JHJHTVX, FBA19JHKYQ2N, FBA19JHLMD9Q, FBA19JHLTVY2, FBA19JHLVKYN, FBA19JHNWD3L)</span>
+        </li>
+        <li class="urgent">
+          <span class="rnum">2</span>
+          <span>Contact Shelly/Sofeast for customs clearance status and last-mile delivery timeline from Long Beach</span>
+        </li>
+        <li class="urgent">
+          <span class="rnum">3</span>
+          <span>Open Amazon case for GYR3 (0/120 received despite "Delivered" status)</span>
+        </li>
+        <li class="soon">
+          <span class="rnum">4</span>
+          <span>Monitor LGB8 receiving (137/144 &mdash; expect completion shortly)</span>
+        </li>
+      </ol>
+    </div>
+
+    <div class="replen-group">
+      <h4>Near-Term (Next 2 Weeks)</h4>
+      <ol class="replen-list">
+        <li class="soon">
+          <span class="rnum">5</span>
+          <span>Once ocean units arrive at FCs, FBA on-hand will increase by ~696 US units &rarr; brings total on-hand to ~1,070+, roughly <strong>76 days supply</strong></span>
+        </li>
+        <li class="soon">
+          <span class="rnum">6</span>
+          <span>File GTIN exemption for holster (per MCF brief) &mdash; enables FBA/MCF listing</span>
+        </li>
+        <li class="soon">
+          <span class="rnum">7</span>
+          <span>Consider sending blade pack inventory to FBA to reactivate closed accessory listings (Serrated BBSER10PK, Straight BBSTR10PK) &mdash; J&amp;J has ample stock (1,457 serrated, 1,615 straight)</span>
+        </li>
+        <li class="soon">
+          <span class="rnum">8</span>
+          <span>Confirm ORF2/MDW2 shipment-to-FC mapping with Shelly</span>
+        </li>
+      </ol>
+    </div>
+
+    <div class="replen-group">
+      <h4>Longer-Term</h4>
+      <ol class="replen-list">
+        <li class="normal">
+          <span class="rnum">9</span>
+          <span>Evaluate next China device PO &mdash; 900 units released of original 2,715 planned. 1,815 units remain on hold pending payment resolution with Nancy/Fabien</span>
+        </li>
+        <li class="normal">
+          <span class="rnum">10</span>
+          <span>Consider routing accessories to Rob/Agoura per hybrid strategy to reduce fulfillment costs</span>
+        </li>
+        <li class="normal">
+          <span class="rnum">11</span>
+          <span>J&amp;J at 491 devices is appropriate for B2B lean reserve &mdash; no immediate J&amp;J replenishment needed</span>
+        </li>
+      </ol>
+    </div>
+
+  </div>
+</details>
+
+<!-- SECTION 5: KEY CONTACTS -->
+<details class="section">
+  <summary>Key Contacts &amp; Reference</summary>
+  <div class="body">
+    <div class="contacts">
+      <div class="contact-card">
+        <div class="contact-avatar" style="background:var(--blue)">SX</div>
+        <div class="contact-info">
+          <div class="name">Shelly Xu</div>
+          <div class="role">Sofeast &mdash; China freight coordination</div>
+          <div class="email">shelly.xu@sofeast.com</div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-avatar" style="background:var(--navy)">NN</div>
+        <div class="contact-info">
+          <div class="name">Nancy Nan</div>
+          <div class="role">Sofeast &mdash; Payment holds, PO management</div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-avatar" style="background:var(--navy)">FG</div>
+        <div class="contact-info">
+          <div class="name">Fabien Gaussorgues</div>
+          <div class="role">Sofeast &mdash; Payment authorization</div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-avatar" style="background:var(--green)">BW</div>
+        <div class="contact-info">
+          <div class="name">Brittan Woodfork</div>
+          <div class="role">J&amp;J &mdash; Client Ops</div>
+          <div class="email">brittan.woodfork@jamesandjames.com</div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-avatar" style="background:var(--green)">GD</div>
+        <div class="contact-info">
+          <div class="name">Gage Downing</div>
+          <div class="role">J&amp;J &mdash; Fulfillment</div>
+          <div class="email">gage.downing@jamesandjames.com</div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-avatar" style="background:var(--amber)">M</div>
+        <div class="contact-info">
+          <div class="name">Matson CLX</div>
+          <div class="role">~11 day transit Yantian &rarr; Long Beach</div>
+          <div class="role">Terminal C60</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</details>
+
+<!-- SECTION 6: CHANGE LOG -->
+<details class="section">
+  <summary>Change Log</summary>
+  <div class="body">
+    <div class="changelog-item">
+      <span class="cl-ver">v7.0</span> <span class="cl-date">(August 4, 2026)</span>
+      <p style="margin-top:4px;font-size:13px">Major update &mdash; ocean shipment arrived Long Beach, tracking data extracted, J&amp;J&rarr;FBA transfers mostly complete, inventory positions updated, MCF hybrid strategy incorporated, replenishment guidance added.</p>
+    </div>
+    <div class="changelog-item">
+      <span class="cl-ver">v6.8</span> <span class="cl-date">(June 23, 2026)</span>
+      <p style="margin-top:4px;font-size:13px">Previous version.</p>
+    </div>
+  </div>
+</details>
+
+</div><!-- /main -->
+
+<div class="footer">
+  BoxBlayde Inventory &amp; Shipment Command Center v7.0 &mdash; Generated August 4, 2026
+</div>
+
 </body>
 </html>
