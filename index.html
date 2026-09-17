@@ -1,656 +1,301 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoxBlayde Inventory &amp; Shipment Command Center v7.0</title>
+<meta charset="utf-8">
+<title>BoxBlayde Inventory Command Center v12</title>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --navy:#1a2332;--navy-light:#243044;--navy-mid:#2a3a52;
-  --bg:#f4f6f9;--white:#fff;--text:#1e293b;--text-muted:#64748b;
-  --green:#2f7d5b;--green-bg:#e6f4ed;
-  --amber:#d99a1c;--amber-bg:#fef3cd;
-  --red:#b23b3b;--red-bg:#fce4e4;
-  --blue:#2c6394;--blue-bg:#dbeafe;
-  --border:#d1d5db;--stripe:#f8fafc;
-  --shadow:0 1px 3px rgba(0,0,0,.08);
-  --radius:6px;
-}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;font-size:14px}
-a{color:var(--blue);text-decoration:none}
-a:hover{text-decoration:underline}
-
-/* HEADER */
-.header{background:var(--navy);color:#fff;padding:20px 24px 16px;position:relative}
-.header h1{font-size:clamp(18px,3vw,26px);font-weight:700;letter-spacing:-.3px;margin-bottom:4px}
-.header .subtitle{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13px;color:#94a3b8}
-.header .subtitle span{display:inline-flex;align-items:center;gap:4px}
-.header .subtitle .ver{background:#334155;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600;color:#e2e8f0}
-
-/* SUMMARY BAR */
-.summary-bar{background:var(--navy-light);display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;border-top:1px solid #334155}
-.summary-card{padding:14px 20px;text-align:center}
-.summary-card .label{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:#94a3b8;margin-bottom:4px}
-.summary-card .value{font-size:22px;font-weight:700;color:#f1f5f9}
-.summary-card .sub{font-size:11px;color:#94a3b8;margin-top:2px}
-.summary-card .value.green{color:#6ee7b7}
-.summary-card .value.amber{color:#fcd34d}
-.summary-card .value.red{color:#fca5a5}
-.summary-card .value.blue{color:#93c5fd}
-
-/* MAIN */
-.main{max-width:1280px;margin:0 auto;padding:16px}
-
-/* CRITICAL ACTIONS */
-.critical-box{background:var(--white);border:1px solid var(--border);border-left:5px solid var(--red);border-radius:var(--radius);padding:18px 20px;margin-bottom:16px;box-shadow:var(--shadow)}
-.critical-box h2{font-size:16px;color:var(--red);margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.critical-box h2::before{content:"!";display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:var(--red);color:#fff;border-radius:50%;font-size:12px;font-weight:700;flex-shrink:0}
-.action-list{list-style:none;display:flex;flex-direction:column;gap:8px}
-.action-list li{display:flex;gap:10px;padding:10px 12px;border-radius:var(--radius);font-size:13px;line-height:1.5}
-.action-list li.red-action{background:var(--red-bg);border:1px solid #f5c2c2}
-.action-list li.amber-action{background:var(--amber-bg);border:1px solid #f0dea3}
-.action-list li .action-num{flex-shrink:0;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;margin-top:1px}
-.action-list li.red-action .action-num{background:var(--red)}
-.action-list li.amber-action .action-num{background:var(--amber)}
-.action-list li .action-text strong{font-weight:600}
-
-/* SECTIONS */
-.section{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden}
-.section summary{cursor:pointer;padding:14px 20px;font-size:15px;font-weight:600;color:var(--navy);list-style:none;display:flex;align-items:center;gap:10px;user-select:none;border-bottom:1px solid transparent;transition:background .15s}
-.section summary:hover{background:#f8fafc}
-.section summary::before{content:"";display:inline-block;width:0;height:0;border-left:6px solid var(--navy);border-top:5px solid transparent;border-bottom:5px solid transparent;transition:transform .2s;flex-shrink:0}
-.section[open] summary::before{transform:rotate(90deg)}
-.section[open] summary{border-bottom:1px solid var(--border);background:#f8fafc}
-.section .body{padding:16px 20px}
-
-/* BADGE */
-.badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600;letter-spacing:.3px;white-space:nowrap;vertical-align:middle}
-.badge-green{background:var(--green-bg);color:var(--green)}
-.badge-amber{background:var(--amber-bg);color:var(--amber)}
-.badge-red{background:var(--red-bg);color:var(--red)}
-.badge-blue{background:var(--blue-bg);color:var(--blue)}
-
-/* TABLES */
-.tbl-wrap{overflow-x:auto;margin:12px 0}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{background:var(--navy);color:#e2e8f0;padding:8px 12px;text-align:left;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
-td{padding:8px 12px;border-bottom:1px solid #e5e7eb;vertical-align:top}
-tr:nth-child(even) td{background:var(--stripe)}
-tr:hover td{background:#eef2ff}
-td.mono{font-family:"Cascadia Code","Fira Code",Consolas,monospace;font-size:12px;word-break:break-all}
-
-/* SUB-SECTION */
-.sub-section{margin:16px 0;padding:14px 16px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:var(--radius)}
-.sub-section h4{font-size:14px;color:var(--navy);margin-bottom:8px}
-
-/* NOTE BOX */
-.note{padding:10px 14px;border-radius:var(--radius);font-size:13px;margin:10px 0;line-height:1.5}
-.note-amber{background:var(--amber-bg);border:1px solid #f0dea3;color:#92400e}
-.note-red{background:var(--red-bg);border:1px solid #f5c2c2;color:#991b1b}
-.note-blue{background:var(--blue-bg);border:1px solid #bfdbfe;color:#1e40af}
-.note-green{background:var(--green-bg);border:1px solid #a7f3d0;color:#065f46}
-
-/* CHANNEL CARDS */
-.channels{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin:12px 0}
-.channel{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-.channel-head{padding:10px 14px;font-weight:600;font-size:13px;color:#fff}
-.channel-head.ch1{background:var(--navy)}
-.channel-head.ch2{background:var(--blue)}
-.channel-head.ch3{background:var(--green)}
-.channel-body{padding:12px 14px;font-size:13px;line-height:1.6}
-.channel-body li{margin-bottom:4px}
-
-/* CONTACT LIST */
-.contacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:8px;margin:10px 0}
-.contact-card{display:flex;gap:10px;padding:10px 14px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:var(--radius);align-items:flex-start}
-.contact-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff;flex-shrink:0}
-.contact-info .name{font-weight:600;font-size:13px}
-.contact-info .role{font-size:12px;color:var(--text-muted)}
-.contact-info .email{font-size:12px;color:var(--blue)}
-
-/* CHANGELOG */
-.changelog-item{padding:8px 0;border-bottom:1px solid #e5e7eb;font-size:13px}
-.changelog-item:last-child{border-bottom:none}
-.changelog-item .cl-ver{font-weight:700;color:var(--navy)}
-.changelog-item .cl-date{color:var(--text-muted);font-size:12px}
-
-/* UPS GRID */
-.ups-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px;margin:8px 0}
-.ups-num{font-family:"Cascadia Code","Fira Code",Consolas,monospace;font-size:12px;padding:4px 8px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;word-break:break-all}
-
-/* REPLEN PRIORITY */
-.replen-group{margin:12px 0}
-.replen-group h4{font-size:14px;font-weight:600;margin-bottom:8px;color:var(--navy);padding-bottom:4px;border-bottom:2px solid var(--navy)}
-.replen-list{list-style:none;display:flex;flex-direction:column;gap:6px}
-.replen-list li{padding:8px 12px;border-radius:var(--radius);font-size:13px;display:flex;gap:8px;align-items:flex-start;line-height:1.5}
-.replen-list li .rnum{flex-shrink:0;width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}
-.replen-list li.urgent{background:var(--red-bg);border:1px solid #f5c2c2}
-.replen-list li.urgent .rnum{background:var(--red)}
-.replen-list li.soon{background:var(--amber-bg);border:1px solid #f0dea3}
-.replen-list li.soon .rnum{background:var(--amber)}
-.replen-list li.normal{background:#f0f9ff;border:1px solid #bae6fd}
-.replen-list li.normal .rnum{background:var(--blue)}
-
-/* FOOTER */
-.footer{text-align:center;padding:24px;font-size:12px;color:var(--text-muted)}
-
-/* RESPONSIVE */
-@media(max-width:640px){
-  .header{padding:14px 16px 12px}
-  .section .body{padding:12px 14px}
-  .summary-bar{grid-template-columns:repeat(2,1fr)}
-  table{font-size:12px}
-  th,td{padding:6px 8px}
-  .critical-box{padding:14px 16px}
-}
+:root{--ink:#12161c;--ink2:#2b3440;--muted:#66707d;--line:#e2e6ec;--bg:#f6f7f9;--card:#fff;
+--navy:#1F3A5F;--red:#C8102E;--amber:#B26B00;--green:#1B7F4C;--blue:#1F6FB2;--purple:#5B3E8E;
+--amberbg:#FFF6E5;--redbg:#FDECEE;--greenbg:#E9F6EF;--bluebg:#EAF3FA;--purplebg:#F2EDF9;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px 80px}
+header{background:linear-gradient(135deg,#1F3A5F 0%,#2C5480 100%);color:#fff;padding:30px 0 26px;border-bottom:4px solid var(--red)}
+header .wrap{padding-bottom:0}
+h1{font-size:26px;font-weight:800;letter-spacing:-.4px}
+.sub{opacity:.86;font-size:13.5px;margin-top:7px}
+.vtag{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;margin-right:8px}
+.alert{background:var(--greenbg);border:1px solid #bfe3ce;border-left:4px solid var(--green);border-radius:8px;padding:14px 18px;margin:22px 0 4px;font-size:13.5px;color:var(--ink2)}
+.alert strong{color:var(--green);display:block;margin-bottom:3px;font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:16px 0 8px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;border-top:3px solid var(--navy)}
+.kpi.crit{border-top-color:var(--red)}.kpi.warn{border-top-color:var(--amber)}.kpi.good{border-top-color:var(--green)}.kpi.info{border-top-color:var(--blue)}.kpi.pur{border-top-color:var(--purple)}
+.kpi .lab{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:700}
+.kpi .val{font-size:26px;font-weight:750;letter-spacing:-.8px;margin:4px 0 2px}
+.kpi .val.sm{font-size:15px;letter-spacing:-.2px;padding-top:8px;line-height:1.25}
+.kpi .note{font-size:11.5px;color:var(--muted)}
+nav.tabs{display:flex;gap:4px;flex-wrap:wrap;margin:26px 0 20px;border-bottom:2px solid var(--line)}
+nav.tabs button{background:none;border:none;font:inherit;font-size:14px;font-weight:700;color:var(--muted);padding:11px 18px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;letter-spacing:-.2px}
+nav.tabs button:hover{color:var(--ink2)}
+nav.tabs button.on{color:var(--navy);border-bottom-color:var(--red)}
+.tab{display:none}.tab.on{display:block}
+h2{font-size:19px;font-weight:700;color:var(--navy);padding-bottom:9px;margin:8px 0 15px;border-bottom:2px solid var(--line)}
+h3{font-size:15px;font-weight:700;margin:22px 0 9px;color:var(--ink2)}
+p{font-size:14px;color:var(--ink2);margin-bottom:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:15px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:15px}@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0}
+th{background:#f0f2f5;text-align:left;padding:8px 10px;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink2);font-weight:700;border-bottom:2px solid var(--line)}
+td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tbody tr:last-child td{border-bottom:none}
+tr.tot td{font-weight:700;background:#f7f9fb;border-top:2px solid var(--line)}
+tbody tr:hover{background:#fafbfc}
+.b{display:inline-block;padding:2px 9px;border-radius:11px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.b.red{background:var(--redbg);color:var(--red)}.b.amber{background:var(--amberbg);color:var(--amber)}
+.b.green{background:var(--greenbg);color:var(--green)}.b.blue{background:var(--bluebg);color:var(--blue)}.b.grey{background:#eef0f3;color:var(--muted)}.b.pur{background:var(--purplebg);color:var(--purple)}
+.co{border-left:4px solid var(--blue);background:var(--bluebg);padding:12px 15px;border-radius:0 8px 8px 0;margin:12px 0;font-size:13.5px}
+.co.red{border-color:var(--red);background:var(--redbg)}.co.amber{border-color:var(--amber);background:var(--amberbg)}
+.co.green{border-color:var(--green);background:var(--greenbg)}.co.purple{border-color:var(--purple);background:var(--purplebg)}
+.co strong{display:block;margin-bottom:3px}
+.tl{position:relative;padding-left:24px;margin:12px 0}
+.tl::before{content:"";position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl .ev{position:relative;padding:8px 0 8px 6px;font-size:13.5px}
+.tl .ev::before{content:"";position:absolute;left:-21px;top:13px;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid var(--navy)}
+.tl .ev.hot::before{border-color:var(--red);background:var(--red)}.tl .ev.ok::before{border-color:var(--green);background:var(--green)}
+.tl .ev .d{font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+ol.act{list-style:none;counter-reset:a}
+ol.act li{counter-increment:a;position:relative;padding:11px 0 11px 40px;border-bottom:1px solid var(--line);font-size:13.5px}
+ol.act li:last-child{border-bottom:none}
+ol.act li::before{content:counter(a);position:absolute;left:0;top:10px;width:25px;height:25px;background:var(--navy);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700}
+ol.act.red li::before{background:var(--red)}
+ul.tight{margin:4px 0 4px 18px;font-size:13.5px;color:var(--ink2)}ul.tight li{margin-bottom:5px}
+.mono{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12px}
+.tag{font-size:11px;color:var(--muted);font-weight:600}
+footer{text-align:center;padding:24px 0;color:var(--muted);font-size:12px;border-top:1px solid var(--line);margin-top:20px}
 </style>
-</head>
-<body>
+<header><div class="wrap">
+<h1>BoxBlayde Inventory &amp; Product Command Center</h1>
+<div class="sub"><span class="vtag">v13</span><span class="vtag">Sep 17, 2026</span> 915 tracking LOGGED (from Shelly Sep 11) · 900 arriving now (J&amp;J + Amazon) · 915 still at sea, ETA LB ~Sep 27 → FCs Oct · still upload 5 FBA IDs to Amazon · blade order approved · new 5k PO in motion</div>
+</div></header>
+<div class="wrap">
 
-<!-- HEADER -->
-<div class="header">
-  <h1>BoxBlayde Inventory &amp; Shipment Command Center</h1>
-  <div class="subtitle">
-    <span><span class="ver">v7.0</span></span>
-    <span>Last Updated: August 4, 2026</span>
-    <span>Dashboard auto-generated for GitHub Pages</span>
-  </div>
+<div class="alert"><strong>✓ 915 tracking captured (Sep 17) · 900 arriving now · 915 still at sea</strong>
+<b>Tracking now logged below</b> from Shelly’s Sep 11 email — 4 FBA legs move by LTL (PRO numbers), BJC1 and Rob/Agoura by UPS. No ocean vessel / container / B-L was issued (DDP consolidated fast boat). <b>Still open: upload Shelly’s 5 bulk-upload files</b> (one per shipment — Manage Shipments → each shipment → Track shipment → upload the tracking file) to clear “Missing tracking ID.” BJC1 alone has 11 distinct UPS numbers, so a single number won’t clear it. The <b>900 first tranche is arriving now</b> (Sep 16–17) at J&amp;J Columbus and the Amazon FCs — the stock-restore gate. The <b>915 is confirmed still on the water</b>, ETA Long Beach ~Sep 27, then FCs across October. Blade reorder <b>approved</b> ($2,975); Wayflyer <b>7.5%</b>, draw 1 = 915 payment (~$30,826) so it stays off the China tab; new 5k-material PO (3k V1.1 + 2k V2) moving, BOM $35.576 (~80% FX).</div>
+
+<div class="kpis">
+<div class="kpi good"><div class="lab">915 — tracking logged</div><div class="val sm">at sea · ETA LB ~Sep 27</div><div class="note">upload 5 bulk files to Amazon</div></div>
+<div class="kpi warn"><div class="lab">915 payment (Wayflyer draw 1)</div><div class="val sm">~$30,826</div><div class="note">$25,339 goods (85%) + $5,487 freight</div></div>
+<div class="kpi info"><div class="lab">Wayflyer</div><div class="val sm">GO · 7.5% flat</div><div class="note">draw 1 = 915 only · no deposit needed</div></div>
+<div class="kpi crit"><div class="lab">Sofeast balance</div><div class="val sm">~$239K net · $250K ceiling</div><div class="note">915 paid via Wayflyer → stays off tab</div></div>
+<div class="kpi warn"><div class="lab">New BOM (current v1.1)</div><div class="val sm">$35.576 @3k</div><div class="note">was $33.07 · +7.6% (~80% FX)</div></div>
+<div class="kpi good"><div class="lab">Blade reorder</div><div class="val sm">APPROVED · $2,975</div><div class="note">5k prod + 15k+10k retail · ~end Oct</div></div>
+<div class="kpi good"><div class="lab">Meta ads</div><div class="val sm">OFF</div><div class="note">below 2.0x breakeven</div></div>
 </div>
 
-<!-- SUMMARY BAR -->
-<div class="summary-bar">
-  <div class="summary-card">
-    <div class="label">J&amp;J Devices</div>
-    <div class="value green">491</div>
-    <div class="sub">Sellable (2 warehouses)</div>
-  </div>
-  <div class="summary-card">
-    <div class="label">FBA On-Hand</div>
-    <div class="value amber">377</div>
-    <div class="sub">~27 days supply</div>
-  </div>
-  <div class="summary-card">
-    <div class="label">FBA Inbound</div>
-    <div class="value blue">823</div>
-    <div class="sub">In transit to FCs</div>
-  </div>
-  <div class="summary-card">
-    <div class="label">Ocean Shipment</div>
-    <div class="value green">ARRIVED</div>
-    <div class="sub">Long Beach ~Aug 2</div>
-  </div>
-  <div class="summary-card">
-    <div class="label">FBA Status</div>
-    <div class="value red">LOW STOCK</div>
-    <div class="sub">14 units/day run rate</div>
-  </div>
+<nav class="tabs">
+<button data-t="in" class="on">Inbound &amp; Shipping</button>
+<button data-t="inv">Current Inventory</button>
+<button data-t="dev">Product Development</button>
+<button data-t="fin">Financing &amp; Cash</button>
+<button data-t="act">Action Queue</button>
+</nav>
+
+<!-- ===================== INBOUND & SHIPPING ===================== -->
+<section class="tab on" id="in">
+<h2>Inbound &amp; Shipping Plan</h2>
+
+<div class="co green"><strong>915 second tranche — SHIPPED Sep 11.</strong> Nancy confirmed departure this morning with carton photos on the trucks; Shelly followed with tracking numbers and the updated Amazon bulk-upload Excel files. All on Maston fast boat, ETA Long Beach ~Sep 27 (quote ETD was Sep 16 — actual factory departure ran a few days ahead). Importer of record / duties to 214 Central Industries, Agoura Hills, CA.</div>
+
+<div class="co amber"><strong>Expected timing by location — the read.</strong> Long Beach ~Sep 27, then inland (truck to Amazon FCs, UPS to Agoura). Sellable dates add a few days of Amazon check-in on top of "ETA warehouse."
+<ul class="tight">
+<li><b>First in (~Sep 30–Oct 7):</b> SBD1 (144), LAX9 (120), and Rob/Agoura (315). Agoura is usable on arrival; SBD1/LAX9 sellable ~early Oct after check-in.</li>
+<li><b>Middle (~Oct 2–9):</b> BJC1 (132).</li>
+<li><b>Last in (~Oct 7–13):</b> IND9 (96) and AVP1 (108) — the East/Midwest legs; sellable ~mid-Oct.</li>
+<li><b>Sequence vs the 900:</b> the 900 lands first (~Sep 27) and is the stock-restore gate; the 915 rolls in behind it Sep 30–Oct 13 as depth. Net: Amazon device stock rebuilds late Sep and is comfortable by mid-Oct.</li>
+</ul></div>
+
+<h3>915-unit shipment — tracking (upload to Amazon today)</h3>
+<div class="scroll"><table>
+<tr><th>Destination</th><th>FBA Shipment ID</th><th>FBA Ref ID</th><th class="n">Ctns</th><th class="n">Units</th><th>ETA Long Beach</th><th>ETA warehouse</th><th>Carrier / Tracking #</th></tr>
+<tr><td>Amazon <b>IND9</b></td><td class="mono">FBA19P7V1HKS</td><td class="mono">24PJ7U4E</td><td class="n">8</td><td class="n">96</td><td>~Sep 27</td><td>Oct 7–13</td><td class="mono">LTL · PRO 10005566</td></tr>
+<tr><td>Amazon <b>SBD1</b></td><td class="mono">FBA19P7XD0JW</td><td class="mono">4V1GM6LS</td><td class="n">12</td><td class="n">144</td><td>~Sep 27</td><td>Sep 30–Oct 7</td><td class="mono">LTL · PRO 10005564</td></tr>
+<tr><td>Amazon <b>LAX9</b></td><td class="mono">FBA19P7S9CKQ</td><td class="mono">8GCHE8HH</td><td class="n">10</td><td class="n">120</td><td>~Sep 27</td><td>Sep 30–Oct 7</td><td class="mono">LTL · PRO 10005561</td></tr>
+<tr><td>Amazon <b>BJC1</b></td><td class="mono">FBA19P7YGFHQ</td><td class="mono">5Z5A1E6D</td><td class="n">11</td><td class="n">132</td><td>~Sep 27</td><td>Oct 2–9</td><td class="mono">UPS SPD · 11 box IDs (bulk file)</td></tr>
+<tr><td>Amazon <b>AVP1</b></td><td class="mono">FBA19P7SL687</td><td class="mono">5AGTWE4K</td><td class="n">9</td><td class="n">108</td><td>~Sep 27</td><td>Oct 7–13</td><td class="mono">LTL · PRO 10005562</td></tr>
+<tr><td><b>Rob / Agoura Hills</b> <span class="tag">CA 91301</span></td><td class="mono">— (non-Amazon)</td><td class="mono">—</td><td class="n">27</td><td class="n">315</td><td>~Sep 27</td><td>Sep 30–Oct 7</td><td class="mono">UPS · 1Z0JH5320317211024</td></tr>
+<tr class="tot"><td>Total — 915</td><td></td><td></td><td class="n">77</td><td class="n">915</td><td>~Sep 27</td><td>Sep 30–Oct 13</td><td></td></tr>
+</table></div>
+<p class="tag"><b>Tracking = Shelly's 5 Amazon bulk-upload files (Sep 11 email), one per shipment</b> (box IDs col A, carrier tracking col B). 4 legs move LTL, one PRO repeated on every box: IND9 10005566 (8 boxes) · SBD1 10005564 (12) · LAX9 10005561 (10) · AVP1 10005562 (9). BJC1 is UPS small-parcel — 11 distinct 1Z numbers (box 1 = 1Z0368FK0302075833), so it must go up via its file. Agoura ref AN04SJ26060151 → UPS 1Z0JH5320317211024 (315). <b>No ocean vessel / container / B-L issued</b> (DDP consolidated fast boat). Amazon split = 600 units / 50 cartons.</p>
+
+<h3>915 freight &amp; cost detail <span class="tag">Maston fast boat · DDP · USD</span></h3>
+<div class="scroll"><table>
+<tr><th>Destination</th><th class="n">Units</th><th class="n">G.W. (kg)</th><th class="n">CBM</th><th class="n">Chg wt (kg)</th><th class="n">Ocean $/kg</th><th class="n">Customs</th><th class="n">Insurance</th><th class="n">Pickup</th><th class="n">DDP total</th></tr>
+<tr><td>IND9</td><td class="n">96</td><td class="n">110.4</td><td class="n">0.453</td><td class="n">112</td><td class="n">4.60</td><td class="n">65</td><td class="n">28.0</td><td class="n">30</td><td class="n">$638.20</td></tr>
+<tr><td>SBD1</td><td class="n">144</td><td class="n">165.6</td><td class="n">0.680</td><td class="n">168</td><td class="n">4.15</td><td class="n">65</td><td class="n">42.0</td><td class="n">30</td><td class="n">$834.20</td></tr>
+<tr><td>LAX9</td><td class="n">120</td><td class="n">138.0</td><td class="n">0.566</td><td class="n">140</td><td class="n">4.15</td><td class="n">65</td><td class="n">35.0</td><td class="n">30</td><td class="n">$711.00</td></tr>
+<tr><td>BJC1</td><td class="n">132</td><td class="n">151.8</td><td class="n">0.623</td><td class="n">154</td><td class="n">4.35</td><td class="n">65</td><td class="n">38.5</td><td class="n">30</td><td class="n">$803.40</td></tr>
+<tr><td>AVP1</td><td class="n">108</td><td class="n">124.2</td><td class="n">0.510</td><td class="n">126</td><td class="n">4.80</td><td class="n">65</td><td class="n">31.5</td><td class="n">30</td><td class="n">$731.30</td></tr>
+<tr><td>Rob / Agoura</td><td class="n">315</td><td class="n">362.4</td><td class="n">1.529</td><td class="n">376</td><td class="n">4.20</td><td class="n">65</td><td class="n">94.5</td><td class="n">30</td><td class="n">$1,768.70</td></tr>
+<tr class="tot"><td>Total</td><td class="n">915</td><td class="n">1,052.4</td><td class="n">4.362</td><td class="n">1,076</td><td class="n">—</td><td class="n">390</td><td class="n">269.5</td><td class="n">180</td><td class="n">$5,486.80</td></tr>
+</table></div>
+<p class="tag">$5,486.80 DDP = ~$6.00/unit. Amazon portion $3,718.10 (600 units); Agoura $1,768.70 (315 units). This freight is the logistics half of the 915 payment (see Financing).</p>
+
+<h3>Blade reorder — APPROVED (Nancy, Sep 11)</h3>
+<div class="scroll"><table>
+<tr><th>Line</th><th class="n">Qty</th><th>Pack</th><th class="n">Unit price</th><th class="n">Total</th><th>Use</th></tr>
+<tr><td>Serrated</td><td class="n">5,000</td><td>loose (production)</td><td class="n">$0.085</td><td class="n">$425</td><td>Next device build</td></tr>
+<tr><td>Serrated</td><td class="n">15,000</td><td>10-packs (1,500 shells)</td><td class="n">$0.11</td><td class="n">$1,650</td><td>Retail refill packs</td></tr>
+<tr><td>Straight</td><td class="n">10,000</td><td>10-packs (in shell)</td><td class="n">$0.09</td><td class="n">$900</td><td>Retail refill packs</td></tr>
+<tr class="tot"><td>Total</td><td class="n">30,000</td><td></td><td></td><td class="n">$2,975</td><td>~35-day lead → ready ~end Oct</td></tr>
+</table></div>
+<p class="tag">Meets MOQ (serrated 20k / straight 10k) on total quantity regardless of packaging. Reply drafted to Nancy confirming quantities + price and asking lead-time/ship-with confirmation.</p>
+
+<h3>Pipeline</h3>
+<div class="tl">
+<div class="ev ok"><div class="d">Sep 11 — done</div><b>915 shipped</b> (Nancy confirmed) · Shelly's tracking + bulk-upload Excels received · blade order approved.</div>
+<div class="ev hot"><div class="d">Now — open</div><b>Upload Shelly’s 5 bulk-upload files to Amazon</b> (one per shipment) to clear “Missing tracking ID.”</div>
+<div class="ev ok"><div class="d">Sep 16–17 — now</div><b>900 units arriving now</b> at J&amp;J Columbus + Amazon FCs. Stock-restore gate underway.</div>
+<div class="ev"><div class="d">Sep 30 – Oct 13</div><b>915 lands</b> — SBD1/LAX9/Agoura first, then BJC1, then IND9/AVP1.</div>
+<div class="ev"><div class="d">~mid-Nov</div><b>New 5k-material PO</b> — 3k V1.1 + 2k V2 shared materials; build/ship target mid-November.</div>
+<div class="ev"><div class="d">~end Oct</div><b>Blades ready</b> (35-day lead) — 5k production + retail 10-packs.</div>
+<div class="ev"><div class="d">~late Sep</div><b>Sanjeev holsters ×1,000</b> — unlabeled → J&amp;J/Grainger or Agoura only.</div>
 </div>
+</section>
 
-<!-- MAIN CONTENT -->
-<div class="main">
+<!-- ===================== CURRENT INVENTORY ===================== -->
+<section class="tab" id="inv">
+<h2>Current Inventory — devices as of Aug 31 (shipping current to Sep 11)</h2>
+<div class="co red"><strong>Read on-hand, not the FBA "total."</strong> Only sellable on-hand runs the business. High velocity (~57/day) drained a thin pool; both tranches (900 + 915) now inbound restore depth late Sep → mid-Oct.</div>
+<h3>Devices</h3>
+<table>
+<tr><th>Location / channel</th><th class="n">On hand</th><th class="n">Inbound</th><th>Note</th></tr>
+<tr><td>Amazon FBA US</td><td class="n">25</td><td class="n">+804 (900, ~Sep 27) · +600 (915, Sep 30–Oct 13)</td><td>Reserved 139 · Researching 16 · Unfulfillable 16</td></tr>
+<tr><td>Amazon FBA Canada</td><td class="n">201</td><td class="n">—</td><td>CA-stock only</td></tr>
+<tr><td>J&amp;J Columbus</td><td class="n">2</td><td class="n">+96 (900, ~late Sep)</td><td>UPS 1ZG2B5250338200560 · B2B reserve only</td></tr>
+<tr><td>Agoura (Rob)</td><td class="n">~500 (flashing)</td><td class="n">+315 (915, ~Sep 30–Oct 7)</td><td>Bridge stock — Shopify DTC + J&amp;J/Grainger backup</td></tr>
+<tr><td>China (held)</td><td class="n">0</td><td class="n">—</td><td><b>Both tranches shipped</b> — 900 + 915 now at sea</td></tr>
+<tr class="tot"><td>Sellable now (ex-inbound)</td><td class="n">~250 + Agoura</td><td class="n">+1,515 (late Sep–Oct)</td><td>900 first, 915 behind it</td></tr>
+</table>
+<div class="co green"><strong>Both tranches moving — China finished-goods line is clear.</strong> All 1,815 units (900 + 915) are at sea. Bridge holds on the 25 + Agoura + blades until the 900 lands ~Sep 27.</div>
+<h3>Accessories</h3>
+<table>
+<tr><th>Item</th><th class="n">J&amp;J Columbus</th><th class="n">Inbound / Amazon</th><th>Note</th></tr>
+<tr><td>Serrated blade packs (BBSER10PK)</td><td class="n">836</td><td class="n">+300 Amazon · +241 Agoura · +15k reorder (~end Oct)</td><td>Ready ~1–2 days · reorder approved</td></tr>
+<tr><td>Straight blade packs (BBSTR10PK)</td><td class="n">756</td><td class="n">+300 Amazon · +230 Agoura · +10k reorder (~end Oct)</td><td>Free-straight promo · reorder approved</td></tr>
+<tr><td>Holsters (BB-HOLS-01)</td><td class="n">534</td><td class="n">+320 Agoura · +1,000 Sanjeev (~late Sep)</td><td>Sanjeev's unlabeled → B2B/Agoura only</td></tr>
+</table>
+<div class="co green"><strong>Blades = Q4 cash engine.</strong> 30k-blade reorder approved ($2,975) on 35-day lead; lands ~end Oct to feed retail + bundles + Grainger.</div>
+</section>
 
-<!-- CRITICAL ACTIONS (always visible, not collapsible) -->
-<div class="critical-box">
-  <h2>Critical Actions Required</h2>
-  <ol class="action-list">
-    <li class="red-action">
-      <span class="action-num">1</span>
-      <span class="action-text"><strong>Upload tracking spreadsheets to Amazon Seller Central</strong> for all 6 ocean shipments. All show "Missing tracking ID" and 0% received. Shipment IDs: FBA19JHJHTVX, FBA19JHKYQ2N, FBA19JHLMD9Q, FBA19JHLTVY2, FBA19JHLVKYN, FBA19JHNWD3L</span>
-    </li>
-    <li class="red-action">
-      <span class="action-num">2</span>
-      <span class="action-text"><strong>Open Amazon Seller Support case for GYR3</strong> &mdash; 0/120 units received despite "Delivered" status. Reference the Jul 21 J&amp;J transfer batch shipment.</span>
-    </li>
-    <li class="amber-action">
-      <span class="action-num">3</span>
-      <span class="action-text"><strong>Contact Shelly/Sofeast</strong> for customs clearance status and last-mile delivery timeline from Long Beach to Amazon FCs.</span>
-    </li>
-    <li class="amber-action">
-      <span class="action-num">4</span>
-      <span class="action-text"><strong>Monitor LGB8 receiving</strong> &mdash; 137/144 units received (95%). Expect completion shortly.</span>
-    </li>
-  </ol>
+<!-- ===================== PRODUCT DEVELOPMENT ===================== -->
+<section class="tab" id="dev">
+<h2>New Product Development</h2>
+<div class="co green"><strong>V2 (USB-C) design approved (Aug 28); prototype greenlit.</strong> Not Christmas finished goods; small pilot around/after CNY. Current v1.1 carries the holiday — hence the 3k v1.1 in the new PO.</div>
+
+<h3>New 5,000-unit materials PO — shared-materials plan (Nancy, Sep 11)</h3>
+<div class="co purple"><strong>Split: 3,000 current V1.1 (with charger) + 2,000 shared materials for future USB-C (V2).</strong> Nancy's procurement recommendation — order only the three long-lead, shared items at 5k; order version-specific parts per version.</div>
+<table>
+<tr><th>Material group</th><th>Shared V1.1 ↔ V2?</th><th>Plan</th></tr>
+<tr><td><b>Blade · motor · battery</b></td><td><span class="b green">shared</span></td><td>Order <b>5,000</b> now — 30–35 day lead; motor/battery get 5k price break</td></tr>
+<tr><td>Screws / fasteners</td><td><span class="b green">shared</span></td><td>Short lead (2–3 wk), cheap — order later, no pre-buy</td></tr>
+<tr><td>Plastic parts / housing</td><td><span class="b red">version-specific</span></td><td>V2 = modified tooling → order per version</td></tr>
+<tr><td>PCBA</td><td><span class="b red">version-specific</span></td><td>V2 = USB-C board → order per version</td></tr>
+<tr><td>Die-casting parts</td><td><span class="b red">version-specific</span></td><td>Order per version</td></tr>
+<tr><td>Packaging</td><td><span class="b red">version-specific</span></td><td>V2 box smaller (no charger) → order per version</td></tr>
+</table>
+<div class="co"><strong>Read: Nancy's plan is sound and reconciles with our prior V1→V2 work.</strong> Our earlier analysis flagged motor/battery/blade as the true shared items — exactly the three she wants pre-bought at 5k. The apparent conflict ("plastic/PCBA/die-cast can't share") is a <b>materials-inventory</b> point, not a design one: V2 is a tooling <em>modification</em> with a USB-C PCBA, so those physical parts differ even though the design carries over. Low risk on the 5k pre-buy — blade/motor/battery get consumed by V1 even if V2 slips. <b>Confirm with Nancy</b> that the 5k order commits no V2 tooling/PCBA spend until V2 is frozen (asked in the drafted reply).</div>
+
+<h3>BOM price increase — reconciled (mostly FX)</h3>
+<div class="co amber"><strong>$33.07 → $35.576 per unit at 3k (+$2.51 / +7.6%).</strong> Decomposition below — the exchange rate does ~80% of the work; core hardware carries no real cost increase.</div>
+<table>
+<tr><th>Driver</th><th class="n">$/unit</th><th class="n">Share</th><th>Detail</th></tr>
+<tr><td>Exchange rate (7.00 → 6.60)</td><td class="n">~$2.00</td><td class="n">~80%</td><td>RMB appreciation; applies proportionally across all lines</td></tr>
+<tr><td>Real RMB cost change</td><td class="n">~$0.50</td><td class="n">~20%</td><td>RMB unit cost ¥231.5 → ¥234.8 (+1.4%)</td></tr>
+<tr class="tot"><td>Total increase</td><td class="n">~$2.51</td><td class="n">100%</td><td>+7.6%</td></tr>
+</table>
+<div class="co red"><strong>The ~$0.50 "real" is not in the hardware — it's three packaging/doc lines.</strong> Motor, battery, PCBA, housings all moved <em>only</em> with FX (no underlying increase). The residual: <b>manual ~$0.21 → ~$0.41</b> (nearly doubled), a <b>new "insert card" ~$0.13</b>, partly offset by a <b>smaller brown box (−$0.15)</b>. Reply to Nancy asks her to confirm/justify these three; core-hardware FX pass-through is accepted.</div>
+
+<div class="grid2">
+<div class="card">
+<h3 style="margin-top:0">USB-C V2 <span class="b green">approved → prototype</span></h3>
+<table>
+<tr><th>Item</th><th>Status</th></tr>
+<tr><td>EE (schematic + PCB + components)</td><td><span class="b green">APPROVED (Aug 28)</span></td></tr>
+<tr><td>ME (3D + report)</td><td><span class="b amber">near-final</span></td></tr>
+<tr><td>Prototype build</td><td><span class="b amber">greenlit — qty TBD</span></td></tr>
+<tr><td>Christmas finished goods</td><td><span class="b red">not realistic</span></td></tr>
+</table>
 </div>
-
-<!-- SECTION 1: INVENTORY SNAPSHOT -->
-<details class="section" open>
-  <summary>Inventory Snapshot &mdash; August 4, 2026</summary>
-  <div class="body">
-
-    <!-- J&J ControlPort -->
-    <div class="sub-section">
-      <h4>J&amp;J ControlPort (3PL)</h4>
-      <div class="tbl-wrap">
-        <table>
-          <thead>
-            <tr><th>Product</th><th>Columbus OH</th><th>Las Vegas NV</th><th>Total Sellable</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Devices</strong></td>
-              <td>258 <span style="color:var(--text-muted);font-size:12px">(285 shelf, 27 earmarked)</span></td>
-              <td>233 <span style="color:var(--text-muted);font-size:12px">(242 shelf, 9 earmarked)</span></td>
-              <td><strong>491</strong></td>
-            </tr>
-            <tr>
-              <td><strong>Serrated Blades</strong></td>
-              <td>885 <span style="color:var(--text-muted);font-size:12px">(890 shelf, 5 earmarked)</span></td>
-              <td>572 <span style="color:var(--text-muted);font-size:12px">(575 shelf, 3 earmarked)</span></td>
-              <td><strong>1,457</strong></td>
-            </tr>
-            <tr>
-              <td><strong>Straight Blades</strong></td>
-              <td>993 <span style="color:var(--text-muted);font-size:12px">(994 shelf, 1 earmarked)</span></td>
-              <td>622 <span style="color:var(--text-muted);font-size:12px">(622 shelf, 0 earmarked)</span></td>
-              <td><strong>1,615</strong></td>
-            </tr>
-            <tr>
-              <td><strong>Holsters</strong></td>
-              <td>550 <span style="color:var(--text-muted);font-size:12px">(551 shelf, 1 earmarked)</span></td>
-              <td>329 <span style="color:var(--text-muted);font-size:12px">(330 shelf, 1 earmarked)</span></td>
-              <td><strong>879</strong></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="note note-blue">J&amp;J devices down from 1,598 in June &rarr; transferred ~1,100 to FBA per hybrid strategy (run J&amp;J lean for B2B only).</div>
-    </div>
-
-    <!-- Amazon FBA -->
-    <div class="sub-section">
-      <h4>Amazon FBA (US) &nbsp;<span class="badge badge-red">LOW STOCK</span></h4>
-      <div class="tbl-wrap">
-        <table>
-          <thead>
-            <tr><th>Metric</th><th>Value</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>On-hand (fulfillable)</td><td><strong>377</strong></td></tr>
-            <tr><td>Inbound</td><td><strong>823</strong></td></tr>
-            <tr><td>Reserved</td><td>95</td></tr>
-            <tr><td>Researching</td><td>4</td></tr>
-            <tr><td>Unfulfillable</td><td>10</td></tr>
-            <tr><td>Total</td><td><strong>1,309</strong></td></tr>
-            <tr><td>90-day sales</td><td>$125,857 / 1,263 units</td></tr>
-            <tr><td>Daily run rate</td><td>~14 units/day</td></tr>
-            <tr><td>Days of supply (on-hand)</td><td><strong>~27 days</strong> <span class="badge badge-amber">WATCH</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-  </div>
-</details>
-
-<!-- SECTION 2: ACTIVE SHIPMENTS -->
-<details class="section" open>
-  <summary>Active Shipments</summary>
-  <div class="body">
-
-    <!-- Shipment A -->
-    <div class="sub-section">
-      <h4>Shipment A: Ocean &mdash; China &rarr; US/Canada Amazon FBA &nbsp;<span class="badge badge-green">VESSEL ARRIVED</span></h4>
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr><th>Detail</th><th>Value</th></tr></thead>
-          <tbody>
-            <tr><td>Vessel</td><td>MATSON WAIKIKI 026E (IMO 9349801)</td></tr>
-            <tr><td>Service</td><td>Matson CLX (China-Long Beach Express)</td></tr>
-            <tr><td>Origin</td><td>Yantian, China</td></tr>
-            <tr><td>ETD</td><td>~July 22, 2026</td></tr>
-            <tr><td>ETA Long Beach</td><td>~August 2, 2026</td></tr>
-            <tr><td>Total</td><td>900 devices in 75 cartons (58 US + 17 Canada)</td></tr>
-            <tr><td>Terms</td><td>DDP (Delivered Duty Paid)</td></tr>
-            <tr><td>IMDG</td><td>Non-dangerous per Special Provision 188</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="note note-blue">Matson Waikiki now in Bering Sea on Alaska rotation. Cargo discharged at Long Beach ~Aug 2. Awaiting customs clearance and last-mile delivery to Amazon FCs.</div>
-
-      <h4 style="margin-top:16px">US Allocation (696 units, 58 cartons)</h4>
-      <div class="tbl-wrap">
-        <table>
-          <thead>
-            <tr><th>Shipment ID</th><th>FC</th><th>Units</th><th>Cartons</th><th>Tracking</th><th>Carrier</th><th>Status</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="mono">FBA19JHLMD9Q</td>
-              <td>LGB8 (Long Beach)</td>
-              <td>168</td>
-              <td>14</td>
-              <td class="mono">PRO 10005094</td>
-              <td>Truck</td>
-              <td><span class="badge badge-red">Missing Tracking ID</span></td>
-            </tr>
-            <tr>
-              <td class="mono">FBA19JHKYQ2N or FBA19JHLTVY2</td>
-              <td>ORF2 (Chesapeake VA)</td>
-              <td>132</td>
-              <td>11</td>
-              <td class="mono">PRO 10005092 or 10005091</td>
-              <td>Truck</td>
-              <td><span class="badge badge-red">Missing Tracking ID</span></td>
-            </tr>
-            <tr>
-              <td class="mono">FBA19JHLVKYN</td>
-              <td>PSP3 (Palm Springs)</td>
-              <td>144</td>
-              <td>12</td>
-              <td class="mono">PRO 10005093</td>
-              <td>Truck</td>
-              <td><span class="badge badge-red">Missing Tracking ID</span></td>
-            </tr>
-            <tr>
-              <td class="mono">FBA19JHKYQ2N or FBA19JHLTVY2</td>
-              <td>MDW2 (Joliet IL)</td>
-              <td>132</td>
-              <td>11</td>
-              <td class="mono">PRO 10005092 or 10005091</td>
-              <td>Truck</td>
-              <td><span class="badge badge-red">Missing Tracking ID</span></td>
-            </tr>
-            <tr>
-              <td class="mono">FBA19JHJHTVX</td>
-              <td>TOL3 (Perrysburg OH)</td>
-              <td>120</td>
-              <td>10</td>
-              <td>UPS (10 individual 1Z#s)</td>
-              <td>UPS</td>
-              <td><span class="badge badge-red">Missing Tracking ID</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="note note-amber">ORF2 and MDW2 both have 11 cartons &mdash; exact shipment-to-FC mapping for these two needs confirmation from Shelly.</div>
-
-      <h4 style="margin-top:16px">Canada Allocation (204 units, 17 cartons)</h4>
-      <div class="tbl-wrap">
-        <table>
-          <thead>
-            <tr><th>Shipment ID</th><th>FC</th><th>Units</th><th>Cartons</th><th>Tracking</th><th>Carrier</th><th>Status</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="mono">FBA19JHNWD3L</td>
-              <td>YXU1 (London ON)</td>
-              <td>204</td>
-              <td>17</td>
-              <td class="mono">PRO 10005089</td>
-              <td>Truck (cross-border)</td>
-              <td><span class="badge badge-red">Missing Tracking ID</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="note note-blue">Canada routing is cross-border truck from US west coast, NOT direct from China to Canada.</div>
-
-      <h4 style="margin-top:16px">UPS Tracking Numbers for TOL3 (FBA19JHJHTVX)</h4>
-      <div class="ups-grid">
-        <div class="ups-num">1ZG2B5250329007359</div>
-        <div class="ups-num">1ZG2B5250330922367</div>
-        <div class="ups-num">1ZG2B5250330739977</div>
-        <div class="ups-num">1ZG2B5250323136186</div>
-        <div class="ups-num">1ZG2B5250338546992</div>
-        <div class="ups-num">1ZG2B5250320768400</div>
-        <div class="ups-num">1ZG2B5250320556415</div>
-        <div class="ups-num">1ZG2B5250325227020</div>
-        <div class="ups-num">1ZG2B5250324256232</div>
-        <div class="ups-num">1ZG2B5250330880046</div>
-      </div>
-
-      <div class="note note-blue" style="margin-top:12px"><strong>Amazon Delivery Window:</strong> August 23&ndash;29, 2026</div>
-    </div>
-
-    <!-- Shipment B -->
-    <div class="sub-section">
-      <h4>Shipment B: J&amp;J &rarr; Amazon FBA Transfers (Jul 21 batch)</h4>
-      <div class="tbl-wrap">
-        <table>
-          <thead>
-            <tr><th>Shipment</th><th>FC</th><th>Shipped</th><th>Received</th><th>Status</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Jul 21 batch</td><td>TOL3</td><td>108</td><td>108 / 108</td>
-              <td><span class="badge badge-green">COMPLETE</span></td>
-            </tr>
-            <tr>
-              <td>Jul 21 batch</td><td>LAS1</td><td>120</td><td>120 / 120</td>
-              <td><span class="badge badge-green">COMPLETE</span></td>
-            </tr>
-            <tr>
-              <td>Jul 21 batch</td><td>RDU2</td><td>108</td><td>108 / 108</td>
-              <td><span class="badge badge-green">COMPLETE</span></td>
-            </tr>
-            <tr>
-              <td>Jul 21 batch</td><td>LGB8</td><td>144</td><td>137 / 144</td>
-              <td><span class="badge badge-amber">RECEIVING (95%)</span></td>
-            </tr>
-            <tr>
-              <td>Jul 21 batch</td><td>GYR3</td><td>120</td><td>0 / 120</td>
-              <td><span class="badge badge-red">DELIVERED, NOT RECEIVED</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="note note-red"><strong>ACTION NEEDED:</strong> GYR3 shows "Delivered" but 0/120 units received. Open a case with Amazon Seller Support referencing this shipment.</div>
-    </div>
-
-    <!-- Shipment C -->
-    <div class="sub-section">
-      <h4>Shipment C: Sea Blade Packs (10 cartons) &nbsp;<span class="badge badge-green">DELIVERED</span></h4>
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr><th>Detail</th><th>Value</th></tr></thead>
-          <tbody>
-            <tr><td>Origin</td><td>China</td></tr>
-            <tr><td>Contents</td><td>Serrated + Straight blade packs</td></tr>
-            <tr><td>Split</td><td>Columbus OH + Las Vegas NV (J&amp;J)</td></tr>
-            <tr><td>Status</td><td><span class="badge badge-green">DELIVERED</span> &mdash; Blades now in J&amp;J inventory</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="note note-green">Sea blade shortage fully resolved. Serrated: 1,457 / Straight: 1,615. LV address issue (UPS North Las Vegas redirect, tracking 1ZY515H10310733349) appears resolved given current inventory levels.</div>
-    </div>
-
-    <!-- Shipment D -->
-    <div class="sub-section">
-      <h4>Shipment D: 1,008 Matson Device Shipment &nbsp;<span class="badge badge-green">BOOKED IN</span></h4>
-      <p style="font-size:13px;color:var(--text-muted)">Confirmed booked in at J&amp;J per knowledge base. These units are part of the J&amp;J inventory (491 sellable devices represent what remains after ~1,100 transferred to FBA).</p>
-    </div>
-
-  </div>
-</details>
-
-<!-- SECTION 3: STRATEGIC CONTEXT -->
-<details class="section">
-  <summary>Strategic Context &mdash; MCF Hybrid Model (Updated 7/29)</summary>
-  <div class="body">
-    <p style="margin-bottom:12px;font-size:13px;color:var(--text-muted)">Three-channel fulfillment model designed to optimize cost, compliance, and speed-to-customer.</p>
-    <div class="channels">
-      <div class="channel">
-        <div class="channel-head ch1">Channel 1 &mdash; J&amp;J (3PL)</div>
-        <div class="channel-body">
-          <ul style="list-style:disc;padding-left:18px">
-            <li>Runs <strong>LEAN</strong></li>
-            <li>B2B orders only (Grainger, Menards, international)</li>
-            <li>Only channel with compliance labels / EDI capability</li>
-            <li>Target: ~400&ndash;500 device reserve</li>
-          </ul>
-        </div>
-      </div>
-      <div class="channel">
-        <div class="channel-head ch2">Channel 2 &mdash; Amazon FBA + MCF</div>
-        <div class="channel-body">
-          <ul style="list-style:disc;padding-left:18px">
-            <li><strong>MAIN DTC device channel</strong></li>
-            <li>Most device stock sits at Amazon</li>
-            <li>~$12.50/device order all-in</li>
-            <li>Holster to join once GTIN exemption approved</li>
-          </ul>
-        </div>
-      </div>
-      <div class="channel">
-        <div class="channel-head ch3">Channel 3 &mdash; Rob / Agoura Hills CA</div>
-        <div class="channel-body">
-          <ul style="list-style:disc;padding-left:18px">
-            <li>Accessories (blade packs, holsters)</li>
-            <li>Under $7/shipment</li>
-            <li>Lean device buffer for local fulfillment</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</details>
-
-<!-- SECTION 4: REPLENISHMENT GUIDANCE -->
-<details class="section" open>
-  <summary>Replenishment Guidance</summary>
-  <div class="body">
-
-    <div class="replen-group">
-      <h4>Immediate Actions (This Week)</h4>
-      <ol class="replen-list">
-        <li class="urgent">
-          <span class="rnum">1</span>
-          <span>Upload tracking spreadsheets to Amazon Seller Central for all 6 ocean shipments (FBA19JHJHTVX, FBA19JHKYQ2N, FBA19JHLMD9Q, FBA19JHLTVY2, FBA19JHLVKYN, FBA19JHNWD3L)</span>
-        </li>
-        <li class="urgent">
-          <span class="rnum">2</span>
-          <span>Contact Shelly/Sofeast for customs clearance status and last-mile delivery timeline from Long Beach</span>
-        </li>
-        <li class="urgent">
-          <span class="rnum">3</span>
-          <span>Open Amazon case for GYR3 (0/120 received despite "Delivered" status)</span>
-        </li>
-        <li class="soon">
-          <span class="rnum">4</span>
-          <span>Monitor LGB8 receiving (137/144 &mdash; expect completion shortly)</span>
-        </li>
-      </ol>
-    </div>
-
-    <div class="replen-group">
-      <h4>Near-Term (Next 2 Weeks)</h4>
-      <ol class="replen-list">
-        <li class="soon">
-          <span class="rnum">5</span>
-          <span>Once ocean units arrive at FCs, FBA on-hand will increase by ~696 US units &rarr; brings total on-hand to ~1,070+, roughly <strong>76 days supply</strong></span>
-        </li>
-        <li class="soon">
-          <span class="rnum">6</span>
-          <span>File GTIN exemption for holster (per MCF brief) &mdash; enables FBA/MCF listing</span>
-        </li>
-        <li class="soon">
-          <span class="rnum">7</span>
-          <span>Consider sending blade pack inventory to FBA to reactivate closed accessory listings (Serrated BBSER10PK, Straight BBSTR10PK) &mdash; J&amp;J has ample stock (1,457 serrated, 1,615 straight)</span>
-        </li>
-        <li class="soon">
-          <span class="rnum">8</span>
-          <span>Confirm ORF2/MDW2 shipment-to-FC mapping with Shelly</span>
-        </li>
-      </ol>
-    </div>
-
-    <div class="replen-group">
-      <h4>Longer-Term</h4>
-      <ol class="replen-list">
-        <li class="normal">
-          <span class="rnum">9</span>
-          <span>Evaluate next China device PO &mdash; 900 units released of original 2,715 planned. 1,815 units remain on hold pending payment resolution with Nancy/Fabien</span>
-        </li>
-        <li class="normal">
-          <span class="rnum">10</span>
-          <span>Consider routing accessories to Rob/Agoura per hybrid strategy to reduce fulfillment costs</span>
-        </li>
-        <li class="normal">
-          <span class="rnum">11</span>
-          <span>J&amp;J at 491 devices is appropriate for B2B lean reserve &mdash; no immediate J&amp;J replenishment needed</span>
-        </li>
-      </ol>
-    </div>
-
-  </div>
-</details>
-
-<!-- SECTION 5: KEY CONTACTS -->
-<details class="section">
-  <summary>Key Contacts &amp; Reference</summary>
-  <div class="body">
-    <div class="contacts">
-      <div class="contact-card">
-        <div class="contact-avatar" style="background:var(--blue)">SX</div>
-        <div class="contact-info">
-          <div class="name">Shelly Xu</div>
-          <div class="role">Sofeast &mdash; China freight coordination</div>
-          <div class="email">shelly.xu@sofeast.com</div>
-        </div>
-      </div>
-      <div class="contact-card">
-        <div class="contact-avatar" style="background:var(--navy)">NN</div>
-        <div class="contact-info">
-          <div class="name">Nancy Nan</div>
-          <div class="role">Sofeast &mdash; Payment holds, PO management</div>
-        </div>
-      </div>
-      <div class="contact-card">
-        <div class="contact-avatar" style="background:var(--navy)">FG</div>
-        <div class="contact-info">
-          <div class="name">Fabien Gaussorgues</div>
-          <div class="role">Sofeast &mdash; Payment authorization</div>
-        </div>
-      </div>
-      <div class="contact-card">
-        <div class="contact-avatar" style="background:var(--green)">BW</div>
-        <div class="contact-info">
-          <div class="name">Brittan Woodfork</div>
-          <div class="role">J&amp;J &mdash; Client Ops</div>
-          <div class="email">brittan.woodfork@jamesandjames.com</div>
-        </div>
-      </div>
-      <div class="contact-card">
-        <div class="contact-avatar" style="background:var(--green)">GD</div>
-        <div class="contact-info">
-          <div class="name">Gage Downing</div>
-          <div class="role">J&amp;J &mdash; Fulfillment</div>
-          <div class="email">gage.downing@jamesandjames.com</div>
-        </div>
-      </div>
-      <div class="contact-card">
-        <div class="contact-avatar" style="background:var(--amber)">M</div>
-        <div class="contact-info">
-          <div class="name">Matson CLX</div>
-          <div class="role">~11 day transit Yantian &rarr; Long Beach</div>
-          <div class="role">Terminal C60</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</details>
-
-<!-- SECTION 6: CHANGE LOG -->
-<details class="section">
-  <summary>Change Log</summary>
-  <div class="body">
-    <div class="changelog-item">
-      <span class="cl-ver">v7.0</span> <span class="cl-date">(August 4, 2026)</span>
-      <p style="margin-top:4px;font-size:13px">Major update &mdash; ocean shipment arrived Long Beach, tracking data extracted, J&amp;J&rarr;FBA transfers mostly complete, inventory positions updated, MCF hybrid strategy incorporated, replenishment guidance added.</p>
-    </div>
-    <div class="changelog-item">
-      <span class="cl-ver">v6.8</span> <span class="cl-date">(June 23, 2026)</span>
-      <p style="margin-top:4px;font-size:13px">Previous version.</p>
-    </div>
-  </div>
-</details>
-
-</div><!-- /main -->
-
-<div class="footer">
-  BoxBlayde Inventory &amp; Shipment Command Center v7.0 &mdash; Generated August 4, 2026
+<div class="card">
+<h3 style="margin-top:0">BoxBlayde Light (mini) <span class="b grey">Q2 2027</span></h3>
+<p>Separate lower-cost product; uses the V2 USB-C PCB; BOM target &lt;$20. Candidate for a Kickstarter/Indiegogo pre-sale to fund tooling.</p>
 </div>
+</div>
+</section>
 
-</body>
-</html>
+<!-- ===================== FINANCING & CASH ===================== -->
+<section class="tab" id="fin">
+<h2>Financing &amp; Cash</h2>
+
+<div class="co green"><strong>Plan simplified: China required no money down and already shipped the 915.</strong> The originally-assumed "draw 1 to fund a China deposit" is no longer needed. <b>Draw 1 is now simply to PAY the 915 balance</b> (85% goods + freight) via Wayflyer — keeping it off the Sofeast trade tab rather than adding to it.</div>
+
+<h3>915 payment — the first Wayflyer draw</h3>
+<table>
+<tr><th>Line</th><th class="n">Amount</th></tr>
+<tr><td>915 goods value (915 × $32.58)</td><td class="n">$29,810.70</td></tr>
+<tr><td>Less 15% already in the tab / deposit</td><td class="n">−$4,471.60</td></tr>
+<tr><td><b>85% balance now due on shipment</b></td><td class="n"><b>$25,339.10</b></td></tr>
+<tr><td>Freight (DDP, all 6 shipments)</td><td class="n">$5,486.80</td></tr>
+<tr class="tot"><td>915 cash needed now → Wayflyer draw 1</td><td class="n">~$30,826</td></tr>
+</table>
+<p class="tag">Paying the 915 from Wayflyer (not operating cash / not the tab) is the right call — it isolates this inventory to the facility that its own sell-through repays, and keeps the Sofeast balance under the $250k ceiling.</p>
+
+<h3>Wayflyer — GO at 7.5%</h3>
+<div class="co"><strong>Positive call Sep 10; proceeding.</strong> Average rate down to <b>7.5%</b>. Updated proposal to process today. Because the 915 needed no deposit, the facility can be drawn in sequence rather than front-loaded.</div>
+<table>
+<tr><th>Draw</th><th>Use</th><th class="n">Amount</th><th>Trigger</th></tr>
+<tr><td>1</td><td><b>Pay the 915 (85% goods + freight)</b></td><td class="n">~$30,826</td><td>now — on funding</td></tr>
+<tr><td>2</td><td>New PO: 3k V1.1 production + 2k V2 shared materials + deposit</td><td class="n">~$85–110k</td><td>on Nancy's deposit terms</td></tr>
+<tr><td>3 <span class="b amber">demand-gated</span></td><td>Further Q4 depth + freight</td><td class="n">~$60–80k</td><td>~Nov</td></tr>
+<tr class="tot"><td>Facility</td><td>staged; 7.5% flat; retire pricey advances; keep Sofeast under ceiling</td><td class="n">~$115–120k</td><td>processing</td></tr>
+</table>
+<p class="tag">New-PO sizing note: 3,000 V1.1 at the new $35.576 ≈ $106.7k goods; the 2k V2 "shared materials" (blade/motor/battery only) + version-specific parts follow per Nancy's deposit terms — draw 2 sized once she confirms deposit %.</p>
+
+<h3>Sofeast balance &amp; the $250k ceiling</h3>
+<table>
+<tr><th>Line</th><th class="n">Amount</th></tr>
+<tr><td>Net unpaid (after payment in transit)</td><td class="n">$238,698</td></tr>
+<tr><td>Pending Lynn payment links</td><td class="n">−$30,590</td></tr>
+<tr><td>Balance after those clear (approx)</td><td class="n">~$208,000</td></tr>
+<tr><td>915 balance</td><td class="n"><b>paid via Wayflyer → not added to tab</b></td></tr>
+</table>
+<div class="co green"><strong>The swap still pencils at 7.5%.</strong> Financing a holiday cycle at 7.5% to free cash that retires 24%-APR Sofeast trade debt is a positive swap before a single extra unit sells; incremental holiday sales are upside.</div>
+</section>
+
+<!-- ===================== ACTION QUEUE ===================== -->
+<section class="tab" id="act">
+<h2>Action Queue</h2>
+<h3>Today <span class="b red">Sep 11</span></h3>
+<ol class="act red">
+<li><b>Upload the 5 FBA tracking sheets to Amazon</b> (Shelly's bulk-upload Excels) — IND9, SBD1, LAX9, BJC1, AVP1 — to clear "Missing tracking ID."</li>
+<li><b>Send Nancy the blade-order reply</b> — approves 5k prod + 15k/10k retail ($2,975); asks lead-time + ship-with confirmation.</li>
+<li><b>Send Nancy the new-PO reply</b> (separate email) — confirms 3k V1.1 + 2k V2 split, the 5k blade/motor/battery pre-buy, the shared-materials logic, the BOM/FX reconciliation (flag manual + insert card), and asks for deposit terms to mobilize.</li>
+<li><b>Process the updated Wayflyer proposal</b> (7.5%); set draw 1 = 915 payment (~$30,826).</li>
+</ol>
+<h3>This week</h3>
+<ol class="act">
+<li><s>Log the 915 tracking (PRO + UPS) into this Command Center</s> — <b>done Sep 17 (v13)</b>. No ocean vessel/container/B-L was issued.</li>
+<li><b>Confirm 900 check-in</b> at J&amp;J + Amazon FCs (arriving now, Sep 16–17) — first stock-restore.</li>
+<li><b>On Nancy's deposit terms</b> → size and place the new 5k PO to hold the mid-November window; sequence Wayflyer draw 2.</li>
+</ol>
+<h3>Structural</h3>
+<ol class="act">
+<li><b>Every China order sequenced with a Sofeast paydown</b> to stay under $250k.</li>
+<li><b>Inventory guardrail:</b> track sellable on-hand / days-of-supply, not the FBA total.</li>
+<li>Line up the replacement B2B/EDI 3PL before fully exiting J&amp;J.</li>
+</ol>
+</section>
+
+<footer>BoxBlayde · 214 Central Industries · Command Center v12 · Sep 11 2026 · figures are estimates for decision-making · 915 shipped; BOM v27 reconciled</footer>
+</div>
+<script>
+(function(){
+  var btns=document.querySelectorAll('nav.tabs button'), tabs=document.querySelectorAll('.tab');
+  btns.forEach(function(b){b.addEventListener('click',function(){
+    btns.forEach(function(x){x.classList.remove('on')});
+    tabs.forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    var el=document.getElementById(b.getAttribute('data-t')); if(el)el.classList.add('on');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });});
+})();
+</script>
