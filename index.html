@@ -1,301 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 <meta charset="utf-8">
-<title>BoxBlayde Inventory Command Center v12</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BoxBlayde Inventory Command Center v14.1</title>
 <style>
-:root{--ink:#12161c;--ink2:#2b3440;--muted:#66707d;--line:#e2e6ec;--bg:#f6f7f9;--card:#fff;
---navy:#1F3A5F;--red:#C8102E;--amber:#B26B00;--green:#1B7F4C;--blue:#1F6FB2;--purple:#5B3E8E;
---amberbg:#FFF6E5;--redbg:#FDECEE;--greenbg:#E9F6EF;--bluebg:#EAF3FA;--purplebg:#F2EDF9;}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1180px;margin:0 auto;padding:0 20px 80px}
-header{background:linear-gradient(135deg,#1F3A5F 0%,#2C5480 100%);color:#fff;padding:30px 0 26px;border-bottom:4px solid var(--red)}
-header .wrap{padding-bottom:0}
-h1{font-size:26px;font-weight:800;letter-spacing:-.4px}
-.sub{opacity:.86;font-size:13.5px;margin-top:7px}
-.vtag{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;margin-right:8px}
-.alert{background:var(--greenbg);border:1px solid #bfe3ce;border-left:4px solid var(--green);border-radius:8px;padding:14px 18px;margin:22px 0 4px;font-size:13.5px;color:var(--ink2)}
-.alert strong{color:var(--green);display:block;margin-bottom:3px;font-size:14px}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:16px 0 8px}
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;border-top:3px solid var(--navy)}
-.kpi.crit{border-top-color:var(--red)}.kpi.warn{border-top-color:var(--amber)}.kpi.good{border-top-color:var(--green)}.kpi.info{border-top-color:var(--blue)}.kpi.pur{border-top-color:var(--purple)}
-.kpi .lab{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:700}
-.kpi .val{font-size:26px;font-weight:750;letter-spacing:-.8px;margin:4px 0 2px}
-.kpi .val.sm{font-size:15px;letter-spacing:-.2px;padding-top:8px;line-height:1.25}
-.kpi .note{font-size:11.5px;color:var(--muted)}
-nav.tabs{display:flex;gap:4px;flex-wrap:wrap;margin:26px 0 20px;border-bottom:2px solid var(--line)}
-nav.tabs button{background:none;border:none;font:inherit;font-size:14px;font-weight:700;color:var(--muted);padding:11px 18px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;letter-spacing:-.2px}
-nav.tabs button:hover{color:var(--ink2)}
-nav.tabs button.on{color:var(--navy);border-bottom-color:var(--red)}
-.tab{display:none}.tab.on{display:block}
-h2{font-size:19px;font-weight:700;color:var(--navy);padding-bottom:9px;margin:8px 0 15px;border-bottom:2px solid var(--line)}
-h3{font-size:15px;font-weight:700;margin:22px 0 9px;color:var(--ink2)}
-p{font-size:14px;color:var(--ink2);margin-bottom:10px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:15px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:15px}@media(max-width:760px){.grid2{grid-template-columns:1fr}}
-.scroll{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0}
-th{background:#f0f2f5;text-align:left;padding:8px 10px;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink2);font-weight:700;border-bottom:2px solid var(--line)}
-td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
-td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
-tbody tr:last-child td{border-bottom:none}
-tr.tot td{font-weight:700;background:#f7f9fb;border-top:2px solid var(--line)}
-tbody tr:hover{background:#fafbfc}
-.b{display:inline-block;padding:2px 9px;border-radius:11px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
-.b.red{background:var(--redbg);color:var(--red)}.b.amber{background:var(--amberbg);color:var(--amber)}
-.b.green{background:var(--greenbg);color:var(--green)}.b.blue{background:var(--bluebg);color:var(--blue)}.b.grey{background:#eef0f3;color:var(--muted)}.b.pur{background:var(--purplebg);color:var(--purple)}
-.co{border-left:4px solid var(--blue);background:var(--bluebg);padding:12px 15px;border-radius:0 8px 8px 0;margin:12px 0;font-size:13.5px}
-.co.red{border-color:var(--red);background:var(--redbg)}.co.amber{border-color:var(--amber);background:var(--amberbg)}
-.co.green{border-color:var(--green);background:var(--greenbg)}.co.purple{border-color:var(--purple);background:var(--purplebg)}
-.co strong{display:block;margin-bottom:3px}
-.tl{position:relative;padding-left:24px;margin:12px 0}
-.tl::before{content:"";position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--line)}
-.tl .ev{position:relative;padding:8px 0 8px 6px;font-size:13.5px}
-.tl .ev::before{content:"";position:absolute;left:-21px;top:13px;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid var(--navy)}
-.tl .ev.hot::before{border-color:var(--red);background:var(--red)}.tl .ev.ok::before{border-color:var(--green);background:var(--green)}
-.tl .ev .d{font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
-ol.act{list-style:none;counter-reset:a}
-ol.act li{counter-increment:a;position:relative;padding:11px 0 11px 40px;border-bottom:1px solid var(--line);font-size:13.5px}
-ol.act li:last-child{border-bottom:none}
-ol.act li::before{content:counter(a);position:absolute;left:0;top:10px;width:25px;height:25px;background:var(--navy);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700}
-ol.act.red li::before{background:var(--red)}
-ul.tight{margin:4px 0 4px 18px;font-size:13.5px;color:var(--ink2)}ul.tight li{margin-bottom:5px}
-.mono{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12px}
-.tag{font-size:11px;color:var(--muted);font-weight:600}
-footer{text-align:center;padding:24px 0;color:var(--muted);font-size:12px;border-top:1px solid var(--line);margin-top:20px}
+  :root{
+    --navy:#12263f; --navy-2:#1f3a5f; --red:#c8102e; --ink:#16202c; --muted:#5d6b7a;
+    --line:#dde3ea; --bg:#f4f6f9; --card:#ffffff; --good:#1c7c54; --warn:#b06d00; --bad:#c8102e;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  header{background:var(--navy);color:#fff;padding:22px 28px 18px}
+  header h1{margin:0 0 8px;font-size:26px;letter-spacing:.2px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px;color:#c9d6e5}
+  .pill{background:rgba(255,255,255,.14);border-radius:999px;padding:3px 10px;font-weight:600;color:#fff}
+  .headline{border-top:3px solid var(--red);background:#eef2f7;padding:14px 28px;font-size:14px}
+  .headline b{color:var(--navy-2)}
+  .wrap{padding:20px 28px 60px;max-width:1280px}
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:22px}
+  .tile{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+  .tile .k{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:700}
+  .tile .v{font-size:22px;font-weight:700;margin:6px 0 2px}
+  .tile .s{font-size:12px;color:var(--muted)}
+  .tile.bad .v{color:var(--bad)} .tile.warn .v{color:var(--warn)} .tile.good .v{color:var(--good)}
+  nav{display:flex;flex-wrap:wrap;gap:4px;border-bottom:2px solid var(--line);margin-bottom:20px}
+  nav button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px;font:inherit;font-weight:600;color:var(--muted);cursor:pointer}
+  nav button[aria-selected="true"]{color:var(--navy-2);border-bottom-color:var(--red)}
+  section{display:none} section.active{display:block}
+  h2{font-size:19px;margin:4px 0 12px;color:var(--navy-2)}
+  h3{font-size:14px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:22px 0 8px}
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:14px;font-size:14px}
+  th{background:#eef2f7;text-align:left;padding:9px 12px;font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--navy-2)}
+  td{padding:9px 12px;border-top:1px solid var(--line);vertical-align:top}
+  td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+  tr.total td{background:#f7f9fc;font-weight:700}
+  .tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px}
+  .t-bad{background:#fbe6e9;color:var(--bad)} .t-warn{background:#fdf0dc;color:var(--warn)}
+  .t-good{background:#e3f3ec;color:var(--good)} .t-info{background:#e7eef7;color:var(--navy-2)}
+  .card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--navy-2);border-radius:6px;padding:12px 14px;margin-bottom:10px}
+  .card.alert{border-left-color:var(--red)} .card.ok{border-left-color:var(--good)}
+  .card b{color:var(--navy-2)}
+  dl.legend{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:0 0 14px;font-size:13.5px}
+  dl.legend dt{font-weight:700;color:var(--navy-2);margin-top:8px}
+  dl.legend dt:first-child{margin-top:0}
+  dl.legend dd{margin:2px 0 0;color:var(--muted)}
+  ol.actions{padding-left:20px;margin:0}
+  ol.actions li{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:10px 12px;margin-bottom:8px}
+  .note{font-size:12.5px;color:var(--muted);margin:6px 0 16px}
+  footer{padding:18px 28px;color:var(--muted);font-size:12px;border-top:1px solid var(--line)}
+  @media (max-width:640px){.wrap,header,.headline,footer{padding-left:16px;padding-right:16px}}
 </style>
-<header><div class="wrap">
-<h1>BoxBlayde Inventory &amp; Product Command Center</h1>
-<div class="sub"><span class="vtag">v13</span><span class="vtag">Sep 17, 2026</span> 915 tracking LOGGED (from Shelly Sep 11) · 900 arriving now (J&amp;J + Amazon) · 915 still at sea, ETA LB ~Sep 27 → FCs Oct · still upload 5 FBA IDs to Amazon · blade order approved · new 5k PO in motion</div>
-</div></header>
+</head>
+<body>
+<header>
+  <h1>BoxBlayde Inventory &amp; Product Command Center</h1>
+  <div class="meta">
+    <span class="pill">v14.1</span><span>Sep 24, 2026</span>
+    <span>&middot; J&amp;J stock correct at 12:44 ET</span>
+    <span>&middot; Seller Central US &amp; CA pulled live</span>
+    <span>&middot; Agoura blades counted by Rob, Sep 23</span>
+  </div>
+</header>
+
+<div class="headline">
+  <b>The 900 is fully landed</b> — 804 across five Amazon FCs and 96 booked in at J&amp;J Columbus on Sep 22. <b>The 915 is still at sea</b>, 600 to Amazon and 315 to Agoura, none to J&amp;J.
+  Las Vegas is at zero and the wind-down is complete. Device cover is thin everywhere: 318 at FBA (low stock), 97 at Columbus, Canada out of stock.
+  <b>Rob's 400 blade packs never shipped</b> — order 214000311 has been boxed at Columbus since Sep 22 on a carrier issue.
+</div>
+
 <div class="wrap">
+  <div class="tiles">
+    <div class="tile good"><div class="k">900 shipment</div><div class="v">900 / 900</div><div class="s">landed — 804 Amazon + 96 J&amp;J</div></div>
+    <div class="tile warn"><div class="k">915 shipment</div><div class="v">0 / 915</div><div class="s">at sea &middot; ETA Long Beach ~Sep 27</div></div>
+    <div class="tile bad"><div class="k">FBA US device on hand</div><div class="v">318</div><div class="s">low stock &middot; 600 in transit</div></div>
+    <div class="tile warn"><div class="k">J&amp;J Columbus device</div><div class="v">97</div><div class="s">the 96 just booked in + 1</div></div>
+    <div class="tile good"><div class="k">J&amp;J Las Vegas</div><div class="v">0</div><div class="s">all SKUs — wind-down done</div></div>
+    <div class="tile bad"><div class="k">Canada device</div><div class="v">0</div><div class="s">out of stock &middot; nothing inbound</div></div>
+    <div class="tile bad"><div class="k">Boxed, not shipped</div><div class="v">400</div><div class="s">order 214000311 &rarr; Agoura</div></div>
+    <div class="tile bad"><div class="k">Unlocated at LBE1</div><div class="v">297</div><div class="s">280 straight + 17 serrated</div></div>
+  </div>
 
-<div class="alert"><strong>✓ 915 tracking captured (Sep 17) · 900 arriving now · 915 still at sea</strong>
-<b>Tracking now logged below</b> from Shelly’s Sep 11 email — 4 FBA legs move by LTL (PRO numbers), BJC1 and Rob/Agoura by UPS. No ocean vessel / container / B-L was issued (DDP consolidated fast boat). <b>Still open: upload Shelly’s 5 bulk-upload files</b> (one per shipment — Manage Shipments → each shipment → Track shipment → upload the tracking file) to clear “Missing tracking ID.” BJC1 alone has 11 distinct UPS numbers, so a single number won’t clear it. The <b>900 first tranche is arriving now</b> (Sep 16–17) at J&amp;J Columbus and the Amazon FCs — the stock-restore gate. The <b>915 is confirmed still on the water</b>, ETA Long Beach ~Sep 27, then FCs across October. Blade reorder <b>approved</b> ($2,975); Wayflyer <b>7.5%</b>, draw 1 = 915 payment (~$30,826) so it stays off the China tab; new 5k-material PO (3k V1.1 + 2k V2) moving, BOM $35.576 (~80% FX).</div>
+  <nav role="tablist">
+    <button role="tab" aria-selected="true" data-t="inv">Current Inventory</button>
+    <button role="tab" aria-selected="false" data-t="inb">Inbound &amp; Shipping</button>
+    <button role="tab" aria-selected="false" data-t="prod">Product Development</button>
+    <button role="tab" aria-selected="false" data-t="fin">Financing &amp; Cash</button>
+    <button role="tab" aria-selected="false" data-t="act">Action Queue</button>
+  </nav>
 
-<div class="kpis">
-<div class="kpi good"><div class="lab">915 — tracking logged</div><div class="val sm">at sea · ETA LB ~Sep 27</div><div class="note">upload 5 bulk files to Amazon</div></div>
-<div class="kpi warn"><div class="lab">915 payment (Wayflyer draw 1)</div><div class="val sm">~$30,826</div><div class="note">$25,339 goods (85%) + $5,487 freight</div></div>
-<div class="kpi info"><div class="lab">Wayflyer</div><div class="val sm">GO · 7.5% flat</div><div class="note">draw 1 = 915 only · no deposit needed</div></div>
-<div class="kpi crit"><div class="lab">Sofeast balance</div><div class="val sm">~$239K net · $250K ceiling</div><div class="note">915 paid via Wayflyer → stays off tab</div></div>
-<div class="kpi warn"><div class="lab">New BOM (current v1.1)</div><div class="val sm">$35.576 @3k</div><div class="note">was $33.07 · +7.6% (~80% FX)</div></div>
-<div class="kpi good"><div class="lab">Blade reorder</div><div class="val sm">APPROVED · $2,975</div><div class="note">5k prod + 15k+10k retail · ~end Oct</div></div>
-<div class="kpi good"><div class="lab">Meta ads</div><div class="val sm">OFF</div><div class="note">below 2.0x breakeven</div></div>
+  <section id="inv" class="active">
+    <h2>Current inventory position</h2>
+
+    <h3>How to read the Amazon FBA columns</h3>
+    <dl class="legend">
+      <dt>On hand</dt><dd>Physically in an Amazon bin and sellable today.</dd>
+      <dt>Reserved</dt><dd>At an FC but committed — customer orders being picked, FC-to-FC transfers, and MCF website orders. Not available to sell.</dd>
+      <dt>Researching</dt><dd>Amazon cannot account for the units and is investigating internally. Treat as zero for planning.</dd>
+      <dt>Unfulfillable</dt><dd>At an FC but not sellable — damaged or defective. Needs a removal order; treat as zero for planning.</dd>
+      <dt>Inbound &mdash; in transit</dt><dd>On an open shipment that is genuinely moving. Will become on-hand.</dd>
+      <dt>Inbound &mdash; unlocated</dt><dd>Still carried as inbound on a shipment Amazon has finished receiving. Never scanned; recoverable only through an investigation. Zero for planning.</dd>
+      <dt>FBA total</dt><dd>Amazon's own sum of every column above. It overstates what is sellable.</dd>
+    </dl>
+    <p class="note">Amazon pools device inventory at ASIN level — every MSKU on B0DD7YBRWT shows the same quantities, so MSKUs are never added. Sales figures are per MSKU and do add.</p>
+
+    <h3>Amazon FBA — United States</h3>
+    <table>
+      <tr><th>SKU</th><th class="n">On hand</th><th class="n">Inbound &mdash; in transit</th><th class="n">Inbound &mdash; unlocated</th><th class="n">Reserved</th><th class="n">Researching</th><th class="n">Unfulfillable</th><th class="n">FBA total</th><th>Status</th></tr>
+      <tr><td>Device B0DD7YBRWT</td><td class="n">318</td><td class="n">600</td><td class="n">0</td><td class="n">226</td><td class="n">10</td><td class="n">15</td><td class="n">1,169</td><td><span class="tag t-bad">Low stock</span></td></tr>
+      <tr><td>BBSER10PK</td><td class="n">265</td><td class="n">200</td><td class="n">17</td><td class="n">13</td><td class="n">0</td><td class="n">0</td><td class="n">495</td><td><span class="tag t-good">Healthy</span></td></tr>
+      <tr><td>BBSTR10PK</td><td class="n">0</td><td class="n">300</td><td class="n">280</td><td class="n">3</td><td class="n">1</td><td class="n">0</td><td class="n">584</td><td><span class="tag t-bad">Out of stock</span></td></tr>
+    </table>
+    <p class="note">Device: Amazon recommended minimum 792 units (41 DoS), historical days of supply 16.3, recommendation "ship 592 units in 6 days." 90-day device sales 2,445 units / $243,007 &asymp; 27 units/day. In-transit blades are shipment FBA19QRWZ8FL to HGR6, window opened Sep 24. Blade 10-packs are MCF-only stock for website orders — the inactive listing status is correct.</p>
+
+    <h3>Amazon FBA — Canada</h3>
+    <table>
+      <tr><th>SKU</th><th class="n">On hand</th><th class="n">In transit</th><th class="n">Reserved</th><th>Note</th></tr>
+      <tr><td>Device B0DD7YBRWT</td><td class="n">0</td><td class="n">0</td><td class="n">1</td><td>Out of stock. Amazon recommends 161 units today. 90-day sales 196 u / CA$25,796.</td></tr>
+      <tr><td>BBSTR10PK</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>Canada view displays 280 inbound, but no Canada shipment exists — it is the LBE1 unlocated shortfall surfacing here. Nothing is inbound to Canada.</td></tr>
+    </table>
+
+    <h3>J&amp;J ControlPort — 12:44 ET, Sep 24</h3>
+    <table>
+      <tr><th>SKU</th><th>Product</th><th class="n">Columbus</th><th class="n">Las Vegas</th><th class="n">Earmarked</th><th class="n">Net available</th></tr>
+      <tr><td>42358257287357</td><td>Device</td><td class="n">97</td><td class="n">0</td><td class="n">0</td><td class="n"><b>97</b></td></tr>
+      <tr><td>BB-HOLS-01</td><td>Holster</td><td class="n">509</td><td class="n">0</td><td class="n">0</td><td class="n"><b>509</b></td></tr>
+      <tr><td>BBSER10PK</td><td>Serrated 10-pack</td><td class="n">343</td><td class="n">0</td><td class="n">&minus;6</td><td class="n"><b>337</b></td></tr>
+      <tr><td>BBSTR10PK</td><td>Straight 10-pack</td><td class="n">120</td><td class="n">0</td><td class="n">&minus;16</td><td class="n"><b>104</b></td></tr>
+    </table>
+    <p class="note">Putting Away and Awaiting Delivery are zero on every SKU, and no ASN sits in Draft, Active or Delivery-received status at either FC — nothing is inbound to J&amp;J.</p>
+
+    <h3>Agoura Hills — Rob's count, night of Sep 23</h3>
+    <table>
+      <tr><th>Item</th><th class="n">On hand (counted)</th><th class="n">In transit to Agoura</th><th>Note</th></tr>
+      <tr><td>Serrated 10-pack</td><td class="n">126</td><td class="n">200</td><td>Order 214000311 — boxed at Columbus, not despatched</td></tr>
+      <tr><td>Straight 10-pack</td><td class="n">70</td><td class="n">200</td><td>Same order</td></tr>
+      <tr><td>Device</td><td class="n">tbd</td><td class="n">315</td><td>Part of the 915, still at sea</td></tr>
+    </table>
+    <p class="note">The earlier working assumption of 200 / 200 blade packs on hand was wrong by &minus;74 serrated and &minus;130 straight. A device count from Rob closes the last open cell.</p>
+
+    <h3>All-in position</h3>
+    <table>
+      <tr><th>Product</th><th class="n">FBA US on hand</th><th class="n">J&amp;J on hand</th><th class="n">Agoura on hand</th><th class="n">In transit</th><th class="n">Unlocated</th><th class="n">Planning pool</th></tr>
+      <tr><td>Device</td><td class="n">318</td><td class="n">97</td><td class="n">tbd</td><td class="n">915</td><td class="n">0</td><td class="n"><b>1,330</b></td></tr>
+      <tr><td>Serrated 10-pack</td><td class="n">265</td><td class="n">337</td><td class="n">126</td><td class="n">400</td><td class="n">17</td><td class="n"><b>1,128</b></td></tr>
+      <tr><td>Straight 10-pack</td><td class="n">0</td><td class="n">104</td><td class="n">70</td><td class="n">500</td><td class="n">280</td><td class="n"><b>674</b></td></tr>
+      <tr><td>Holster</td><td class="n">&mdash;</td><td class="n">509</td><td class="n">&mdash;</td><td class="n">1,014 (Oct)</td><td class="n">&mdash;</td><td class="n"><b>509</b></td></tr>
+    </table>
+    <p class="note">Planning pool = on hand + in transit, excluding unlocated, researching and unfulfillable units.</p>
+    <div class="card alert"><b>Runway.</b> FBA US devices (318 on hand + 600 in transit) cover ~34 days at the ~27/day Amazon rate — to roughly Oct 28. All-in US devices cover ~49 days at that rate, ~21 days at the August all-channel rate of ~64/day. The next production (3,000 V1.1) ships ~Nov 17 and lands early-to-mid December, so a device gap runs from late October into December.</div>
+  </section>
+
+  <section id="inb">
+    <h2>Inbound &amp; shipping</h2>
+
+    <h3>The 900 — landed, fully accounted for</h3>
+    <table>
+      <tr><th>Leg</th><th class="n">Units</th><th>Destination</th><th>Status</th></tr>
+      <tr><td>FBA19MFMFHHK</td><td class="n">192</td><td>MCC1</td><td><span class="tag t-good">Located 192/192</span></td></tr>
+      <tr><td>FBA19MFKYTDV</td><td class="n">168</td><td>FWA4</td><td><span class="tag t-good">Located 168/168</span></td></tr>
+      <tr><td>FBA19MFM6PKV</td><td class="n">168</td><td>FTW1</td><td><span class="tag t-good">Located 168/168</span> <span class="tag t-warn">defects flag</span></td></tr>
+      <tr><td>FBA19MFL56YP</td><td class="n">144</td><td>ORF2</td><td><span class="tag t-good">Located 144/144</span></td></tr>
+      <tr><td>FBA19MFMCD7B</td><td class="n">132</td><td>MCI4</td><td><span class="tag t-good">Located 132/132</span></td></tr>
+      <tr><td>ASN "Aug 2026 BB Columbus" (#755373)</td><td class="n">96</td><td>J&amp;J Columbus</td><td><span class="tag t-good">Booked in Sep 22</span> put away 15:13</td></tr>
+      <tr class="total"><td>Total</td><td class="n">900</td><td>&mdash;</td><td>All landed</td></tr>
+    </table>
+    <p class="note">The J&amp;J leg: 8 boxes, truck, tracking 1ZG2B5250338200560, $2,899.20 at cost. ASN created Aug 20, expected Sep 23, delivered Sep 22 at 11:13, booked in and put away by 15:13 the same day. Columbus device stock reads 97 — those 96 plus one residual unit.</p>
+
+    <h3>The 915 — in transit, none to J&amp;J</h3>
+    <table>
+      <tr><th>Leg</th><th class="n">Units</th><th>Destination</th><th>Status</th></tr>
+      <tr><td>FBA19P7V1HKS</td><td class="n">96</td><td>IND9</td><td><span class="tag t-info">Shipped</span> 0/96</td></tr>
+      <tr><td>FBA19P7XD0JW</td><td class="n">144</td><td>SBD1</td><td><span class="tag t-info">Shipped</span> 0/144</td></tr>
+      <tr><td>FBA19P7S9CKQ</td><td class="n">120</td><td>LAX9</td><td><span class="tag t-info">Shipped</span> 0/120</td></tr>
+      <tr><td>FBA19P7SL687</td><td class="n">108</td><td>AVP1</td><td><span class="tag t-info">Shipped</span> 0/108</td></tr>
+      <tr><td>FBA19P7YGFHQ</td><td class="n">132</td><td>BJC1</td><td><span class="tag t-info">Shipped</span> 0/132</td></tr>
+      <tr><td>UPS 1Z0JH5320317211024</td><td class="n">315</td><td>Agoura Hills (Rob)</td><td><span class="tag t-info">In transit</span></td></tr>
+      <tr class="total"><td>Total</td><td class="n">915</td><td>&mdash;</td><td>At sea; ETA Long Beach ~Sep 27</td></tr>
+    </table>
+    <div class="card"><b>No J&amp;J allocation on the 915</b>, confirmed two ways: no ASN exists for it, and ControlPort holds no ASN in Draft, Active or Delivery-received status at either FC — every ASN on file is Booked in or Expired. The Historical Inventory Report agrees, with Awaiting Delivery at zero on all four SKUs. The 96 units you remembered going to J&amp;J were the 900's Columbus leg, already booked in.</div>
+
+    <h3>Exceptions</h3>
+    <div class="card alert">
+      <b>Order 214000311 — 400 blade packs to Rob, boxed but never shipped. Root cause found.</b> Boxed 14:21 on Sep 22, then stalled before Labelled. ControlPort's shipping-prediction queue holds exactly one order — this one — with the raw carrier error:
+      <em>"The Easypost quoter account returned the following error which prevented it from quoting: FedExSmartPost says FedEx returned error: Rating is temporarily unavailable, please try again later."</em>
+      The quoter tried <b>FedEx SmartPost</b>, a residential economy service with a USPS last mile — which is why J&amp;J's reply on ticket #529212 talked about USPS not offering signature. The block is a carrier rating failure, not the insurance request. It is also the wrong service: SmartPost carries no signature option and no meaningful declared value. Fix is to force <b>UPS Ground</b> and re-quote. Stock is already decremented, so the units are in neither warehouse. Its twin, order 214000310 to HGR6, despatched cleanly at 15:14 the same day because Dan supplied the label.
+    </div>
+    <div class="card alert">
+      <b>FBA19M97K6KJ — 297 units never scanned.</b> Created Aug 19, J&amp;J Las Vegas to LBE1 Greensburg PA on Amazon partnered UPS ($47.86), still Receiving, last updated Aug 30. BBSER10PK 300 expected / 283 located (17 short); BBSTR10PK 300 expected / 20 located (<b>280 short</b>). Eligible for investigation on <b>Oct 4, 2026</b>; the recovery path is a Seller Central investigation, not a UPS carrier claim.
+    </div>
+
+    <h3>ControlPort exceptions — Sep 24</h3>
+    <table>
+      <tr><th>Exception</th><th class="n">Count</th><th>Note</th></tr>
+      <tr><td>Orders failed to import through channel</td><td class="n">51</td><td>Was 25 on Sep 22 — backlog doubled</td></tr>
+      <tr><td>Stuck orders</td><td class="n">16</td><td>All flagged as containing out-of-stock items</td></tr>
+      <tr><td>Awaiting postage approval</td><td class="n">2</td><td>Both stale and unrelated: #18714 (Jun 8) and #214000294 (Jul 21, TOL3, 268 lb, $10,692) — clear them</td></tr>
+      <tr><td>Cannot match to carrier</td><td class="n">1</td><td>Order 214000311 — FedEx SmartPost rating failure</td></tr>
+      <tr><td>Amending / Boxed</td><td class="n">1 / 3</td><td>214000311 sits among the boxed</td></tr>
+    </table>
+    <p class="note">Despatch on time: 100% over 7 and 30 days, 86.5% over 90 days.</p>
+
+    <h3>On order</h3>
+    <div class="card"><b>Blade reorder (~$3,155).</b> 20,000 serrated (5,000 loose for production + 15,000 in 1,500 retail packs) and 12,000 straight (1,200 packs). Supplier delivery Oct 30 &rarr; Sofeast ~Nov 2 &rarr; IQC &rarr; ship ~Nov 4. Air and fast-boat quotes early November; air on retail packs is an authorized exception for Q4.</div>
+    <div class="card"><b>Holsters PO #060326.</b> 1,014 pcs, departed Sep 8, Newark ~Oct 8, released from West Berlin NJ ~Oct 20&ndash;21. Style N Craft is DDP and importer of record. Preferred handling: ask Sanjeev to hold the majority and release in 200&ndash;300 unit tranches; default fallback ~400 to Agoura, zero to Columbus.</div>
+    <div class="card"><b>5,000-unit PO.</b> 3,000 Version 1.1 at $35.576 plus 2,000 long-lead USB-C sets. Target ship ~Nov 17, landing early-to-mid December.</div>
+  </section>
+
+  <section id="prod">
+    <h2>Product development</h2>
+    <div class="card"><b>Version 2.0 USB-C.</b> Deletes the $2.64 adapter (~$3 off build cost) and unlocks a wall-mount charging dock. 2,000 long-lead sets committed with the 5,000-unit PO: blade $0.085, motor $3.192, battery $5.333 — $17,220 total. Prototype run: 25 PCBA plus 8 finished samples.</div>
+    <div class="card"><b>Version 1.1.</b> 3,000 units at $35.576 (the +$2.51 versus the old $33.07 quote is entirely FX — May 2024 at 7.1 versus 6.6). Landed cost roughly $40&ndash;42.</div>
+    <div class="card"><b>BoxBlayde Light.</b> Single cell, ~$18 build cost, $69.99 target price, 74% margin. In prototype.</div>
+    <div class="card"><b>Packaging.</b> Color insert card retained (already carries a QR code); printed multi-language manual to be replaced by a QR code to a language-selectable manual on the website. Sofeast running the redesign with its ID engineer; changes inside 1&ndash;2 weeks do not affect delivery.</div>
+    <div class="card"><b>Holster sourcing.</b> Style N Craft (India) being evaluated against Vira (China) on lead time; Rob leading, sampling in progress. A possible second 1,000-unit order later in 2026 may go to Vira.</div>
+    <div class="card ok"><b>Category position.</b> The only non-rotary electric cardboard cutter in the category — pulls a standard utility blade rather than pushing a rotary wheel. Competitors (Worx ZipSnip, Fanttik C10 Pro, HOTO EdgeFlow) top out at $69.99 against a $99 retail price and $31.96 build cost.</div>
+  </section>
+
+  <section id="fin">
+    <h2>Financing &amp; cash</h2>
+    <div class="card"><b>Sofeast terms.</b> Paid as units are received and sold — $38 per BoxBlayde sold across Amazon and Shopify, invoiced weekly on real-time sales, oldest invoices first. No deposit on the 5,000-unit PO (Fabien, Sep 15). 2% per month on overdue invoices.</div>
+    <div class="card alert"><b>Balance.</b> ~$238,698 at the Aug 28 statement plus $31,790 invoiced Sep 16 (915 devices at 85% ratio $25,364; fast-boat freight and USB-C prototypes $6,426) — a gross tab near $270,000 before credit for weekly payments. The $250,000 ceiling leaves little headroom; year-end estimate ~$300,000 at ~$6&ndash;7k/month interest.</div>
+    <div class="card"><b>The structural problem.</b> The 915 landed at $38.62/unit and new V1.1 lands ~$40&ndash;42, so the $38/unit-sold payment approximates replacement landed cost — the legacy balance does not decline from operations while restocking through Sofeast. Clearing ~$270k over 12k units while replacing them implies ~$64/unit.</div>
+    <div class="card"><b>Wayflyer.</b> Offer 191945, $130,000 advance, 7.5% blended fee, remittance $139,753, expiry ~Oct 29. On hold — Rob says not needed for this order and is concerned legacy noteholders (incl. Kurt, ~$200k outstanding) would object to another creditor ahead of them. No UCC filed below $750k exposure; no prepayment penalty but no fee rebate either.</div>
+    <div class="card"><b>Equity.</b> Rob targeting $500k&ndash;$1M, timing Q1 2027, intended to retire the interest-bearing balance. CIM outline requested from Dan.</div>
+    <div class="card ok"><b>Performance (August).</b> Amazon US revenue $106,425 at 13.9% ACOS — best month of the year. Website $82,566. Blended ROAS 3.91x, up from 2.70x in July. Operating profit $17,805 after overhead.</div>
+    <div class="card"><b>Canada.</b> Launched Aug 31; 109 of 196 opening units in 12 days at 4.0x blended return; test completed Sep 18 demonstrating ~400&ndash;500 units/month. Scale planned from February 2027.</div>
+  </section>
+
+  <section id="act">
+    <h2>Action queue</h2>
+    <ol class="actions">
+      <li><b>Release order 214000311.</b> Reply on ticket #529212: insurance is withdrawn, ship <b>UPS Ground</b> (not FedEx SmartPost), and state whether signature is still required. The FedEx rating failure is what stalled it — the order needs a re-quote on the right carrier, and the postage-approval queue does not contain it.</li>
+      <li><b>Oct 4 — file the Seller Central investigation on FBA19M97K6KJ.</b> 280 BBSTR10PK + 17 BBSER10PK, Amazon partnered carrier, so Amazon owns the loss. The window opens that day.</li>
+      <li><b>Clear the ControlPort backlog.</b> 51 failed channel imports and 16 stuck orders — several blocked only because Columbus device stock is down to 97. Also clear the 2 postage holds and the unmatched-carrier order.</li>
+      <li><b>Device restock for FBA.</b> Amazon is asking for 592 units in 6 days. The only uncommitted pools are Columbus (97) and whatever lands at Agoura from the 915.</li>
+      <li><b>Canada allocation.</b> Out of stock, ~500 units/month of demand, nothing inbound. The November build is the only route before Black Friday (Nov 27).</li>
+      <li><b>Ask Rob for a device count</b> at Agoura Hills to close the last open cell in the all-in table.</li>
+      <li><b>Holster call-off plan.</b> Confirm with Sanjeev whether West Berlin can hold and release in 200&ndash;300 unit tranches before the ~Oct 20 ship-out.</li>
+      <li><b>Freight decision on the blade reorder.</b> Air versus fast boat on the early-November quote; air on retail packs is authorized for the Q4 season.</li>
+    </ol>
+  </section>
 </div>
 
-<nav class="tabs">
-<button data-t="in" class="on">Inbound &amp; Shipping</button>
-<button data-t="inv">Current Inventory</button>
-<button data-t="dev">Product Development</button>
-<button data-t="fin">Financing &amp; Cash</button>
-<button data-t="act">Action Queue</button>
-</nav>
+<footer>BoxBlayde Inventory &amp; Product Command Center v14.1 &middot; built Sep 24, 2026 from live Seller Central (US and Canada), J&amp;J ControlPort and Rob's Agoura count &middot; 214 Central Industries, Inc.</footer>
 
-<!-- ===================== INBOUND & SHIPPING ===================== -->
-<section class="tab on" id="in">
-<h2>Inbound &amp; Shipping Plan</h2>
-
-<div class="co green"><strong>915 second tranche — SHIPPED Sep 11.</strong> Nancy confirmed departure this morning with carton photos on the trucks; Shelly followed with tracking numbers and the updated Amazon bulk-upload Excel files. All on Maston fast boat, ETA Long Beach ~Sep 27 (quote ETD was Sep 16 — actual factory departure ran a few days ahead). Importer of record / duties to 214 Central Industries, Agoura Hills, CA.</div>
-
-<div class="co amber"><strong>Expected timing by location — the read.</strong> Long Beach ~Sep 27, then inland (truck to Amazon FCs, UPS to Agoura). Sellable dates add a few days of Amazon check-in on top of "ETA warehouse."
-<ul class="tight">
-<li><b>First in (~Sep 30–Oct 7):</b> SBD1 (144), LAX9 (120), and Rob/Agoura (315). Agoura is usable on arrival; SBD1/LAX9 sellable ~early Oct after check-in.</li>
-<li><b>Middle (~Oct 2–9):</b> BJC1 (132).</li>
-<li><b>Last in (~Oct 7–13):</b> IND9 (96) and AVP1 (108) — the East/Midwest legs; sellable ~mid-Oct.</li>
-<li><b>Sequence vs the 900:</b> the 900 lands first (~Sep 27) and is the stock-restore gate; the 915 rolls in behind it Sep 30–Oct 13 as depth. Net: Amazon device stock rebuilds late Sep and is comfortable by mid-Oct.</li>
-</ul></div>
-
-<h3>915-unit shipment — tracking (upload to Amazon today)</h3>
-<div class="scroll"><table>
-<tr><th>Destination</th><th>FBA Shipment ID</th><th>FBA Ref ID</th><th class="n">Ctns</th><th class="n">Units</th><th>ETA Long Beach</th><th>ETA warehouse</th><th>Carrier / Tracking #</th></tr>
-<tr><td>Amazon <b>IND9</b></td><td class="mono">FBA19P7V1HKS</td><td class="mono">24PJ7U4E</td><td class="n">8</td><td class="n">96</td><td>~Sep 27</td><td>Oct 7–13</td><td class="mono">LTL · PRO 10005566</td></tr>
-<tr><td>Amazon <b>SBD1</b></td><td class="mono">FBA19P7XD0JW</td><td class="mono">4V1GM6LS</td><td class="n">12</td><td class="n">144</td><td>~Sep 27</td><td>Sep 30–Oct 7</td><td class="mono">LTL · PRO 10005564</td></tr>
-<tr><td>Amazon <b>LAX9</b></td><td class="mono">FBA19P7S9CKQ</td><td class="mono">8GCHE8HH</td><td class="n">10</td><td class="n">120</td><td>~Sep 27</td><td>Sep 30–Oct 7</td><td class="mono">LTL · PRO 10005561</td></tr>
-<tr><td>Amazon <b>BJC1</b></td><td class="mono">FBA19P7YGFHQ</td><td class="mono">5Z5A1E6D</td><td class="n">11</td><td class="n">132</td><td>~Sep 27</td><td>Oct 2–9</td><td class="mono">UPS SPD · 11 box IDs (bulk file)</td></tr>
-<tr><td>Amazon <b>AVP1</b></td><td class="mono">FBA19P7SL687</td><td class="mono">5AGTWE4K</td><td class="n">9</td><td class="n">108</td><td>~Sep 27</td><td>Oct 7–13</td><td class="mono">LTL · PRO 10005562</td></tr>
-<tr><td><b>Rob / Agoura Hills</b> <span class="tag">CA 91301</span></td><td class="mono">— (non-Amazon)</td><td class="mono">—</td><td class="n">27</td><td class="n">315</td><td>~Sep 27</td><td>Sep 30–Oct 7</td><td class="mono">UPS · 1Z0JH5320317211024</td></tr>
-<tr class="tot"><td>Total — 915</td><td></td><td></td><td class="n">77</td><td class="n">915</td><td>~Sep 27</td><td>Sep 30–Oct 13</td><td></td></tr>
-</table></div>
-<p class="tag"><b>Tracking = Shelly's 5 Amazon bulk-upload files (Sep 11 email), one per shipment</b> (box IDs col A, carrier tracking col B). 4 legs move LTL, one PRO repeated on every box: IND9 10005566 (8 boxes) · SBD1 10005564 (12) · LAX9 10005561 (10) · AVP1 10005562 (9). BJC1 is UPS small-parcel — 11 distinct 1Z numbers (box 1 = 1Z0368FK0302075833), so it must go up via its file. Agoura ref AN04SJ26060151 → UPS 1Z0JH5320317211024 (315). <b>No ocean vessel / container / B-L issued</b> (DDP consolidated fast boat). Amazon split = 600 units / 50 cartons.</p>
-
-<h3>915 freight &amp; cost detail <span class="tag">Maston fast boat · DDP · USD</span></h3>
-<div class="scroll"><table>
-<tr><th>Destination</th><th class="n">Units</th><th class="n">G.W. (kg)</th><th class="n">CBM</th><th class="n">Chg wt (kg)</th><th class="n">Ocean $/kg</th><th class="n">Customs</th><th class="n">Insurance</th><th class="n">Pickup</th><th class="n">DDP total</th></tr>
-<tr><td>IND9</td><td class="n">96</td><td class="n">110.4</td><td class="n">0.453</td><td class="n">112</td><td class="n">4.60</td><td class="n">65</td><td class="n">28.0</td><td class="n">30</td><td class="n">$638.20</td></tr>
-<tr><td>SBD1</td><td class="n">144</td><td class="n">165.6</td><td class="n">0.680</td><td class="n">168</td><td class="n">4.15</td><td class="n">65</td><td class="n">42.0</td><td class="n">30</td><td class="n">$834.20</td></tr>
-<tr><td>LAX9</td><td class="n">120</td><td class="n">138.0</td><td class="n">0.566</td><td class="n">140</td><td class="n">4.15</td><td class="n">65</td><td class="n">35.0</td><td class="n">30</td><td class="n">$711.00</td></tr>
-<tr><td>BJC1</td><td class="n">132</td><td class="n">151.8</td><td class="n">0.623</td><td class="n">154</td><td class="n">4.35</td><td class="n">65</td><td class="n">38.5</td><td class="n">30</td><td class="n">$803.40</td></tr>
-<tr><td>AVP1</td><td class="n">108</td><td class="n">124.2</td><td class="n">0.510</td><td class="n">126</td><td class="n">4.80</td><td class="n">65</td><td class="n">31.5</td><td class="n">30</td><td class="n">$731.30</td></tr>
-<tr><td>Rob / Agoura</td><td class="n">315</td><td class="n">362.4</td><td class="n">1.529</td><td class="n">376</td><td class="n">4.20</td><td class="n">65</td><td class="n">94.5</td><td class="n">30</td><td class="n">$1,768.70</td></tr>
-<tr class="tot"><td>Total</td><td class="n">915</td><td class="n">1,052.4</td><td class="n">4.362</td><td class="n">1,076</td><td class="n">—</td><td class="n">390</td><td class="n">269.5</td><td class="n">180</td><td class="n">$5,486.80</td></tr>
-</table></div>
-<p class="tag">$5,486.80 DDP = ~$6.00/unit. Amazon portion $3,718.10 (600 units); Agoura $1,768.70 (315 units). This freight is the logistics half of the 915 payment (see Financing).</p>
-
-<h3>Blade reorder — APPROVED (Nancy, Sep 11)</h3>
-<div class="scroll"><table>
-<tr><th>Line</th><th class="n">Qty</th><th>Pack</th><th class="n">Unit price</th><th class="n">Total</th><th>Use</th></tr>
-<tr><td>Serrated</td><td class="n">5,000</td><td>loose (production)</td><td class="n">$0.085</td><td class="n">$425</td><td>Next device build</td></tr>
-<tr><td>Serrated</td><td class="n">15,000</td><td>10-packs (1,500 shells)</td><td class="n">$0.11</td><td class="n">$1,650</td><td>Retail refill packs</td></tr>
-<tr><td>Straight</td><td class="n">10,000</td><td>10-packs (in shell)</td><td class="n">$0.09</td><td class="n">$900</td><td>Retail refill packs</td></tr>
-<tr class="tot"><td>Total</td><td class="n">30,000</td><td></td><td></td><td class="n">$2,975</td><td>~35-day lead → ready ~end Oct</td></tr>
-</table></div>
-<p class="tag">Meets MOQ (serrated 20k / straight 10k) on total quantity regardless of packaging. Reply drafted to Nancy confirming quantities + price and asking lead-time/ship-with confirmation.</p>
-
-<h3>Pipeline</h3>
-<div class="tl">
-<div class="ev ok"><div class="d">Sep 11 — done</div><b>915 shipped</b> (Nancy confirmed) · Shelly's tracking + bulk-upload Excels received · blade order approved.</div>
-<div class="ev hot"><div class="d">Now — open</div><b>Upload Shelly’s 5 bulk-upload files to Amazon</b> (one per shipment) to clear “Missing tracking ID.”</div>
-<div class="ev ok"><div class="d">Sep 16–17 — now</div><b>900 units arriving now</b> at J&amp;J Columbus + Amazon FCs. Stock-restore gate underway.</div>
-<div class="ev"><div class="d">Sep 30 – Oct 13</div><b>915 lands</b> — SBD1/LAX9/Agoura first, then BJC1, then IND9/AVP1.</div>
-<div class="ev"><div class="d">~mid-Nov</div><b>New 5k-material PO</b> — 3k V1.1 + 2k V2 shared materials; build/ship target mid-November.</div>
-<div class="ev"><div class="d">~end Oct</div><b>Blades ready</b> (35-day lead) — 5k production + retail 10-packs.</div>
-<div class="ev"><div class="d">~late Sep</div><b>Sanjeev holsters ×1,000</b> — unlabeled → J&amp;J/Grainger or Agoura only.</div>
-</div>
-</section>
-
-<!-- ===================== CURRENT INVENTORY ===================== -->
-<section class="tab" id="inv">
-<h2>Current Inventory — devices as of Aug 31 (shipping current to Sep 11)</h2>
-<div class="co red"><strong>Read on-hand, not the FBA "total."</strong> Only sellable on-hand runs the business. High velocity (~57/day) drained a thin pool; both tranches (900 + 915) now inbound restore depth late Sep → mid-Oct.</div>
-<h3>Devices</h3>
-<table>
-<tr><th>Location / channel</th><th class="n">On hand</th><th class="n">Inbound</th><th>Note</th></tr>
-<tr><td>Amazon FBA US</td><td class="n">25</td><td class="n">+804 (900, ~Sep 27) · +600 (915, Sep 30–Oct 13)</td><td>Reserved 139 · Researching 16 · Unfulfillable 16</td></tr>
-<tr><td>Amazon FBA Canada</td><td class="n">201</td><td class="n">—</td><td>CA-stock only</td></tr>
-<tr><td>J&amp;J Columbus</td><td class="n">2</td><td class="n">+96 (900, ~late Sep)</td><td>UPS 1ZG2B5250338200560 · B2B reserve only</td></tr>
-<tr><td>Agoura (Rob)</td><td class="n">~500 (flashing)</td><td class="n">+315 (915, ~Sep 30–Oct 7)</td><td>Bridge stock — Shopify DTC + J&amp;J/Grainger backup</td></tr>
-<tr><td>China (held)</td><td class="n">0</td><td class="n">—</td><td><b>Both tranches shipped</b> — 900 + 915 now at sea</td></tr>
-<tr class="tot"><td>Sellable now (ex-inbound)</td><td class="n">~250 + Agoura</td><td class="n">+1,515 (late Sep–Oct)</td><td>900 first, 915 behind it</td></tr>
-</table>
-<div class="co green"><strong>Both tranches moving — China finished-goods line is clear.</strong> All 1,815 units (900 + 915) are at sea. Bridge holds on the 25 + Agoura + blades until the 900 lands ~Sep 27.</div>
-<h3>Accessories</h3>
-<table>
-<tr><th>Item</th><th class="n">J&amp;J Columbus</th><th class="n">Inbound / Amazon</th><th>Note</th></tr>
-<tr><td>Serrated blade packs (BBSER10PK)</td><td class="n">836</td><td class="n">+300 Amazon · +241 Agoura · +15k reorder (~end Oct)</td><td>Ready ~1–2 days · reorder approved</td></tr>
-<tr><td>Straight blade packs (BBSTR10PK)</td><td class="n">756</td><td class="n">+300 Amazon · +230 Agoura · +10k reorder (~end Oct)</td><td>Free-straight promo · reorder approved</td></tr>
-<tr><td>Holsters (BB-HOLS-01)</td><td class="n">534</td><td class="n">+320 Agoura · +1,000 Sanjeev (~late Sep)</td><td>Sanjeev's unlabeled → B2B/Agoura only</td></tr>
-</table>
-<div class="co green"><strong>Blades = Q4 cash engine.</strong> 30k-blade reorder approved ($2,975) on 35-day lead; lands ~end Oct to feed retail + bundles + Grainger.</div>
-</section>
-
-<!-- ===================== PRODUCT DEVELOPMENT ===================== -->
-<section class="tab" id="dev">
-<h2>New Product Development</h2>
-<div class="co green"><strong>V2 (USB-C) design approved (Aug 28); prototype greenlit.</strong> Not Christmas finished goods; small pilot around/after CNY. Current v1.1 carries the holiday — hence the 3k v1.1 in the new PO.</div>
-
-<h3>New 5,000-unit materials PO — shared-materials plan (Nancy, Sep 11)</h3>
-<div class="co purple"><strong>Split: 3,000 current V1.1 (with charger) + 2,000 shared materials for future USB-C (V2).</strong> Nancy's procurement recommendation — order only the three long-lead, shared items at 5k; order version-specific parts per version.</div>
-<table>
-<tr><th>Material group</th><th>Shared V1.1 ↔ V2?</th><th>Plan</th></tr>
-<tr><td><b>Blade · motor · battery</b></td><td><span class="b green">shared</span></td><td>Order <b>5,000</b> now — 30–35 day lead; motor/battery get 5k price break</td></tr>
-<tr><td>Screws / fasteners</td><td><span class="b green">shared</span></td><td>Short lead (2–3 wk), cheap — order later, no pre-buy</td></tr>
-<tr><td>Plastic parts / housing</td><td><span class="b red">version-specific</span></td><td>V2 = modified tooling → order per version</td></tr>
-<tr><td>PCBA</td><td><span class="b red">version-specific</span></td><td>V2 = USB-C board → order per version</td></tr>
-<tr><td>Die-casting parts</td><td><span class="b red">version-specific</span></td><td>Order per version</td></tr>
-<tr><td>Packaging</td><td><span class="b red">version-specific</span></td><td>V2 box smaller (no charger) → order per version</td></tr>
-</table>
-<div class="co"><strong>Read: Nancy's plan is sound and reconciles with our prior V1→V2 work.</strong> Our earlier analysis flagged motor/battery/blade as the true shared items — exactly the three she wants pre-bought at 5k. The apparent conflict ("plastic/PCBA/die-cast can't share") is a <b>materials-inventory</b> point, not a design one: V2 is a tooling <em>modification</em> with a USB-C PCBA, so those physical parts differ even though the design carries over. Low risk on the 5k pre-buy — blade/motor/battery get consumed by V1 even if V2 slips. <b>Confirm with Nancy</b> that the 5k order commits no V2 tooling/PCBA spend until V2 is frozen (asked in the drafted reply).</div>
-
-<h3>BOM price increase — reconciled (mostly FX)</h3>
-<div class="co amber"><strong>$33.07 → $35.576 per unit at 3k (+$2.51 / +7.6%).</strong> Decomposition below — the exchange rate does ~80% of the work; core hardware carries no real cost increase.</div>
-<table>
-<tr><th>Driver</th><th class="n">$/unit</th><th class="n">Share</th><th>Detail</th></tr>
-<tr><td>Exchange rate (7.00 → 6.60)</td><td class="n">~$2.00</td><td class="n">~80%</td><td>RMB appreciation; applies proportionally across all lines</td></tr>
-<tr><td>Real RMB cost change</td><td class="n">~$0.50</td><td class="n">~20%</td><td>RMB unit cost ¥231.5 → ¥234.8 (+1.4%)</td></tr>
-<tr class="tot"><td>Total increase</td><td class="n">~$2.51</td><td class="n">100%</td><td>+7.6%</td></tr>
-</table>
-<div class="co red"><strong>The ~$0.50 "real" is not in the hardware — it's three packaging/doc lines.</strong> Motor, battery, PCBA, housings all moved <em>only</em> with FX (no underlying increase). The residual: <b>manual ~$0.21 → ~$0.41</b> (nearly doubled), a <b>new "insert card" ~$0.13</b>, partly offset by a <b>smaller brown box (−$0.15)</b>. Reply to Nancy asks her to confirm/justify these three; core-hardware FX pass-through is accepted.</div>
-
-<div class="grid2">
-<div class="card">
-<h3 style="margin-top:0">USB-C V2 <span class="b green">approved → prototype</span></h3>
-<table>
-<tr><th>Item</th><th>Status</th></tr>
-<tr><td>EE (schematic + PCB + components)</td><td><span class="b green">APPROVED (Aug 28)</span></td></tr>
-<tr><td>ME (3D + report)</td><td><span class="b amber">near-final</span></td></tr>
-<tr><td>Prototype build</td><td><span class="b amber">greenlit — qty TBD</span></td></tr>
-<tr><td>Christmas finished goods</td><td><span class="b red">not realistic</span></td></tr>
-</table>
-</div>
-<div class="card">
-<h3 style="margin-top:0">BoxBlayde Light (mini) <span class="b grey">Q2 2027</span></h3>
-<p>Separate lower-cost product; uses the V2 USB-C PCB; BOM target &lt;$20. Candidate for a Kickstarter/Indiegogo pre-sale to fund tooling.</p>
-</div>
-</div>
-</section>
-
-<!-- ===================== FINANCING & CASH ===================== -->
-<section class="tab" id="fin">
-<h2>Financing &amp; Cash</h2>
-
-<div class="co green"><strong>Plan simplified: China required no money down and already shipped the 915.</strong> The originally-assumed "draw 1 to fund a China deposit" is no longer needed. <b>Draw 1 is now simply to PAY the 915 balance</b> (85% goods + freight) via Wayflyer — keeping it off the Sofeast trade tab rather than adding to it.</div>
-
-<h3>915 payment — the first Wayflyer draw</h3>
-<table>
-<tr><th>Line</th><th class="n">Amount</th></tr>
-<tr><td>915 goods value (915 × $32.58)</td><td class="n">$29,810.70</td></tr>
-<tr><td>Less 15% already in the tab / deposit</td><td class="n">−$4,471.60</td></tr>
-<tr><td><b>85% balance now due on shipment</b></td><td class="n"><b>$25,339.10</b></td></tr>
-<tr><td>Freight (DDP, all 6 shipments)</td><td class="n">$5,486.80</td></tr>
-<tr class="tot"><td>915 cash needed now → Wayflyer draw 1</td><td class="n">~$30,826</td></tr>
-</table>
-<p class="tag">Paying the 915 from Wayflyer (not operating cash / not the tab) is the right call — it isolates this inventory to the facility that its own sell-through repays, and keeps the Sofeast balance under the $250k ceiling.</p>
-
-<h3>Wayflyer — GO at 7.5%</h3>
-<div class="co"><strong>Positive call Sep 10; proceeding.</strong> Average rate down to <b>7.5%</b>. Updated proposal to process today. Because the 915 needed no deposit, the facility can be drawn in sequence rather than front-loaded.</div>
-<table>
-<tr><th>Draw</th><th>Use</th><th class="n">Amount</th><th>Trigger</th></tr>
-<tr><td>1</td><td><b>Pay the 915 (85% goods + freight)</b></td><td class="n">~$30,826</td><td>now — on funding</td></tr>
-<tr><td>2</td><td>New PO: 3k V1.1 production + 2k V2 shared materials + deposit</td><td class="n">~$85–110k</td><td>on Nancy's deposit terms</td></tr>
-<tr><td>3 <span class="b amber">demand-gated</span></td><td>Further Q4 depth + freight</td><td class="n">~$60–80k</td><td>~Nov</td></tr>
-<tr class="tot"><td>Facility</td><td>staged; 7.5% flat; retire pricey advances; keep Sofeast under ceiling</td><td class="n">~$115–120k</td><td>processing</td></tr>
-</table>
-<p class="tag">New-PO sizing note: 3,000 V1.1 at the new $35.576 ≈ $106.7k goods; the 2k V2 "shared materials" (blade/motor/battery only) + version-specific parts follow per Nancy's deposit terms — draw 2 sized once she confirms deposit %.</p>
-
-<h3>Sofeast balance &amp; the $250k ceiling</h3>
-<table>
-<tr><th>Line</th><th class="n">Amount</th></tr>
-<tr><td>Net unpaid (after payment in transit)</td><td class="n">$238,698</td></tr>
-<tr><td>Pending Lynn payment links</td><td class="n">−$30,590</td></tr>
-<tr><td>Balance after those clear (approx)</td><td class="n">~$208,000</td></tr>
-<tr><td>915 balance</td><td class="n"><b>paid via Wayflyer → not added to tab</b></td></tr>
-</table>
-<div class="co green"><strong>The swap still pencils at 7.5%.</strong> Financing a holiday cycle at 7.5% to free cash that retires 24%-APR Sofeast trade debt is a positive swap before a single extra unit sells; incremental holiday sales are upside.</div>
-</section>
-
-<!-- ===================== ACTION QUEUE ===================== -->
-<section class="tab" id="act">
-<h2>Action Queue</h2>
-<h3>Today <span class="b red">Sep 11</span></h3>
-<ol class="act red">
-<li><b>Upload the 5 FBA tracking sheets to Amazon</b> (Shelly's bulk-upload Excels) — IND9, SBD1, LAX9, BJC1, AVP1 — to clear "Missing tracking ID."</li>
-<li><b>Send Nancy the blade-order reply</b> — approves 5k prod + 15k/10k retail ($2,975); asks lead-time + ship-with confirmation.</li>
-<li><b>Send Nancy the new-PO reply</b> (separate email) — confirms 3k V1.1 + 2k V2 split, the 5k blade/motor/battery pre-buy, the shared-materials logic, the BOM/FX reconciliation (flag manual + insert card), and asks for deposit terms to mobilize.</li>
-<li><b>Process the updated Wayflyer proposal</b> (7.5%); set draw 1 = 915 payment (~$30,826).</li>
-</ol>
-<h3>This week</h3>
-<ol class="act">
-<li><s>Log the 915 tracking (PRO + UPS) into this Command Center</s> — <b>done Sep 17 (v13)</b>. No ocean vessel/container/B-L was issued.</li>
-<li><b>Confirm 900 check-in</b> at J&amp;J + Amazon FCs (arriving now, Sep 16–17) — first stock-restore.</li>
-<li><b>On Nancy's deposit terms</b> → size and place the new 5k PO to hold the mid-November window; sequence Wayflyer draw 2.</li>
-</ol>
-<h3>Structural</h3>
-<ol class="act">
-<li><b>Every China order sequenced with a Sofeast paydown</b> to stay under $250k.</li>
-<li><b>Inventory guardrail:</b> track sellable on-hand / days-of-supply, not the FBA total.</li>
-<li>Line up the replacement B2B/EDI 3PL before fully exiting J&amp;J.</li>
-</ol>
-</section>
-
-<footer>BoxBlayde · 214 Central Industries · Command Center v12 · Sep 11 2026 · figures are estimates for decision-making · 915 shipped; BOM v27 reconciled</footer>
-</div>
 <script>
-(function(){
-  var btns=document.querySelectorAll('nav.tabs button'), tabs=document.querySelectorAll('.tab');
-  btns.forEach(function(b){b.addEventListener('click',function(){
-    btns.forEach(function(x){x.classList.remove('on')});
-    tabs.forEach(function(x){x.classList.remove('on')});
-    b.classList.add('on');
-    var el=document.getElementById(b.getAttribute('data-t')); if(el)el.classList.add('on');
-    window.scrollTo({top:0,behavior:'smooth'});
-  });});
-})();
+  var tabs = document.querySelectorAll('nav button');
+  for (var i = 0; i < tabs.length; i++) {
+    tabs[i].addEventListener('click', function (e) {
+      for (var j = 0; j < tabs.length; j++) { tabs[j].setAttribute('aria-selected', 'false'); }
+      e.currentTarget.setAttribute('aria-selected', 'true');
+      var panes = document.querySelectorAll('section');
+      for (var k = 0; k < panes.length; k++) { panes[k].className = ''; }
+      document.getElementById(e.currentTarget.getAttribute('data-t')).className = 'active';
+      window.scrollTo(0, 0);
+    });
+  }
 </script>
+</body>
+</html>
